@@ -1,27 +1,44 @@
 # Projekt "Sklep z oprogramowaniem"
 Autorzy:
+
 - Igor Sosnowicz 263897
+
 - Dawid Szeląg 264008
+
 - Kacper Natusiewicz 263892
 
+
 Termin: piątek 13:15 - 15:00 (grupa z 14:15)
+
 Prowadzący: dr inż. Roman Ptak
+
 Przedmiot: Bazy Danych 2 - Projekt
-Data: 20.10.2023r.
+
+Data: 20.10.2023 r.
+
 ## Cel i zakres
 Sklep przeznaczony jest dla niewielkiej grupy użytkowników do 1000 dziennie. Oferuje tylko bezpłatne oprogramowanie. Oprogramowanie dodawane jest w formie kodu źródłowego i kompilowane do pliku wykonywalnego w zależności od architektury urządzenia klienta, np. .exe lub .deb. W tej formie jest pobierane przez użytkownika (klienta sklepu), który jest odpowiedzialny za instalację pobranego pliku.
 
 Istnieję cztery rodzaje użytkowników:
+
 - administrator - osoba zarządzająca sklepem oraz użytkownikami. Posiada najwyższy stopień uprawnień;
+
 - autor oprogramowania - osoba wgrywająca pliki źródłowe do sklepu, zarządzająca swoim oprogramowaniem;
-- klient sklepu - osoba przeglądająca i pobierająca oprogramowanie ze sklepu za darmo.
+
+- klient sklepu - osoba przeglądająca i pobierająca oprogramowanie ze sklepu za darmo,
+
 - użytkownik niezarejestrowany - osoba mogącą tylko założyć konto klienta sklepu.
 
 ## Wymagania funkcjonalne:
+
 1. Użytkownik niezarejestrowany może wyłącznie założyć konto klienta sklepu.
+
 2. Klient/autor oprogramowania/administrator może wyszukiwać oprogramowanie.
+
 3. Klient/autor oprogramowania/administrator może przeglądać szczegółowo oprogramowanie.
+
 4. Klient/autor oprogramowania/administrator może pobierać oprogramowanie końcowe (program wykonywalny).
+
 5. Klient/autor oprogramowania/administrator może wystawiać słowną recenzję.
 6. Klient/autor oprogramowania/administrator może edytować swoją słowną recenzję.
 7. Klient/autor oprogramowania/administrator może usuwać swoją słowną recenzję.
@@ -65,6 +82,7 @@ Istnieję cztery rodzaje użytkowników:
 ### Oprogramowanie w formie kodu źródłowego
 - identyfikator (id) oprogramowania
 - identyfikator (id) autora
+- nazwa oprogramowania
 - opis słowny
 - link do grafiki promocyjnej
 - identyfikator (id) kategorii
