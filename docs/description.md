@@ -121,3 +121,9 @@ Istnieję cztery rodzaje użytkowników:
 - opis słowny, w jaki sposób oprogramowanie narusza wyżej wspomniany punkt regulaminu
 - data nadesłania
 - status rozpatrzenia
+
+### Kategoria
+
+- identyfikator (id) kategorii
+- nazwa kategorii
+- słowny opis kategorii
