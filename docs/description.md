@@ -29,7 +29,7 @@ Istnieję cztery rodzaje użytkowników:
 
 - użytkownik niezarejestrowany - osoba mogącą tylko założyć konto klienta sklepu.
 
-## Wymagania funkcjonalne:
+## Wymagania funkcjonalne
 
 1. Użytkownik niezarejestrowany może wyłącznie założyć konto klienta sklepu.
 
@@ -70,7 +70,7 @@ Istnieję cztery rodzaje użytkowników:
 8. Jeden użytkownik może umieścić maksymalnie jedną recenzję słowną pod danym oprogramowaniem.
 9. Jeden użytkownik może umieścić maksymalnie jedną ocenę pod danych oprogramowaniem.
 
-## Opisy obiektów
+## Encje
 
 ### Użytkownik
 - login
@@ -79,15 +79,43 @@ Istnieję cztery rodzaje użytkowników:
 - data utworzenia konta
 - identyfikator (id) rodzaju użytkownika (klient sklepu, autor oprogramowania czy administrator)
 
-### Oprogramowanie w formie kodu źródłowego
+### Jednostka oprogramowania
 - identyfikator (id) oprogramowania
 - identyfikator (id) autora
 - nazwa oprogramowania
 - opis słowny
 - link do grafiki promocyjnej
-- identyfikator (id) kategorii
+
+### Kod źródłowy
+
+- identyfikator (id) kodu źródłowego
+- identyfikator (id) powiązanej wersji oprogramowania
 - ścieżka do katalogu zawierającego kod źródłowy umieszczonego na serwerze
-- scieżka do katalogu zawierającego skompilowane wersje oprogramowania
+
+### Wersja oprogramowania
+
+- identyfikator (id) wersji oprogramowania
+- identyfikator (id) wersjonowanej jednostki oprogramowania
+- opis słowny
+- data dodania
+- major version
+- minor version
+- patch version
+
+### Plik wykonywalny
+
+- identyfikator pobrania
+- wersja pobieranego oprogramowania
+- docelowa architektura i system operacyjny pliku wykonywalnego
+- data kompilacji
+- ścieżka do pliku wykonywalnego
+
+### Pobranie
+
+- identyfikator pobrania
+- identyfikator użytkownika pobierającego oprogramowanie
+- identyfikator pobieranego pliku wykonywalnego
+- data pobrania
 
 ### Recenzja słowna
 - identyfikator (id) recenzji słownej
@@ -95,7 +123,7 @@ Istnieję cztery rodzaje użytkowników:
 - tytuł recenzji
 - treść recenzji
 - data nadesłania
-- data ostaniej edycji
+- data ostatniej edycji
 
 ### Ocena
 - identyfikator (id) oceny
@@ -127,3 +155,11 @@ Istnieję cztery rodzaje użytkowników:
 - identyfikator (id) kategorii
 - nazwa kategorii
 - słowny opis kategorii
+
+### Prośba o zmianę typu konta
+
+- identyfikator prośby
+- id użytkownika
+- opis prośby
+- data nadesłania
+- status prośby
