@@ -92,3 +92,20 @@ CREATE TABLE SoftwareCategory (
   category_id int(10) NOT NULL);
 ALTER TABLE SoftwareCategory ADD CONSTRAINT Associates FOREIGN KEY (category_id) REFERENCES Category (category_id);
 ALTER TABLE SoftwareCategory ADD CONSTRAINT Connects FOREIGN KEY (software_id) REFERENCES SoftwareUnit (software_id);
+
+-- Views
+
+CREATE VIEW OpenAccountChangeRequest AS SELECT
+  AccountChangeRequest.request_id,
+  User.username,
+  AccountChangeRequest.description, 
+  AccountChangeRequest.date_submitted as `date`
+  FROM User
+  INNER JOIN AccountChangeRequest ON User.user_id = AccountChangeRequest.user_id;
+
+CREATE VIEW AccountView AS SELECT
+  login,
+  username,
+  account_creation_date,
+  account_type
+  FROM User;
