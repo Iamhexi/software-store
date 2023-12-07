@@ -1,0 +1,8 @@
+Cannot insert NULL exectuable_id
+INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
+Failure
+
+Insert NULL exectuable_id
+INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
+Success
+
