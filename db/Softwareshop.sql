@@ -234,9 +234,6 @@ CREATE TRIGGER SoftwareVersionCreated
 BEGIN
     DECLARE last_patch_version INT;
 
-    INSERT INTO SourceCode (version_id, filepath)
-    VALUES (NEW.version_id, '<FILEPATH>');
-
     SELECT patch_version
     INTO last_patch_version
     FROM SoftwareVersion
@@ -368,7 +365,6 @@ BEGIN
     DELETE FROM Executable WHERE Executable.version_id = version_id;
     DELETE FROM SoftwareVersion WHERE SoftwareVersion.version_id = version_id;
 end;
-
 
 -- FUNCTIONS
 
