@@ -241,7 +241,12 @@ BEGIN
       AND major_version = NEW.major_version
       AND minor_version = NEW.minor_version;
 
-    SET NEW.patch_version = last_patch_version + 1;
+    IF last_patch_version IS NULL THEN
+        SET NEW.patch_version = 0;
+        ELSE
+            SET NEW.patch_version = last_patch_version + 1;
+
+    end if;
 
 end;
 
