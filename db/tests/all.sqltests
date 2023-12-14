@@ -1,8 +1,14 @@
 Cannot insert NULL exectuable_id
 INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
 Failure
+Administrator
 
 Insert NULL exectuable_id
 INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
 Success
+Administrator
 
+Cannot add SoftwareUnit
+INSERT INTO SoftwareUnit VALUES(NULL, 1, 'My beautiful software', 'Some description', 'https://example.com/graphics', 0);
+Failure
+Client
