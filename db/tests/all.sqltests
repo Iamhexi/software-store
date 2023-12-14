@@ -1,14 +1,624 @@
-Cannot insert NULL exectuable_id
-INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
+Cannot insert NULL User.login
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES(NULL, x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
 Failure
 Administrator
 
-Insert NULL exectuable_id
-INSERT INTO Download (download_id, user_id, executable_id, date_download) VALUES(NULL, 1, NULL, '2023-12-29');
+Cannot insert NULL User.pass_hash
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser1', NULL, NULL, NULL, 'Client');
+Failure
+Administrator
+
+Insert NULL User.username
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser2', x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
 Success
 Administrator
 
-Cannot add SoftwareUnit
-INSERT INTO SoftwareUnit VALUES(NULL, 1, 'My beautiful software', 'Some description', 'https://example.com/graphics', 0);
+Insert NULL User.account_creation_date
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser3', x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
+Success
+Administrator
+
+Cannot insert NULL User.account_type
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser4', x'ec55d3e698d289f2afd663725127bace', NULL, NULL, NULL);
+Failure
+Administrator
+
+Insert AS UNREGISTERED User
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser5', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
+Success
+UnregisteredUser
+
+Cannot insert AS CLIENT User
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser6', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
 Failure
 Client
+
+Cannot insert AS AUTHOR User
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser7', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
+Failure
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR User
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser8', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
+Success
+Administrator
+
+Cannot insert NULL Review.author_id
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(NULL, 2, NULL, NULL, '2023-12-29', '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Review.author_id
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(999999, 2, NULL, NULL, '2023-12-29', '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL Review.software_id
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, NULL, NULL, NULL, '2023-12-29', '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Review.software_id
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 999999, NULL, NULL, '2023-12-29', '2023-12-29');
+Failure
+Administrator
+
+Insert NULL Review.title
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, NULL, NULL, '2023-12-29', '2023-12-29');
+Success
+Administrator
+
+Insert NULL Review.description
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, NULL, NULL, '2023-12-29', '2023-12-29');
+Success
+Administrator
+
+Cannot insert NULL Review.date_added
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, NULL, NULL, NULL, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL Review.date_last_updated
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, NULL, NULL, '2023-12-29', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED Review
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, 'Test Review', 'Im testing the review feature.', '2023-12-29', '2023-12-29');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT Review
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, 'Test Review', 'Im testing the review feature.', '2023-12-29', '2023-12-29');
+Success
+Client
+
+Insert AS AUTHOR Review
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, 'Test Review', 'Im testing the review feature.', '2023-12-29', '2023-12-29');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR Review
+INSERT INTO Review (author_id, software_id, title, description, date_added, date_last_updated) VALUES(1, 2, 'Test Review', 'Im testing the review feature.', '2023-12-29', '2023-12-29');
+Success
+Administrator
+
+Cannot insert NULL Rating.author_id
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(NULL, 2, 5, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Rating.author_id
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(999999, 2, 5, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL Rating.software_id
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, NULL, 5, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Rating.software_id
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 999999, 5, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL Rating.mark
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, NULL, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL Rating.date_added
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED Rating
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT Rating
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
+Failure
+Client
+
+Insert AS AUTHOR Rating
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
+Failure
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR Rating
+INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
+Failure
+Administrator
+
+Cannot insert NULL BugReport.software_id
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(NULL, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN BugReport.software_id
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(999999, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL BugReport.user_id
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, NULL, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN BugReport.user_id
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 999999, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Insert NULL BugReport.title
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Success
+Administrator
+
+Insert NULL BugReport.description_of_steps_to_get_bug
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Success
+Administrator
+
+Insert NULL BugReport.bug_description
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL BugReport.date_added
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, NULL, 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL BugReport.review_status
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED BugReport
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT BugReport
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+Success
+Client
+
+Insert AS AUTHOR BugReport
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR BugReport
+INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL StatuteViolationReport.software_id
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(NULL, 1, 3, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN StatuteViolationReport.software_id
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(999999, 1, 3, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL StatuteViolationReport.user_id
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, NULL, 3, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN StatuteViolationReport.user_id
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 999999, 3, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL StatuteViolationReport.rule_point
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Insert NULL StatuteViolationReport.description
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, NULL, '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL StatuteViolationReport.date_added
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, NULL, NULL, 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL StatuteViolationReport.review_status
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, NULL, '2023-12-29', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED StatuteViolationReport
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, 'Testing the rule violations.', '2023-12-29', 'Pending');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT StatuteViolationReport
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, 'Testing the rule violations.', '2023-12-29', 'Pending');
+Success
+Client
+
+Insert AS AUTHOR StatuteViolationReport
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, 'Testing the rule violations.', '2023-12-29', 'Pending');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR StatuteViolationReport
+INSERT INTO StatuteViolationReport (software_id, user_id, rule_point, description, date_added, review_status) VALUES(2, 1, 3, 'Testing the rule violations.', '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL AccountChangeRequest.user_id
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(NULL, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN AccountChangeRequest.user_id
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(999999, NULL, '2023-12-29', 'Pending');
+Failure
+Administrator
+
+Insert NULL AccountChangeRequest.description
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, NULL, '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL AccountChangeRequest.date_submitted
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, NULL, NULL, 'Pending');
+Failure
+Administrator
+
+Cannot insert NULL AccountChangeRequest.review_status
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, NULL, '2023-12-29', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED AccountChangeRequest
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT AccountChangeRequest
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
+Success
+Client
+
+Insert AS AUTHOR AccountChangeRequest
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR AccountChangeRequest
+INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
+Success
+Administrator
+
+Cannot insert NULL SoftwareUnit.author_id
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(NULL, NULL, NULL, NULL, 0);
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN SoftwareUnit.author_id
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(999999, NULL, NULL, NULL, 0);
+Failure
+Administrator
+
+Insert NULL SoftwareUnit.name
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
+Success
+Administrator
+
+Insert NULL SoftwareUnit.description
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
+Success
+Administrator
+
+Insert NULL SoftwareUnit.link_to_graphic
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
+Success
+Administrator
+
+Cannot insert NULL SoftwareUnit.is_blocked
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED SoftwareUnit
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'TestSoft', 'Software for testing', '/TestSoft/Graphics/splash.png', 0);
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT SoftwareUnit
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'TestSoft', 'Software for testing', '/TestSoft/Graphics/splash.png', 0);
+Failure
+Client
+
+Insert AS AUTHOR SoftwareUnit
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'TestSoft', 'Software for testing', '/TestSoft/Graphics/splash.png', 0);
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR SoftwareUnit
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'TestSoft', 'Software for testing', '/TestSoft/Graphics/splash.png', 0);
+Success
+Administrator
+
+Cannot insert NULL SoftwareVersion.software_id
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(NULL, NULL, '2023-12-29', 1, 2, '3Hotfix');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN SoftwareVersion.software_id
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(999999, NULL, '2023-12-29', 1, 2, '3Hotfix');
+Failure
+Administrator
+
+Insert NULL SoftwareVersion.description
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, '3Hotfix');
+Success
+Administrator
+
+Cannot insert NULL SoftwareVersion.date_added
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, NULL, 1, 2, '3Hotfix');
+Failure
+Administrator
+
+Cannot insert NULL SoftwareVersion.major_version
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', NULL, 2, '3Hotfix');
+Failure
+Administrator
+
+Cannot insert NULL SoftwareVersion.minor_version
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, NULL, '3Hotfix');
+Failure
+Administrator
+
+Cannot insert NULL SoftwareVersion.patch_version
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+Failure
+Client
+
+Insert AS AUTHOR SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+Success
+Administrator
+
+Cannot insert NULL SourceCode.version_id
+INSERT INTO SourceCode (version_id, filepath) VALUES(NULL, NULL);
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN SourceCode.version_id
+INSERT INTO SourceCode (version_id, filepath) VALUES(999999, NULL);
+Failure
+Administrator
+
+Insert NULL SourceCode.filepath
+INSERT INTO SourceCode (version_id, filepath) VALUES(1, NULL);
+Success
+Administrator
+
+Cannot insert AS UNREGISTERED SourceCode
+INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT SourceCode
+INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
+Failure
+Client
+
+Insert AS AUTHOR SourceCode
+INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR SourceCode
+INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
+Success
+Administrator
+
+Cannot insert NULL Executable.version_id
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(NULL, 'Win64', '2023-12-29', '/Test/File.exe');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Executable.version_id
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(999999, 'Win64', '2023-12-29', '/Test/File.exe');
+Failure
+Administrator
+
+Cannot insert NULL Executable.target_architecture
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, NULL, '2023-12-29', '/Test/File.exe');
+Failure
+Administrator
+
+Cannot insert NULL Executable.date_compiled
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', NULL, '/Test/File.exe');
+Failure
+Administrator
+
+Cannot insert NULL Executable.filepath
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED Executable
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT Executable
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+Failure
+Client
+
+Insert AS AUTHOR Executable
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR Executable
+INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+Success
+Administrator
+
+Cannot insert NULL Download.user_id
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(NULL, 1, '2023-12-29 12:37:45');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Download.user_id
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(999999, 1, '2023-12-29 12:37:45');
+Failure
+Administrator
+
+Cannot insert NULL Download.exectuable_id
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, NULL, '2023-12-29 12:37:45');
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN Download.exectuable_id
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 999999, '2023-12-29 12:37:45');
+Failure
+Administrator
+
+Cannot insert NULL Download.date_download
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED Download
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Failure
+UnregisteredUser
+
+Insert AS CLIENT Download
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Client
+
+Insert AS AUTHOR Download
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR Download
+INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Administrator
+
+Cannot insert NULL Category.name
+INSERT INTO Category (name, description) VALUES(NULL, 'A test category.');
+Failure
+Administrator
+
+Cannot insert NULL Category.description
+INSERT INTO Category (name, description) VALUES('TestCategory', NULL);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED Category
+INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT Category
+INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
+Failure
+Client
+
+Cannot insert AS AUTHOR Category
+INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
+Failure
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR Category
+INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
+Success
+Administrator
+
+Cannot insert NULL SoftwareCategory.category_id
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(NULL, 1);
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN SoftwareCategory.category_id
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(999999, 1);
+Failure
+Administrator
+
+Cannot insert NULL SoftwareCategory.software_id
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, NULL);
+Failure
+Administrator
+
+Cannot insert NOT FOREIGN SoftwareCategory.software_id
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 999999);
+Failure
+Administrator
+
+Cannot insert AS UNREGISTERED SoftwareCategory
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
+Failure
+UnregisteredUser
+
+Cannot insert AS CLIENT SoftwareCategory
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
+Failure
+Client
+
+Insert AS AUTHOR SoftwareCategory
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
+Success
+SoftwareAuthor
+
+Insert AS ADMINISTRATOR SoftwareCategory
+INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
+Success
+Administrator
