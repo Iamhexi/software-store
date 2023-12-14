@@ -1,3 +1,6 @@
+CREATE DATABASE software_store;
+USE software_store;
+
 CREATE TABLE `User`
 (
     user_id               int(10)      NOT NULL AUTO_INCREMENT,
@@ -15,7 +18,7 @@ CREATE TABLE Review
     author_id         int(10) NOT NULL,
     software_id       int(10) NOT NULL,
     title             varchar(255),
-    description       varchar(16384),
+    description       TEXT,
     date_added        date    NOT NULL,
     date_last_updated date    NOT NULL,
     INDEX index_date_added_review (date_added),
@@ -37,8 +40,8 @@ CREATE TABLE BugReport
     version_id                      int(10)     NOT NULL,
     user_id                         int(10)     NOT NULL,
     title                           varchar(255),
-    description_of_steps_to_get_bug varchar(16384),
-    bug_description                 varchar(16384),
+    description_of_steps_to_get_bug TEXT,
+    bug_description                 TEXT,
     date_added                      date        NOT NULL,
     review_status                   varchar(20) NOT NULL,
     INDEX index_title_bug (title),
@@ -50,7 +53,7 @@ CREATE TABLE StatuteViolationReport
     software_id   int(10)     NOT NULL,
     user_id       int(10)     NOT NULL,
     rule_point    int(10)     NOT NULL,
-    description   varchar(16384),
+    description   TEXT,
     date_added    date        NOT NULL,
     review_status varchar(20) NOT NULL,
     PRIMARY KEY (report_id)
@@ -59,8 +62,8 @@ CREATE TABLE AccountChangeRequest
 (
     request_id     int(10)     NOT NULL AUTO_INCREMENT,
     user_id        int(10)     NOT NULL,
-    description    varchar(16384),
-    justification  varchar(16384),
+    description    TEXT,
+    justification  TEXT,
     date_submitted date        NOT NULL,
     review_status  varchar(20) NOT NULL,
     PRIMARY KEY (request_id)
@@ -70,7 +73,7 @@ CREATE TABLE SoftwareUnit
     software_id     int(10)      NOT NULL AUTO_INCREMENT,
     author_id       int(10)      NOT NULL,
     name            varchar(255) NOT NULL,
-    description     varchar(16384),
+    description     TEXT,
     link_to_graphic varchar(255),
     is_blocked      tinyint(1)   NOT NULL,
     INDEX index_name_software (name),
@@ -81,7 +84,7 @@ CREATE TABLE SoftwareVersion
 (
     version_id    int(10) NOT NULL AUTO_INCREMENT,
     software_id   int(10) NOT NULL,
-    description   varchar(16384),
+    description   TEXT,
     date_added    date    NOT NULL,
     major_version int(10) NOT NULL,
     minor_version int(10) NOT NULL,
@@ -120,7 +123,7 @@ CREATE TABLE Category
 (
     category_id int(10)        NOT NULL UNIQUE,
     name        varchar(100)   NOT NULL,
-    description varchar(16384) NOT NULL
+    description TEXT NOT NULL
 );
 CREATE TABLE SoftwareCategory
 (
@@ -457,3 +460,64 @@ BEGIN
           ORDER BY bugs_report_per_software
           LIMIT 1) as 'software_downloads_bugs';
 end;
+
+-- Creating database users
+
+CREATE OR REPLACE USER 'Administator'@'localhost' IDENTIFIED BY 'MyPassword123';
+CREATE OR REPLACE USER 'SoftwareAuthor'@'localhost' IDENTIFIED BY 'MyPassword123';
+CREATE OR REPLACE USER 'Client'@'localhost' IDENTIFIED BY 'MyPassword123';
+CREATE OR REPLACE USER 'UnregisteredUser'@'localhost' IDENTIFIED BY 'MyPassword123';
+
+-- Privileges system
+
+-- Administrator
+
+GRANT ALL PRIVILEGES
+ON software_store.*
+TO Administator@localhost;
+
+-- Software Author
+
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Executable TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Rating TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.BugReport TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Review TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SourceCode TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareUnit TO SoftwareAuthor@localhost;
+
+
+GRANT SELECT, INSERT
+ON software_store.Download
+TO SoftwareAuthor@localhost;
+
+GRANT INSERT
+ON software_store.StatuteViolationReport
+TO SoftwareAuthor@localhost;
+
+GRANT SELECT, DELETE, INSERT
+ON software_store.SoftwareVersion
+TO SoftwareAuthor@localhost;
+
+-- Client
+
+GRANT SELECT
+ON software_store.Executable
+TO Client@localhost;
+
+GRANT INSERT ON software_store.Download TO Client@localhost;
+GRANT INSERT ON software_store.BugReport TO Client@localhost;
+GRANT INSERT ON software_store.StatuteViolationReport TO Client@localhost;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Rating TO Client@localhost;
+GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Review TO Client@localhost;
+GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.SoftwareUnit TO Client@localhost;
+GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.SoftwareVersion TO Client@localhost;
+
+-- Unregistered User
+
+GRANT INSERT
+ON software_store.User
+TO UnregisteredUser@localhost;
+
+
+FLUSH PRIVILEGES; -- Save privileges
