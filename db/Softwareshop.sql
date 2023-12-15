@@ -233,6 +233,8 @@ FROM SoftwareUnit
 
 -- TRIGGERS
 
+DELIMITER $$
+
 CREATE TRIGGER SoftwareVersionCreated
     BEFORE INSERT
     ON SoftwareVersion
@@ -254,7 +256,8 @@ BEGIN
 
     end if;
 
-end;
+END $$
+
 
 CREATE TRIGGER CategoryDeleted
     BEFORE DELETE
@@ -264,7 +267,8 @@ BEGIN
     DELETE
     FROM SoftwareCategory
     WHERE category_id = OLD.category_id;
-end;
+END $$
+
 
 -- PROCEDURES
 
@@ -284,21 +288,21 @@ BEGIN
     WHERE BugReport.version_id IN (SELECT version_id
                                    FROM SoftwareVersion
                                    WHERE software_id = SoftwareVersion.software_id);
-END;
+END $$
 
 CREATE PROCEDURE BlockSoftware(software_id_in INT)
 BEGIN
     UPDATE SoftwareUnit
     SET is_blocked = 1
     WHERE SoftwareUnit.software_id = software_id_in;
-end;
+END $$
 
 CREATE PROCEDURE UnblockSoftware(software_id_in INT)
 BEGIN
     UPDATE SoftwareUnit
     SET is_blocked = 0
     WHERE SoftwareUnit.software_id = software_id_in;
-end;
+END $$
 
 CREATE PROCEDURE PurgeUser(user_id INT)
 BEGIN
@@ -338,14 +342,14 @@ BEGIN
                                             FROM SoftwareVersion
                                             WHERE SoftwareVersion.software_id IN (SELECT software_id
                                                                                   FROM SoftwareUnit
-                                                                                  WHERE author_id = user_id));;
+                                                                                  WHERE author_id = user_id));
 
         END IF;
     END IF;
 
-end;
+END $$
 
-CREATE PROCEDURE ProcessAccountChangeRequest(request_id_in INT, isAccepted BOOL, justification_in VARCHAR)
+CREATE PROCEDURE ProcessAccountChangeRequest(request_id_in INT, isAccepted BOOL, justification_in TEXT)
 BEGIN
     IF isAccepted THEN
         UPDATE AccountChangeRequest
@@ -363,7 +367,7 @@ BEGIN
             justification = justification_in
         WHERE AccountChangeRequest.request_id = request_id_in;
     end if;
-end;
+END $$
 
 CREATE PROCEDURE DeleteSoftwareVersion(version_id INT)
 BEGIN
@@ -375,31 +379,33 @@ BEGIN
                                      WHERE Executable.version_id = version_id);
     DELETE FROM Executable WHERE Executable.version_id = version_id;
     DELETE FROM SoftwareVersion WHERE SoftwareVersion.version_id = version_id;
-end;
+END $$
+
 
 -- FUNCTIONS
 
 CREATE FUNCTION GetCommaSeparatedCategories(software_id INT)
-    RETURN VARCHAR
+    RETURNS VARCHAR(255)
 BEGIN
-    DECLARE listCategory VARCHAR;
+    SET @listCategory := (
+        SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR ',')
+        FROM Category
+        WHERE Category.category_id IN (
+            SELECT category_id
+            FROM SoftwareCategory
+            WHERE SoftwareCategory.software_id = software_id
+        )
+    );
 
-    SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR ',')
-    INTO listCategory
-    FROM Category
-    WHERE Category.category_id IN (SELECT category_id
-                                   FROM SoftwareCategory
-                                   WHERE SoftwareCategory.software_id = software_id);
+    IF @listCategory IS NULL THEN
+        SET @listCategory := 'uncategorized';
+    END IF;
 
-    IF listCategory IS NULL THEN
-        listCategory = 'uncategorized';
-    end if;
-
-    RETURN listCategory;
-end;
+    RETURN @listCategory;
+END $$
 
 CREATE FUNCTION GetMostPopularSoftwareAuthor()
-    RETURN INT
+    RETURNS INT
 BEGIN
     DECLARE author_most_popular INT;
 
@@ -417,10 +423,10 @@ BEGIN
           LIMIT 1) as author_downloads;
 
     RETURN author_most_popular;
-end;
+END $$
 
 CREATE FUNCTION GetMostPopularSoftwareUnit(category_id INT)
-    RETURN INT
+    RETURNS INT
 BEGIN
     DECLARE software_most_popular_category INT;
 
@@ -438,10 +444,12 @@ BEGIN
           GROUP BY software_id
           ORDER BY downloads_per_software DESC
           LIMIT 1) as software_category_downloads;
-end;
+
+    RETURN software_most_popular_category;
+END $$
 
 CREATE FUNCTION GetBestQualitySoftwareUnit()
-    RETURN INT
+    RETURNS INT
 BEGIN
     DECLARE software_most_quality INT;
 
@@ -461,8 +469,12 @@ BEGIN
           GROUP BY SU.software_id
           HAVING downloads_per_software >= 100
           ORDER BY bugs_report_per_software
-          LIMIT 1) as 'software_downloads_bugs';
-end;
+          LIMIT 1) as software_downloads_bugs;
+
+    RETURN software_most_quality;
+END $$
+
+DELIMITER ;
 
 -- Creating database users
 
