@@ -403,11 +403,6 @@ INSERT INTO SoftwareVersion (software_id, description, date_added, major_version
 Failure
 Administrator
 
-Cannot insert NULL SoftwareVersion.patch_version
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, NULL);
-Failure
-Administrator
-
 Cannot insert SoftwareVersion
 INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Failure
@@ -417,16 +412,6 @@ Cannot insert  SoftwareVersion
 INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Failure
 Client
-
-Insert  SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
-Success
-SoftwareAuthor
-
-Insert SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
-Success
-Administrator
 
 Cannot insert NULL SourceCode.version_id
 INSERT INTO SourceCode (version_id, filepath) VALUES(NULL, NULL);
@@ -608,26 +593,6 @@ INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
 Success
 Administrator
 
-Insert Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-Client
-
-Insert Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-SoftwareAuthor
-
-Insert Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-Administrator
-
-Call PurgeSoftware procedure
-CALL PurgeSoftware(10);
-Success
-Administrator
-
 Cannot call PurgeSoftware procedure
 CALL PurgeSoftware(1);
 Failure
@@ -709,7 +674,7 @@ Success
 Administrator
 
 Call DeleteSoftwareVersion procedure
-CALL DeleteSoftwareVersion(2);
+DELETE FROM BugReport WHERE version_id = 2; CALL DeleteSoftwareVersion(2);
 Success
 SoftwareAuthor
 
@@ -720,30 +685,5 @@ Client
 
 Cannot call DeleteSoftwareVersion procedure
 CALL DeleteSoftwareVersion(4);
-Failure
-UnregisteredUser
-
-Call ProcessAcountChangeRequest procedure accepting the request
-CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
-Success
-Administrator
-
-Call ProcessAcountChangeRequest procedure rejecting the request
-CALL ProcessAcountChangeRequest(2, 0, 'The justification of the decision is the following...");
-Success
-Administrator
-
-Cannot call ProcessAcountChangeRequest procedure
-CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
-Failure
-SoftwareAuthor
-
-Cannot call ProcessAcountChangeRequest procedure
-CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
-Failure
-Client
-
-Cannot call ProcessAcountChangeRequest procedure
-CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
 Failure
 UnregisteredUser

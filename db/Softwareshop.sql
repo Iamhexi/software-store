@@ -511,7 +511,8 @@ GRANT SELECT, DELETE, INSERT
 ON software_store.SoftwareVersion
 TO SoftwareAuthor@localhost;
 
-GRANT CALL ON software_store.DeleteSoftwareVersion TO SoftwareAuthor@localhost;
+GRANT EXECUTE ON PROCEDURE software_store.DeleteSoftwareVersion TO SoftwareAuthor@localhost;
+
 
 -- Client
 
