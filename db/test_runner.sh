@@ -1,6 +1,8 @@
 #!/bin/bash
 filename="tests/all.sqltests"
 buffer_file=buffer.tmp
+test_count=0
+failed_tests=0
 
 while IFS= read -r line1; do
     # Read the next two lines
@@ -11,6 +13,7 @@ while IFS= read -r line1; do
 
         # Check if all three lines are non-empty
         if [ -n "$line2" ] && [ -n "$line3" ] && [ -n "$line4" ]; then
+            test_count=$(($test_count+1))
             echo "Running test: $line1 as $line4"
 
             mariadb \
@@ -37,6 +40,7 @@ while IFS= read -r line1; do
                 echo "${red_fg}Test failed"
                 echo "$db_answer${reset}"
                 echo "Expected result: $line3"
+                failed_tests=$(($failed_tests+1))
             fi
 
             rm $buffer_file
@@ -46,3 +50,5 @@ while IFS= read -r line1; do
         fi
     fi
 done < "$filename"
+
+echo "RESULT: $failed_tests out of $test_count tests have failed."

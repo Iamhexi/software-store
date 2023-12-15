@@ -9,12 +9,12 @@ Failure
 Administrator
 
 Insert NULL User.username
-INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser2', x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES(FLOOR(RAND()*(999999)+1), x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
 Success
 Administrator
 
 Insert NULL User.account_creation_date
-INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser3', x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES(FLOOR(RAND()*(999999)+1), x'ec55d3e698d289f2afd663725127bace', NULL, NULL, 'Client');
 Success
 Administrator
 
@@ -24,7 +24,7 @@ Failure
 Administrator
 
 Insert User
-INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser5', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES(FLOOR(RAND()*(999999)+1), x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
 Success
 UnregisteredUser
 
@@ -39,7 +39,7 @@ Failure
 SoftwareAuthor
 
 Insert User
-INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES('TestUser8', x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
+INSERT INTO User (login, pass_hash, username, account_creation_date, account_type) VALUES(FLOOR(RAND()*(999999)+1), x'ec55d3e698d289f2afd663725127bace', 'RegistrationTest', '2023-12-29', 'Client');
 Success
 Administrator
 
@@ -138,19 +138,19 @@ INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2
 Failure
 UnregisteredUser
 
-Insert  Rating
+Insert Rating
 INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
-Failure
+Success
 Client
 
-Insert  Rating
+Insert Rating
 INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
-Failure
+Success
 SoftwareAuthor
 
 Insert Rating
 INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2023-12-29');
-Failure
+Success
 Administrator
 
 Cannot insert NULL BugReport.version_id
@@ -339,17 +339,17 @@ Failure
 Administrator
 
 Insert NULL SoftwareUnit.description
-INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'some software', NULL, NULL, 0);
 Success
 Administrator
 
 Insert NULL SoftwareUnit.link_to_graphic
-INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'some software', NULL, NULL, 0);
 Success
 Administrator
 
 Cannot insert NULL SoftwareUnit.is_blocked
-INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, NULL);
+INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, 'some software', NULL, NULL, NULL);
 Failure
 Administrator
 
@@ -438,9 +438,9 @@ INSERT INTO SourceCode (version_id, filepath) VALUES(999999, NULL);
 Failure
 Administrator
 
-Insert NULL SourceCode.filepath
+Cannot Insert NULL SourceCode.filepath
 INSERT INTO SourceCode (version_id, filepath) VALUES(1, NULL);
-Success
+Failure
 Administrator
 
 Cannot insert SourceCode
@@ -448,7 +448,7 @@ INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
 Failure
 UnregisteredUser
 
-Cannot insert  SourceCode
+Cannot insert SourceCode
 INSERT INTO SourceCode (version_id, filepath) VALUES(1, '/TestSoft/src/');
 Failure
 Client
@@ -493,13 +493,13 @@ INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath
 Failure
 UnregisteredUser
 
-Cannot insert  Executable
+Cannot insert Executable
 INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
 Failure
 Client
 
-Insert  Executable
-INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+Insert Executable
+INSERT INTO SoftwareVersion VALUES (NULL, 2, NULL, '2023-11-01', 1, 1, 5); INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
 Success
 SoftwareAuthor
 
@@ -528,30 +528,15 @@ INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 999999, '
 Failure
 Administrator
 
-Cannot insert NULL Download.date_download
+Insert NULL Download.date_download causes timestamp to be added
 INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, NULL);
-Failure
+Success
 Administrator
 
 Cannot insert Download
 INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
 Failure
 UnregisteredUser
-
-Insert  Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-Client
-
-Insert  Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-SoftwareAuthor
-
-Insert Download
-INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
-Success
-Administrator
 
 Cannot insert NULL Category.name
 INSERT INTO Category (name, description) VALUES(NULL, 'A test category.');
@@ -568,12 +553,12 @@ INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category
 Failure
 UnregisteredUser
 
-Cannot insert  Category
+Cannot insert Category
 INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
 Failure
 Client
 
-Cannot insert  Category
+Cannot insert Category
 INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
 Failure
 SoftwareAuthor
@@ -613,7 +598,7 @@ INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
 Failure
 Client
 
-Insert  SoftwareCategory
+Insert SoftwareCategory
 INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
 Success
 SoftwareAuthor
@@ -622,3 +607,19 @@ Insert SoftwareCategory
 INSERT INTO SoftwareCategory (category_id, software_id) VALUES(1, 1);
 Success
 Administrator
+
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Client
+
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+SoftwareAuthor
+
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Administrator
+

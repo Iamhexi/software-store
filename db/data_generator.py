@@ -138,9 +138,9 @@ def generate_software_version():
     date_added = generate_date()
     major_version = random.randint(1, 10)
     minor_version = random.randint(1, 10)
-    patch_version = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    patch_version = random.randint(1, 100)
 
-    values = f'NULL, {software_id}, "{description}", "{date_added}", {major_version}, {minor_version}, "{patch_version}"'
+    values = f'NULL, {software_id}, "{description}", "{date_added}", {major_version}, {minor_version}, {patch_version}'
     return f'INSERT INTO SoftwareVersion VALUES ({values})'
 
 def generate_source_code():
@@ -184,17 +184,17 @@ def generate(entity):
         return generate_review()
     elif entity == "rating":
         return generate_rating()
-    elif entity == "bug_report":
+    elif entity == "bugreport":
         return generate_bug_report()
-    elif entity == "statute_violation_report":
+    elif entity == "statuteviolationreport":
         return generate_statute_violation_report()
-    elif entity == "account_change_request":
+    elif entity == "accountchangerequest":
         return generate_account_change_request()
-    elif entity == "software_unit":
+    elif entity == "softwareunit":
         return generate_software_unit()
-    elif entity == "software_version":
+    elif entity == "softwareversion":
         return generate_software_version()
-    elif entity == "source_code":
+    elif entity == "sourcecode":
         return generate_source_code()
     elif entity == "executable":
         return generate_executable()
@@ -202,7 +202,7 @@ def generate(entity):
         return generate_download()
     elif entity == "category":
         return generate_category()
-    elif entity == "software_category":
+    elif entity == "softwarecategory":
         return generate_software_category()
     else:
         raise ValueError(f"Entity '{entity}' not supported for data generation.")
@@ -215,4 +215,4 @@ entity = sys.argv[1]
 numberOfEntitites = int(sys.argv[2])
 
 for i in range(numberOfEntitites):
-    print(generate(entity))
+    print(generate(entity) + ';')

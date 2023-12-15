@@ -121,9 +121,10 @@ CREATE TABLE Download
 );
 CREATE TABLE Category
 (
-    category_id int(10)        NOT NULL UNIQUE,
+    category_id int(10)        NOT NULL AUTO_INCREMENT,
     name        varchar(100)   NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    PRIMARY KEY(category_id)
 );
 CREATE TABLE SoftwareCategory
 (
@@ -147,6 +148,8 @@ ALTER TABLE Executable
     ADD CONSTRAINT fk_Executable_SoftwareVersion FOREIGN KEY (version_id) REFERENCES SoftwareVersion (version_id);
 ALTER TABLE Download
     ADD CONSTRAINT fk_Download_Executable FOREIGN KEY (executable_id) REFERENCES Executable (executable_id);
+ALTER TABLE Download
+    ADD CONSTRAINT fk_Download_User FOREIGN KEY (user_id) REFERENCES User (user_id);
 ALTER TABLE BugReport
     ADD CONSTRAINT fk_BugReport_SoftwareVersion FOREIGN KEY (version_id) REFERENCES SoftwareVersion (version_id);
 ALTER TABLE BugReport
@@ -500,6 +503,8 @@ TO SoftwareAuthor@localhost;
 
 GRANT SELECT ON software_store.SoftwareCategory TO Client@localhost;
 GRANT SELECT ON software_store.Executable TO Client@localhost;
+GRANT SELECT ON software_store.SoftwareVersion TO Client@localhost;
+GRANT SELECT ON software_store.SoftwareUnit TO Client@localhost;
 
 GRANT INSERT ON software_store.Download TO Client@localhost;
 GRANT INSERT ON software_store.BugReport TO Client@localhost;
@@ -508,8 +513,6 @@ GRANT INSERT ON software_store.AccountChangeRequest TO Client@localhost;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Rating TO Client@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Review TO Client@localhost;
-GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.SoftwareUnit TO Client@localhost;
-GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.SoftwareVersion TO Client@localhost;
 
 -- Unregistered User
 
@@ -519,3 +522,74 @@ TO UnregisteredUser@localhost;
 
 
 FLUSH PRIVILEGES; -- Save privileges
+
+
+-- Example data
+
+INSERT INTO User VALUES (NULL, "emily7388", "enqtneykmezqltaraectumahapfigttcnjkwchdtzxacwjrnmsppjsdsgeqjpbhnmlggoybyabiqdwddqstcvricpzlcwgmuolqnrfcjwbmploibxbawvnsyjlchbnvw", "Emily", "2023-05-11", "author");
+INSERT INTO User VALUES (NULL, "emily4071", "nrkinrtuvbbkddseelnnbliauiuvexqtipdlamkinacwksgzoblsnsoijuqphzuthmiwyownlpqpwmulkcnodcduumjxcdsxpsxzszudrrhxypxpaiffdzlbomrqfgbv", "Emily", "2023-10-17", "client");
+INSERT INTO User VALUES (NULL, "john8308", "xyfxittfqpjardzdcwkgjuxvyywtvjhmnkahbozmujkvouwzjhdoognfhxijinepzamfmpdumpasjerswijcuohdhqomonypuvgurxudbjwbtfrgdtwfaeelnnipbhrw", "John", "2023-04-10", "author");
+INSERT INTO User VALUES (NULL, "emily7079", "lrinxzdiznnggfsvutttvmqwjnghxjgjgxvffwpugbsbcfujeysbstyrwvobtfuobtbfkaunxbogpojyccdgqziezuzpqbgbrvcmzvasczxtvbpcihdovkuupjbmiwnu", "Emily", "2024-06-21", "client");
+INSERT INTO User VALUES (NULL, "john5535", "wwlywqjiueqbqakrulyloxvshpdyaguidqgekdqtupcmjbyeuyaaajtytajysnyjfqksxgjrpaysyfjhimyruhvdgqzagvubojvkzipkhppiuykapojqudlyguunevbn", "John", "2023-11-16", "author");
+INSERT INTO User VALUES (NULL, "robert2897", "zpsbveemctwonoxbvlugzhcisbqwhfspprhyazmajhgtzvuntarucaqhcajiwrcpxrxzhcfbniacclllqncqhupshutvjqtcavvorbmvxltanckxtyoqnveapakiuwpc", "Robert", "2024-09-09", "client");
+INSERT INTO User VALUES (NULL, "robert5019", "yphnvpbgegfzwnwpgbjkgodjnluoplqwwulqywupcknuysxmqihjqfaagsytlykxqlxorokmzwbgyioeispjgomxbkwsczatijfbshhbwuukpjvxfnxwktvknkfhewyh", "Robert", "2023-10-10", "client");
+INSERT INTO User VALUES (NULL, "emma4129", "cddieyjzkcvpnxmvjmaxuofxfyalwnuogjtaescykxajcdfrqjvpvompurmmbjlutusxghoghrqzxqgliixdxbomjpyvwoxjuketyfgqusxaugyokqaayybpjcjeuomo", "Emma", "2024-07-24", "client");
+INSERT INTO User VALUES (NULL, "john2853", "huiddoxlvibxjaxkomekmrrnruudrdmkkeedaipppaglwszagflvqmtnfwjsmkjedcfvimqizjvfetzwlsborqrqssrejgysacepknhewszalkaykzxivcvwvuipumhu", "John", "2024-06-24", "client");
+INSERT INTO User VALUES (NULL, "john5309", "akvdzrwsmypmzgxmoniyanccqaicwyjgmiuhvnbzzhjrwwtviwctfqlmizinztvdjqiulimacjyttbsvkzfgwnofvfqfefpzjximhudrhtjbmpgnotftazwaukkiofgz", "John", "2024-09-27", "client");
+INSERT INTO User VALUES (NULL, "emma3608", "vsrztkghvqclporrkqzrdbkztnqhvtpgbzllzpcrwpzpdhxfzulnkrijnxzgbrhsisonbfcuoutdrgqbajyynqyuzfdrzlppwvdsjdtvfqgekrwmebealufeaahiiwfe", "Emma", "2023-03-21", "client");
+INSERT INTO User VALUES (NULL, "emma6504", "sjodojmbqkpyzgyeuqknsqamvwkzpxfkpffhdlnmqggjabpgwkjfzaojiekktwsjfgffztstptryapzeljymgydgxvdgkyurkpliafwjdehnhbezwhgygppkidnazdga", "Emma", "2023-07-19", "client");
+INSERT INTO User VALUES (NULL, "emily1240", "bpfmwekxkgmfwxwrdplhkcgqqxoiaxafzrngavlcdrxemehvfkrgbtdlwlpvzhzrkwtgyimgrxzlotaxsccpeswakmkngmxkaksjljeeuxbiiyjcohpsiymyhinjvflg", "Emily", "2023-02-28", "admin");
+INSERT INTO User VALUES (NULL, "robert2974", "wifruzaihatevqevofxozpzadadwixvtssrayfscpfhkkrgjtvvqvmwgrfslhqdhyzakwynhvpyoxbrhyafipkbzseezgninrxontjrzxrukgwsdpiruatyjfwizstck", "Robert", "2023-01-20", "author");
+INSERT INTO User VALUES (NULL, "emily7714", "aepssotfoeanvptmxjzhshwuahlsuzltubezjidfvdmctrbprexdvvipclmupnumvzwolxzksmapzznvtlioorcwniaqroypvehyigckphipeqhijgbosxwzqjrgxmix", "Emily", "2024-11-09", "client");
+INSERT INTO User VALUES (NULL, "emma5670", "qnvvcnajofojakcnmtgbfcgynqofbcjesjollmcrnkmeaxlhxlleoruqkahsdqrkzjhlwbqsxrugciqzaxfjrotgryhflwjssvusbrmsuxheapsuvkshbsbjzvqagzjx", "Emma", "2023-09-26", "author");
+INSERT INTO User VALUES (NULL, "emily6426", "efmcwopkykcrliomxuwlpgkskluiazlmygohcfiktzhutfdjayidpabccrurxqpkulhkyufhaoiatgyxpojrzxbnxksbpfbbzcunwtoaaoroxoxnqjquqjqshqnrhixq", "Emily", "2024-01-09", "author");
+INSERT INTO User VALUES (NULL, "emily3202", "bpcbatvewocrgxibpycnmbnvwymnoxctxndvsvmzigeudwdnoxyswqteipsanjmvujenuyqksbqwrwybkwxluyvumlttbdozkmciyjjxbkhmnzuriphawbrpybdsnvsx", "Emily", "2023-03-22", "client");
+INSERT INTO User VALUES (NULL, "emily7978", "pqtylngtkgfsjqsxzhiftlfewlpcewbxqtgarclkcoltsddnuvzjxibgqeekialhaaifwwndqfpksrcsphtoerzforuxbjespruulbtrgczajtokguuidwvumblpokvi", "Emily", "2024-04-25", "author");
+INSERT INTO User VALUES (NULL, "robert5083", "nnpmtxcxeozcwwwcodwpmezjxuzublfppaxhasswxandiradhlcboplgczjstnzrkffowesbgcjfpdlxjfxjuwtbknztdyrygzjaeqezmrfwmarjxtfrfnfelrqntein", "Robert", "2024-01-05", "admin");
+INSERT INTO User VALUES (NULL, "john7079", "bznieydbibucdhfrtftqnwhbvtcwtmihqrcmepmgqlyazaaxwdrotbbtiqvfitvzxtezijeftienzklosxthvkcdekgsqxlrttvtwtaejwfhdiggrzijutapujugqbau", "John", "2023-10-28", "client");
+INSERT INTO User VALUES (NULL, "john5496", "xfqrsdftyqeslavfbbmwahfqnzlfxaacpjginsfwjxgsrdrackjizkoezrynbhryymclxdazjjrywqxaxyzjqbiqzlbnnqoiwujgquuyufxbknwzoeuzfqqdtrsirpdr", "John", "2024-01-20", "author");
+INSERT INTO User VALUES (NULL, "robert1620", "xtkbnggcojeicqwhgycaukarmroarufulmpznbmlojinkrmdcvmctivcvtfgeihuaxexiihyspnksxaohjsryerwamxeyclgqajxermucvkhwrhoigkfvacuuecmcnux", "Robert", "2023-02-01", "author");
+INSERT INTO User VALUES (NULL, "emily2520", "lyczkxebcdqgaoeacqgoagxylxbrgmvukjlpbryknynqbgkkvlxqbylwkecmdvaencurszpaeggiwvfpvcagsxbmtuyprbpkilopxegvtskpttflxiqaijcruvjitzkc", "Emily", "2024-01-07", "admin");
+INSERT INTO User VALUES (NULL, "emma1209", "rzqglwhqhflvbchqxriehevkrreifkylawokckziclhqkwsoxxgqsangyrfxjltkhxwuclpztsgqccfapmvwwvkckudtpvmklhlgupdporcyzmyodlrcvlgwhtdnphcq", "Emma", "2024-02-09", "author");
+
+INSERT INTO SoftwareUnit VALUES (NULL, 4, "QsMONoEfeH", "SMKT6eRslTlKiOo9fqBSI5VJ2p7bAN0R2aJ8msOxKsKoGy332e60ocq4f4wNuTWM4ZEfK0Z4ENZqQzxXjf3C2lHWtKGu3WR6o5jtsoFD1ZHZCxL4W1POBOkJqcm62vE7uzq0nxiLBNFLQaBZSHuaiZwolPK05sjoMLtQW0shEBD8921vXpCtA6uDqFEbV0d7GZk3bYMXxM52CZIWYi82zMp35MRFeLT11XlRPQpftljnsPrnS3QlJkfI0qAgzxM", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 8, "kSwKIPmTfS", "rRqjrRPdyMpN1dKkWLqmzMDRCfhIAZxO3OCZQe3NTKfgMvoL3WQjvpTpaFR8paHtvrmcL9VVQUzalfHCZFhEZK9WxSnOBepeaoIUe7lzl8h2j1EuzCds47bXI18myqztMaBpQIlM9WmWRUNOrVaG2ATxPeJpEtu1LfAQH9vHhiJdvkciacyzZ58xBJU9EG79TiFAZn581tB3mLGnW3B2U9NBiAM4DwQFnInES3Jx5oJJJc4uATXOfM1NXwtUf27", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 6, "JoCrWhymLJ", "ryKfp4d7e8yI38TtrUvHGQsuvBHtPpXGQmRcLWeJsWXm03aMRY1EAZlQ20E3U90MOenFAzbnndXRF89gp6SXlK9RS4AoUrfBufJi1CXBSIcUp7fyp70qk5ajvZWbgkLAOiR51s4YNMryHR6r7lZAsHpysMnc94C1csZMkn8g5cjdhRM5flKGszS6zJi9aXSIllymWWDrnpwoowqZMU33jbZnRAC9B5Ep5e8YPu9knt9wa2ERDucNaOovCzFI4r6", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 1, "zEEvRDKyym", "RnGrWiz8nM5g0TfM3rZR6QI4VaMF004GObEp1I3lmoAWkQqrbYwZO3XpVjKxLs8IVoEtoWZD9QIuhcHS4UIUg54XNBfc0mGfihdDCJCdLWbwOpO5Ew9EeTkf31skIgOzKda8flQeJnN0L3TnZu8Gt98SrYgeTW9JsippqpzomOZJW4sUXrbJI1zU98lIzyB1qiiEqk61eCRlL8ElfoFTEgxpuY6LimMchzxLUBARHNwcZLuWP3A7JN2ns77NYq7", "https://example.com/graphic", 0);
+INSERT INTO SoftwareUnit VALUES (NULL, 7, "xmueeyKWkb", "wOo83CNQdzLKcNX9XQ0NKrwequT37o4EEwIgWSXaXGJmP5R6cq5KqDyKjjizkJX44Wnz3h3UY4tWKsQG5sD4n8qrk88jkLVC6kgVpZXU58J1STFsDfWtSH9wr80iXfirGY2aPB4qwUPhA1OCBCPpfkcywtIaXLdCpDtstwsjdewXGfLs0QbHO3u0QkPU5kZP8dbhyjYAt7mIkrhiT1y2eEEa833X7HZd5jbnSODRRIFTwWWbQGqb1SF9i3lnJ8o", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 4, "ceyvMMUGEn", "mP56Wm4ViDpvGS5a1GaYO3tw3vt0SDWyNx3jZvd8qdv0L27rpo4TTddMfR3Sn2yHBrwKplIRpet3bIzG717iIdzs5e94XNsdaMAGXB7S4JiNxhJIiHlho6MAXxhu3rRC1ckF61igqmTwExcATjhR5CAQwfmH9JVWGjTnL1ilFTX1dUh5iPZWmtBuCsVj2Oi4L6r4lwadRZnHRih0jdKy3rkCrXgjEAmOTxkS8RlQ4I10ahuLSJJPXDk9gnPcGvN", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 8, "JNdSYmblHf", "iWIXbS6JmqdQ6LRhCf3Jwgj90Kus8rUfpLNF1sVSmabWBulvOvqudlSfpmfd02oqJAe2LZwaRusB7FE01NgiMF7RBjXu6auwk4XFpLKkREtAwGX4EDktlfYvu0kJqm9hJMhFoUkaFSg5GQiDY8yrhp8r8SIhLQCQTnWZv39L4gWrNcqwGraRjWNWr2U5FL3D7xHVmapvBeBy1rDsDS4hwrK52HA7trZGYPNyWSmRX0UujTHMZov2Q9evbvJF5zK", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 6, "ZKDyzNgEAO", "MNTTdy0jOo321Bc9casCXCg4DxA7fvYLIneER7wDh4HaWHQjNPMJvuUpC35TbhefHfu18oYlFf3rhuTgeFYDiyVc2UD43SvNPzikx64G7E3Zt5dMLQkdZseRnDRCz9q0PIXO2UNQFexsqfkEBhLrIPgTustUv9uZJjgIe1ReqD0y2fL4I0YDfHlCDelOH7j590TycNmH7aB1maWT5IiRGrGMMGwdCknA4Oi5h2DEoPeL9v10s2GWp1wzX3H3iRu", "https://example.com/graphic", 1);
+INSERT INTO SoftwareUnit VALUES (NULL, 4, "BmrRHjyMba", "ZWwYi5AxqUwC4eDTY4mWXA7ibZI2lDp9yetDanS5OPQvbx4mfsQoFWFYjyH2UThl12CNDGhNHBuc7yhfMUJ4NeVUOtQZuNGRAgyE4U7DaapRQqcj3thCYhWfTYwAc6IcEjDlPHahztP1tlkDPmmsmpGeEtlqUrTrJLLtLa05Eu9aChgXdTpTS9XX929LeE0wGJQ7a6Ct70T58IwTAuoLImzUygZMWIrsJKsZQOGgFmKmMzvjuUnLlC6wrbe63Ix", "https://example.com/graphic", 0);
+INSERT INTO SoftwareUnit VALUES (NULL, 9, "EOkhjGiKmw", "RfKyl2APyl80tKsSRpzqURPsFZguodZ1etRc0cKONPeW7E6rOAkbhRckJubTLojiIk5LJmAjnHH3fkLNVy5Znh4fH93YQpLW2nJWh0bKSEdoaOn9GRdRGyii4iZMVYEA83OyVjgAtnbKOOpBptOIC0n5VAlI9Y5TTjGDDejHtL61m0PsDHTCgu9Vt1Eae9oqBUyNPAC3vPSKz0kEaVmzTwVzzKXCu7iUD6vAVYGNgpTObDlmoYOHB2biaQYydfj", "https://example.com/graphic", 0);
+
+INSERT INTO SoftwareVersion VALUES (NULL, 10, "VDlScvrT9UC4Q90xeH6Len8LRwkFnpp53SWZMKrlo49ODUjSJbeKaRDsTTrgrIaFyG3lrm0JJrOknDeGblrhKj90LjhSVkoaKwA2B5UrRod7a3WXH8sH8p1M3X2n0O1MWOC11H1pjvwzU8BsP49bDYCcmu8HpQXWqTIY1UBq6V3bGdawSHnDdXzUSCkzQq015wOoo26IThCZLW9KwbBdkKVKaOpep59zVtTR1pz6XnlIG89BX1wW8lxN0UIGwDK", "2024-08-26", 3, 8, 67);
+INSERT INTO SoftwareVersion VALUES (NULL, 2, "pnKSGX02xgtbhe34VOHTprYY4ROFgh5udojYyovf5bDmblhDykDUCZeRffZp9PXZnxHJf9ZMSo4sQjsokTq9NRsm10ozElvzZ4MLsSNZZymCKmPM7ilvtZ0VtJVL3RIuQXOLukg2if0M0u0cwoOkDb12adIsNurSiEVDY95yQBUgp378PdNNPMFf1G8PrVQ1LwZolGMv3vTdyNTl5latPd278eY0jbB3muAiegfyE9ZJO3HBwwzX1jtOtyMTOH0", "2023-05-19", 10, 2, 31);
+INSERT INTO SoftwareVersion VALUES (NULL, 6, "tiUWM3iEdsDJ1M7VPcXIOGbdW5xxNvfFYdPhyRinXzAun9Uf0BJP87VK97ULoJNj31xhjyMhgTs8UGy0mUOo06N0NEobyPJGZWpehKZhKSLAs8RnyNiCgEkYceWJ1EzXausagHChLJHcD8vC34o0P99tSZx5japQiz2cXsmnOXgRedPm6DFIa17dDdAmKqwt3ofvXXQXgQ8Yt7jTJGWmSXBtL5rRxeodRqM1syoBmP7KoTCGVPbuNsJj4Lp5SSc", "2023-03-23", 4, 4, 10);
+INSERT INTO SoftwareVersion VALUES (NULL, 9, "fd36EXrBEBS2168hUIXe5Hi9bQXMec4sFKyxXu2rf8BYdrlHSay0Ef9AEiiCb5islbbdBySRY1XqJvGW1AzSD5OapPIGxq6OtQVFP10aER8J5JMQfqZibQj5NqtEySghmhoYgKNbsvH5tvQPzMMXEsAAo6VX24FpHW8P2Jrw9XeWWFwlyoVaY8oOKpf3Y9jUxzhEG7cKQkUn5svmISTGMO374aozXWLvEJZLb1UnI2UYJaN4UXAY5r0uNzXsUST", "2023-04-18", 5, 10, 17);
+INSERT INTO SoftwareVersion VALUES (NULL, 1, "lyVfAu6MQaTRiY4h4C3OICGFdkCBf3pNYZvTvhdUbTSvZN2nptqrEr46gYx7BCMyYg7HTObjnGinIqca2y7IxaX8WxLtHgmtTozFbM8NkpB3PgZGapG6gqL4OndaTNclEXBSZSRMrFzkra95Kd4OFxaQ9TFZJnhGSOrdy3MWLNawRLrDO5KN8FpNVYYqzMTN1LMdWhYiA3S339ugnlKLVCAo1T9DL97sh819KAlS4d6nNV2et6y8cuHFYSolv1b", "2024-09-19", 10, 3, 2);
+INSERT INTO SoftwareVersion VALUES (NULL, 3, "LFhA93MBPmH9N6QZods2bnjkZ4JCMLRXtaNVAxMDUDRqShYSPZ6jsNFmYlUJg7A4kUlkHitvxUGwJ7iqZ9CvZM6Ka8I2oE5IjhfOMUM6VT1ywUKZNWaKonCBqVrrGsCfou6MjTeNRW4ULmkb7X0V5tbqKVx103vbC9LWObTPVsc36craDOvtgrrnFV86qqFdxdj8hTDqGkNfBdww8MBWELEguYdvAL1FwjhXxhKz1p5TuqGlTxrCiebFusYeOHW", "2023-05-16", 5, 8, 33);
+INSERT INTO SoftwareVersion VALUES (NULL, 2, "5Mv5CQV8Y0EZCQlsHvhZzmal2kqwqx68d3hrPaCnkfXC9Ql2acxVSDQaneajQhdUJUFGXSTMA7qv8ulFPTd5zSSJ9PnxADZBA9HRhuw7p73TkfT8B6eNn81JCPjMPQQtTHJWoKgzocUJbYEGV5mrLukEDYSkBRzXvIKfllmpGEsvmg3HGV7aDaefNLLBWFmMSRbSsXwG8pv6R4CFX3PGIHRE9neD5P5xpVeR957iMHIZVLsx3UXHO1a1igcOHMh", "2024-06-27", 6, 1, 78);
+INSERT INTO SoftwareVersion VALUES (NULL, 4, "QuJ3DmwtVtcZypHM8xulEr6XZnhQn79UXLiDTLdZ5WnG96N6CzEWTAbtZSykpAXVNFYkJ6aO9WSmDebNa2ObMgdd8V0mbaAXNpAvmDdQaL4mEoe6mq4JEEcAjLIMZHiMem3OszQeLwuhnii6JUZN6utQtAfpACEqo67S7bxjGaOI2S8oYfWYSRtsXfUZGpD10JxMZcRIuk3FkDZnMfksA7l0AnBy3Z4vLMgW2N9Kjz2sBLVKa651grWUmqt3aHa", "2024-04-03", 8, 7, 6);
+INSERT INTO SoftwareVersion VALUES (NULL, 6, "vTJSXUvIeycw2gKNZyKMZGfA9wrrLubHsfBreWjTODAnyjsLBuGH69FTkrErqoghaMiwZruQL9YUwYCTpDKbWbkVPFE7F79ImR01lqDCf2azKXzjWEsH57QoIsMBlkHGSc0LUyzIJ9U429WFd6NldOHrqTaq5EMNm2D16W015BO7jRa0Y5I3rVdRwa85MTAYydrtOcIMlLQI3He9seQd9At9VbUbD4CMRE5oeAadoyTOSZBxBwEiPIkauRPLddL", "2024-07-19", 8, 1, 71);
+INSERT INTO SoftwareVersion VALUES (NULL, 1, "ZbhA5pQOv2l9QmsBS4ka3eZs2ln0nidQWPkfBxwOiojpPaFdQgyv2yTTMBU2G69cX8kyxVQ5MlU22BH0Ahthz0XkrOb6C6QDq32EWfc6eX3QUthM3zImhMvg6PRpbycMSvlrXZKN1vmRHfiR05S1KZoZPo7QyyvFWUeZhT9IIHiKymBvCxLeZyuwFPFuksdpydNy9pbZuRohqWnVQDjPojvNipP6XZKt4yXhEuTS064H4yaZJ5kmCwr1h6ZsjEc", "2023-08-27", 10, 9, 29);
+
+
+INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
+INSERT INTO SourceCode VALUES (NULL, 5, "/path/to/source/code/5/");
+INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
+INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
+INSERT INTO SourceCode VALUES (NULL, 4, "/path/to/source/code/4/");
+INSERT INTO SourceCode VALUES (NULL, 9, "/path/to/source/code/9/");
+INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
+
+INSERT INTO Executable VALUES (NULL, 1, "arm", "2023-09-05", "/path/to/executable/4/app.dmg");
+INSERT INTO Executable VALUES (NULL, 1, "x64", "2024-05-02", "/path/to/executable/9/app.deb");
+INSERT INTO Executable VALUES (NULL, 1, "x64", "2024-11-26", "/path/to/executable/7/app.dmg");
+INSERT INTO Executable VALUES (NULL, 1, "arm", "2024-01-20", "/path/to/executable/3/app.msi");
+INSERT INTO Executable VALUES (NULL, 1, "arm", "2024-04-09", "/path/to/executable/1/app.msi");
+INSERT INTO Executable VALUES (NULL, 2, "x64", "2023-11-28", "/path/to/executable/8/app.msi");
+INSERT INTO Executable VALUES (NULL, 2, "x64", "2024-05-14", "/path/to/executable/4/app.app");
+INSERT INTO Executable VALUES (NULL, 2, "x86", "2024-02-27", "/path/to/executable/5/app.msi");
+INSERT INTO Executable VALUES (NULL, 2, "x64", "2023-10-24", "/path/to/executable/1/app.deb");
+INSERT INTO Executable VALUES (NULL, 2, "x86", "2023-11-23", "/path/to/executable/8/app.exe");
