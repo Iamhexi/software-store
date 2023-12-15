@@ -381,24 +381,25 @@ END $$
 
 -- FUNCTIONS
 
-# CREATE FUNCTION GetCommaSeparatedCategories(software_id INT)
-#     RETURNS VARCHAR
-# BEGIN
-#     DECLARE listCategory text;
-#
-#     SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR ',')
-#     INTO listCategory
-#     FROM Category
-#     WHERE Category.category_id IN (SELECT category_id
-#                                    FROM SoftwareCategory
-#                                    WHERE SoftwareCategory.software_id = software_id);
-#
-#     IF listCategory IS NULL THEN
-#         SET listCategory = 'uncategorized';
-#     end if;
-#
-#     RETURN listCategory;
-# END $$
+CREATE FUNCTION GetCommaSeparatedCategories(software_id INT)
+    RETURNS VARCHAR(255)
+BEGIN
+    SET @listCategory := (
+        SELECT GROUP_CONCAT(name ORDER BY name SEPARATOR ',')
+        FROM Category
+        WHERE Category.category_id IN (
+            SELECT category_id
+            FROM SoftwareCategory
+            WHERE SoftwareCategory.software_id = software_id
+        )
+    );
+
+    IF @listCategory IS NULL THEN
+        SET @listCategory := 'uncategorized';
+    END IF;
+
+    RETURN @listCategory;
+END $$
 
 CREATE FUNCTION GetMostPopularSoftwareAuthor()
     RETURNS INT
