@@ -499,6 +499,8 @@ GRANT SELECT, DELETE, INSERT
 ON software_store.SoftwareVersion
 TO SoftwareAuthor@localhost;
 
+GRANT CALL ON software_store.DeleteSoftwareVersion TO SoftwareAuthor@localhost;
+
 -- Client
 
 GRANT SELECT ON software_store.SoftwareCategory TO Client@localhost;

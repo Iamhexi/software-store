@@ -623,3 +623,127 @@ INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-
 Success
 Administrator
 
+Call PurgeSoftware procedure
+CALL PurgeSoftware(10);
+Success
+Administrator
+
+Cannot call PurgeSoftware procedure
+CALL PurgeSoftware(1);
+Failure
+SoftwareAuthor
+
+Cannot call PurgeSoftware procedure
+CALL PurgeSoftware(1);
+Failure
+Client
+
+Cannot call PurgeSoftware procedure
+CALL PurgeSoftware(1);
+Failure
+UnregisteredUser
+
+Call BlockSoftware procedure
+CALL BlockSoftware(10);
+Success
+Administrator
+
+Cannot call BlockSoftware procedure
+CALL BlockSoftware(1);
+Failure
+SoftwareAuthor
+
+Cannot call BlockSoftware procedure
+CALL BlockSoftware(1);
+Failure
+Client
+
+Cannot call BlockSoftware procedure
+CALL BlockSoftware(1);
+Failure
+UnregisteredUser
+
+Call UnblockSoftware procedure
+CALL UnblockSoftware(1);
+Success
+Administrator
+
+Cannot call UnblockSoftware procedure
+CALL UnblockSoftware(1);
+Failure
+SoftwareAuthor
+
+Cannot call UnblockSoftware procedure
+CALL UnblockSoftware(1);
+Failure
+Client
+
+Cannot call UnblockSoftware procedure
+CALL UnblockSoftware(1);
+Failure
+UnregisteredUser
+
+Call PurgeUser procedure
+CALL PurgeUser(10);
+Success
+Administrator
+
+Cannot call PurgeUser procedure
+CALL PurgeUser(1);
+Failure
+SoftwareAuthor
+
+Cannot call PurgeUser procedure
+CALL PurgeUser(1);
+Failure
+Client
+
+Cannot call PurgeUser procedure
+CALL PurgeUser(1);
+Failure
+UnregisteredUser
+
+Call DeleteSoftwareVersion procedure
+CALL DeleteSoftwareVersion(1);
+Success
+Administrator
+
+Call DeleteSoftwareVersion procedure
+CALL DeleteSoftwareVersion(2);
+Success
+SoftwareAuthor
+
+Cannot call DeleteSoftwareVersion procedure
+CALL DeleteSoftwareVersion(3);
+Failure
+Client
+
+Cannot call DeleteSoftwareVersion procedure
+CALL DeleteSoftwareVersion(4);
+Failure
+UnregisteredUser
+
+Call ProcessAcountChangeRequest procedure accepting the request
+CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
+Success
+Administrator
+
+Call ProcessAcountChangeRequest procedure rejecting the request
+CALL ProcessAcountChangeRequest(2, 0, 'The justification of the decision is the following...");
+Success
+Administrator
+
+Cannot call ProcessAcountChangeRequest procedure
+CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
+Failure
+SoftwareAuthor
+
+Cannot call ProcessAcountChangeRequest procedure
+CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
+Failure
+Client
+
+Cannot call ProcessAcountChangeRequest procedure
+CALL ProcessAcountChangeRequest(1, 1, 'The justification of the decision is the following...");
+Failure
+UnregisteredUser
