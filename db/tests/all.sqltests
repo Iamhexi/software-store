@@ -153,68 +153,68 @@ INSERT INTO Rating (author_id, software_id, mark, date_added) VALUES(1, 2, 5, '2
 Failure
 Administrator
 
-Cannot insert NULL BugReport.software_id
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(NULL, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Cannot insert NULL BugReport.version_id
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(NULL, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Failure
 Administrator
 
-Cannot insert NOT FOREIGN BugReport.software_id
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(999999, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+Cannot insert NOT FOREIGN BugReport.version_id
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(999999, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Failure
 Administrator
 
 Cannot insert NULL BugReport.user_id
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, NULL, NULL, NULL, NULL, '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, NULL, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Failure
 Administrator
 
 Cannot insert NOT FOREIGN BugReport.user_id
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 999999, NULL, NULL, NULL, '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 999999, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Failure
 Administrator
 
 Insert NULL BugReport.title
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Success
 Administrator
 
 Insert NULL BugReport.description_of_steps_to_get_bug
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Success
 Administrator
 
 Insert NULL BugReport.bug_description
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', 'Pending');
 Success
 Administrator
 
 Cannot insert NULL BugReport.date_added
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, NULL, 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, NULL, 'Pending');
 Failure
 Administrator
 
 Cannot insert NULL BugReport.review_status
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', NULL);
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, NULL, NULL, NULL, '2023-12-29', NULL);
 Failure
 Administrator
 
 Cannot insert BugReport
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
 Failure
 UnregisteredUser
 
 Insert  BugReport
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
 Success
 Client
 
 Insert  BugReport
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
 Success
 SoftwareAuthor
 
 Insert BugReport
-INSERT INTO BugReport (software_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
+INSERT INTO BugReport (version_id, user_id, title, description_of_steps_to_get_bug, bug_description, date_added, review_status) VALUES(2, 1, 'Test bug', '1. Test the bug. 2. Make the bug happen.', 'Stuff might work when it shouldnt', '2023-12-29', 'Pending');
 Success
 Administrator
 
@@ -308,14 +308,14 @@ INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_s
 Failure
 UnregisteredUser
 
-Insert  AccountChangeRequest
+Insert AccountChangeRequest
 INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
 Success
 Client
 
-Insert  AccountChangeRequest
+Insert AccountChangeRequest
 INSERT INTO AccountChangeRequest (user_id, description, date_submitted, review_status) VALUES(1, 'Testing account change requests.', '2023-12-29', 'Pending');
-Success
+Failure
 SoftwareAuthor
 
 Insert AccountChangeRequest
@@ -333,9 +333,9 @@ INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_bloc
 Failure
 Administrator
 
-Insert NULL SoftwareUnit.name
+Cannot insert NULL SoftwareUnit.name
 INSERT INTO SoftwareUnit (author_id, name, description, link_to_graphic, is_blocked) VALUES(1, NULL, NULL, NULL, 0);
-Success
+Failure
 Administrator
 
 Insert NULL SoftwareUnit.description
@@ -374,32 +374,32 @@ Success
 Administrator
 
 Cannot insert NULL SoftwareVersion.software_id
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(NULL, NULL, '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(NULL, NULL, '2023-12-29', 1, 2, 2);
 Failure
 Administrator
 
 Cannot insert NOT FOREIGN SoftwareVersion.software_id
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(999999, NULL, '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(999999, NULL, '2023-12-29', 1, 2, 2);
 Failure
 Administrator
 
 Insert NULL SoftwareVersion.description
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, 2);
 Success
 Administrator
 
 Cannot insert NULL SoftwareVersion.date_added
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, NULL, 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, NULL, 1, 2, 2);
 Failure
 Administrator
 
 Cannot insert NULL SoftwareVersion.major_version
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', NULL, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', NULL, 2, 2);
 Failure
 Administrator
 
 Cannot insert NULL SoftwareVersion.minor_version
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, NULL, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, NULL, 2);
 Failure
 Administrator
 
@@ -409,22 +409,22 @@ Failure
 Administrator
 
 Cannot insert SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Failure
 UnregisteredUser
 
 Cannot insert  SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Failure
 Client
 
 Insert  SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Success
 SoftwareAuthor
 
 Insert SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, '3Hotfix');
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
 Success
 Administrator
 
@@ -509,47 +509,47 @@ Success
 Administrator
 
 Cannot insert NULL Download.user_id
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(NULL, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(NULL, 1, '2023-12-29 12:37:45');
 Failure
 Administrator
 
 Cannot insert NOT FOREIGN Download.user_id
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(999999, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(999999, 1, '2023-12-29 12:37:45');
 Failure
 Administrator
 
-Cannot insert NULL Download.exectuable_id
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, NULL, '2023-12-29 12:37:45');
+Cannot insert NULL Download.executable_id
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, NULL, '2023-12-29 12:37:45');
 Failure
 Administrator
 
-Cannot insert NOT FOREIGN Download.exectuable_id
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 999999, '2023-12-29 12:37:45');
+Cannot insert NOT FOREIGN Download.executable_id
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 999999, '2023-12-29 12:37:45');
 Failure
 Administrator
 
 Cannot insert NULL Download.date_download
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, NULL);
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, NULL);
 Failure
 Administrator
 
 Cannot insert Download
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
 Failure
 UnregisteredUser
 
 Insert  Download
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
 Success
 Client
 
 Insert  Download
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
 Success
 SoftwareAuthor
 
 Insert Download
-INSERT INTO Download (user_id, exectuable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
 Success
 Administrator
 
@@ -579,7 +579,7 @@ Failure
 SoftwareAuthor
 
 Insert Category
-INSERT INTO Category (name, description) VALUES('TestCategory', 'A test category.');
+INSERT INTO Category (category_id, name, description) VALUES(NULL, 'TestCategory', 'A test category.');
 Success
 Administrator
 

@@ -463,7 +463,7 @@ end;
 
 -- Creating database users
 
-CREATE OR REPLACE USER 'Administator'@'localhost' IDENTIFIED BY 'MyPassword123';
+CREATE OR REPLACE USER 'Administrator'@'localhost' IDENTIFIED BY 'your_password';
 CREATE OR REPLACE USER 'SoftwareAuthor'@'localhost' IDENTIFIED BY 'MyPassword123';
 CREATE OR REPLACE USER 'Client'@'localhost' IDENTIFIED BY 'MyPassword123';
 CREATE OR REPLACE USER 'UnregisteredUser'@'localhost' IDENTIFIED BY 'MyPassword123';
@@ -474,7 +474,7 @@ CREATE OR REPLACE USER 'UnregisteredUser'@'localhost' IDENTIFIED BY 'MyPassword1
 
 GRANT ALL PRIVILEGES
 ON software_store.*
-TO Administator@localhost;
+TO Administrator@localhost;
 
 -- Software Author
 
@@ -485,14 +485,12 @@ GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Review TO SoftwareAuthor@
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SourceCode TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareUnit TO SoftwareAuthor@localhost;
 
-
 GRANT SELECT, INSERT
 ON software_store.Download
 TO SoftwareAuthor@localhost;
 
-GRANT INSERT
-ON software_store.StatuteViolationReport
-TO SoftwareAuthor@localhost;
+GRANT INSERT ON software_store.StatuteViolationReport TO SoftwareAuthor@localhost;
+GRANT INSERT ON software_store.SoftwareCategory TO SoftwareAuthor@localhost;
 
 GRANT SELECT, DELETE, INSERT
 ON software_store.SoftwareVersion
@@ -500,13 +498,13 @@ TO SoftwareAuthor@localhost;
 
 -- Client
 
-GRANT SELECT
-ON software_store.Executable
-TO Client@localhost;
+GRANT SELECT ON software_store.SoftwareCategory TO Client@localhost;
+GRANT SELECT ON software_store.Executable TO Client@localhost;
 
 GRANT INSERT ON software_store.Download TO Client@localhost;
 GRANT INSERT ON software_store.BugReport TO Client@localhost;
 GRANT INSERT ON software_store.StatuteViolationReport TO Client@localhost;
+GRANT INSERT ON software_store.AccountChangeRequest TO Client@localhost;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Rating TO Client@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON software_store.Review TO Client@localhost;
