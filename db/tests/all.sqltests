@@ -374,42 +374,42 @@ Success
 Administrator
 
 Cannot insert NULL SoftwareVersion.software_id
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(NULL, NULL, '2023-12-29', 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(NULL, NULL, '2023-12-29', 1, 2, NULL);
 Failure
 Administrator
 
 Cannot insert NOT FOREIGN SoftwareVersion.software_id
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(999999, NULL, '2023-12-29', 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(999999, NULL, '2023-12-29', 1, 2, NULL);
 Failure
 Administrator
 
 Insert NULL SoftwareVersion.description
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, 2, NULL);
 Success
 Administrator
 
 Cannot insert NULL SoftwareVersion.date_added
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, NULL, 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, NULL, 1, 2, NULL);
 Failure
 Administrator
 
 Cannot insert NULL SoftwareVersion.major_version
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', NULL, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', NULL, 2, NULL);
 Failure
 Administrator
 
 Cannot insert NULL SoftwareVersion.minor_version
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, NULL, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, NULL, '2023-12-29', 1, NULL, NULL);
 Failure
 Administrator
 
 Cannot insert SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
 Failure
 UnregisteredUser
 
 Cannot insert  SoftwareVersion
-INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, 2);
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
 Failure
 Client
 
@@ -484,7 +484,7 @@ Failure
 Client
 
 Insert Executable
-INSERT INTO SoftwareVersion VALUES (NULL, 2, NULL, '2023-11-01', 1, 1, 5); INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
+INSERT INTO SoftwareVersion VALUES (NULL, 2, NULL, '2023-11-01', 1, 1, NULL); INSERT INTO Executable (version_id, target_architecture, date_compiled, filepath) VALUES(1, 'Win64', '2023-12-29', '/Test/File.exe');
 Success
 SoftwareAuthor
 
@@ -648,6 +648,21 @@ CALL UnblockSoftware(1);
 Failure
 UnregisteredUser
 
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Client
+
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+SoftwareAuthor
+
+Insert Download
+INSERT INTO Download (user_id, executable_id, date_download) VALUES(1, 1, '2023-12-29 12:37:45');
+Success
+Administrator
+
 Call PurgeUser procedure
 CALL PurgeUser(10);
 Success
@@ -687,3 +702,48 @@ Cannot call DeleteSoftwareVersion procedure
 CALL DeleteSoftwareVersion(4);
 Failure
 UnregisteredUser
+
+Call ProcessAccountChangeRequest procedure accepting the request
+CALL ProcessAccountChangeRequest(1, 1, 'The justification of the decision is the following...');
+Success
+Administrator
+
+Call ProcessAccountChangeRequest procedure rejecting the request
+CALL ProcessAccountChangeRequest(2, 0, 'The justification of the decision is the following...');
+Success
+Administrator
+
+Cannot call ProcessAccountChangeRequest procedure
+CALL ProcessAccountChangeRequest(1, 1, 'The justification of the decision is the following...');
+Failure
+SoftwareAuthor
+
+Cannot call ProcessAccountChangeRequest procedure
+CALL ProcessAccountChangeRequest(1, 1, 'The justification of the decision is the following...');
+Failure
+Client
+
+Cannot call ProcessAccountChangeRequest procedure
+CALL ProcessAccountChangeRequest(1, 1, 'The justification of the decision is the following...');
+Failure
+UnregisteredUser
+
+Call PurgeSoftware procedure
+CALL PurgeSoftware(10);
+Success
+Administrator
+
+Insert SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
+Success
+Administrator
+
+Insert SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
+Success
+SoftwareAuthor
+
+Insert SoftwareVersion
+INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
+Success
+Administrator
