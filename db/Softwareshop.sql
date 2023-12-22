@@ -287,7 +287,21 @@ BEGIN
     WHERE BugReport.version_id IN (SELECT version_id
                                    FROM SoftwareVersion
                                    WHERE software_id = SoftwareVersion.software_id);
+    DELETE
+            FROM Download
+            WHERE Download.executable_id IN (SELECT executable_id
+                                            FROM Executable
+                                            WHERE Executable.version_id IN (SELECT version_id
+                                                                                  FROM SoftwareVersion
+                                                                                  WHERE SoftwareVersion.software_id = software_id));
+    DELETE
+            FROM Executable
+            WHERE Executable.version_id IN (SELECT version_id
+                                            FROM SoftwareVersion
+                                            WHERE SoftwareVersion.software_id = software_id);
     DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
+    DELETE FROM SoftwareCategory WHERE SoftwareCategory.software_id = software_id;
+    DELETE FROM StatuteViolationReport WHERE StatuteViolationReport.software_id = software_id;
     DELETE FROM SoftwareUnit WHERE SoftwareUnit.software_id = software_id;
 END $$
 

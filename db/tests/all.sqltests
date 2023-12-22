@@ -702,7 +702,6 @@ Cannot call DeleteSoftwareVersion procedure
 CALL DeleteSoftwareVersion(4);
 Failure
 UnregisteredUser
-<<<<<<< Updated upstream
 
 Call ProcessAccountChangeRequest procedure accepting the request
 CALL ProcessAccountChangeRequest(1, 1, 'The justification of the decision is the following...');
@@ -744,9 +743,8 @@ INSERT INTO SoftwareVersion (software_id, description, date_added, major_version
 Success
 SoftwareAuthor
 
-Insert SoftwareVersion
+Cannot Insert SoftwareVersion
 INSERT INTO SoftwareVersion (software_id, description, date_added, major_version, minor_version, patch_version) VALUES(2, 'Test patch', '2023-12-29', 1, 2, NULL);
-Success
-Administrator
-=======
->>>>>>> Stashed changes
+Failure
+Client
+
