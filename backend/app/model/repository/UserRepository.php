@@ -5,7 +5,7 @@ require_once __DIR__.'/../User.php';
 
 class UserRepository implements Repository {
     private Database $database = new PDODatabase;
-    static string $table_name = get_class($this);
+    static string $table_name = 'User';
 
     public function find($id): ?User {
         $table = self::$table_name;
@@ -15,6 +15,7 @@ class UserRepository implements Repository {
             class_name: self::$table_name,
             number: 1
         );
+        
     }
 
     public function findAll(): array {

@@ -24,7 +24,7 @@ class User {
         return password_verify($password, $this->password_hash);
     }
 
-    public function __get($name): mixed {
+    public function __get(string $name): mixed {
         if (!property_exists($this, $name))
             throw new Exception("Property $name does not exist");
         return $this->$name;
