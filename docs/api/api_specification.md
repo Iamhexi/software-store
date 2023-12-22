@@ -75,10 +75,10 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 - Allowed methods: POST, GET, PUT, DELETE
 - omit `request_id` for a request using POST method
 - PUT method requires: `description`, `review_status`, `user_id` in the request **body** and  `request_id` in request **header**
-- POST method requires: `description`, `review_status`, `user_id` in the request **body**
-- Authorised users: administrator, concerned client (GET)
+- POST method requires: `description`, `user_id` in the request **body**
+- Authorised users: administrator, concerned client (GET, POST)
 
-## Other endpoints
+##  Other endpoints
 
 All other endpoints should be treated according to the rules specified in the `Conventions` section. 
 
