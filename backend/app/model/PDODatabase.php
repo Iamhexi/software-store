@@ -28,7 +28,7 @@ class PDODatabase implements Database {
         return $result;
     }
 
-    public function get_rows(string $query, array $params = [], string $class_name = 'stdClass', int $number = PHP_INT_MAX): array {
+    public function get_rows(string $query, array $params = [], string $class_name = 'stdClass', int $number = PHP_INT_MAX): array|User|null {
 
         $statement = $this->pdo->prepare($query);
         $statement->execute($params);

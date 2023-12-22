@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/PDODatabase.php';
+
 class User {
 
     public function __construct( 
@@ -9,22 +10,27 @@ class User {
         private string $username,
         private DateTime $account_creation_date,
         private AccountType $account_type
-    ) {
-        $this->user_id = $user_id;
-        $this->login = $login;
-        $this->password_hash = $password_hash;
-        $this->username = $username;
-        $this->account_creation_date = $account_creation_date;
+    ) {}
+
+    public function change_password(): void {
+        $this->password_hash = password_hash($this->password_hash, Config::HASHING_ALGORITHM);
+    }
+
+    public function change_account_type(AccountType $account_type): void {
         $this->account_type = $account_type;
     }
 
-    public function register(): bool {
-        $database = new PDODatabase();
-        $query = 'INSERT INTO users(login, password_hash, username, account_creation_date, account_type_id) VALUES (?, ?, ?, ?, ?)';
-        $params = [$this->login, $this->password_hash, $this->username, $this->account_creation_date->format('Y-m-d H:i:s'), strval($this->account_type)];
-        return $database->execute_query($query, $params);
+    public function validate_password(string $password): bool {
+        return password_verify($password, $this->password_hash);
     }
 
-    // TODO: implement business logic of User
+    public function __get($name): mixed {
+        if (!property_exists($this, $name))
+            throw new Exception("Property $name does not exist");
+        return $this->$name;
+    }
 
+    public function __toString(): string {
+        return "User: $this->username";
+    }
 }
