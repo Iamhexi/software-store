@@ -1,7 +1,7 @@
 <?php 
 require_once __DIR__.'/Repository.php';
 require_once __DIR__.'/../PDODatabase.php';
-require_once __DIR__.'/../Review.php';
+require_once __DIR__.'/../BugReport.php';
 
 class BugReportRepository implements Repository {
     private Database $database = new PDODatabase;

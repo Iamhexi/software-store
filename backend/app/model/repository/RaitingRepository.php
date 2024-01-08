@@ -3,7 +3,7 @@ require_once __DIR__.'/Repository.php';
 require_once __DIR__.'/../PDODatabase.php';
 require_once __DIR__.'/../Raiting.php';
 
-class ReviewRepository implements Repository {
+class RaitingRepository implements Repository {
     private Database $database = new PDODatabase;
     private const CLASS_NAME = 'Raiting';
     function find(int $id): ?Raiting {
