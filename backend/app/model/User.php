@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__.'/PDODatabase.php';
+require_once __DIR__ . '/AccountType.php';
+require_once __DIR__ . '/AccountChangeRequest.php';
 
 class User {
 
@@ -22,6 +23,19 @@ class User {
 
     public function validate_password(string $password): bool {
         return password_verify($password, $this->password_hash);
+    }
+
+    public function generate_account_change_request(string $justification): AccountChangeRequest {
+        if ($this->account_type != AccountType::CLIENT)
+            throw new Exception("Only the clients may request a change to their account type.");
+
+        return new AccountChangeRequest(
+            request_id: null,
+            user_id: $this->user_id,
+            date_submitted: new DateTime(),
+            review_status: RequestStatus::Pending,
+            description: $justification
+        );
     }
 
     public function __get(string $name): mixed {
