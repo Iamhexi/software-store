@@ -4,8 +4,10 @@ require_once __DIR__.'/../PDODatabase.php';
 require_once __DIR__.'/../BugReport.php';
 
 class BugReportRepository implements Repository {
+
     private Database $database = new PDODatabase;
     private const CLASS_NAME = 'BugReport';
+    
     function find(int $id): ?BugReport {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(

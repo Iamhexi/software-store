@@ -1,16 +1,18 @@
 <?php 
 require_once __DIR__.'/Repository.php';
 require_once __DIR__.'/../PDODatabase.php';
-require_once __DIR__.'/../Raiting.php';
+require_once __DIR__.'/../Rating.php';
 
-class RaitingRepository implements Repository {
+class RatingRepository implements Repository {
+    
     private Database $database = new PDODatabase;
-    private const CLASS_NAME = 'Raiting';
-    function find(int $id): ?Raiting {
+    private const CLASS_NAME = 'Rating';
+
+    function find(int $id): ?Rating {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE raiting_id = :raiting_id;",
-            params: ['raiting_id' => $id],
+            query: "SELECT * FROM $created_class WHERE rating_id = :rating_id;",
+            params: ['rating_id' => $id],
             class_name: $created_class,
             number: 1
         );
@@ -24,13 +26,13 @@ class RaitingRepository implements Repository {
         );
     }
     
-    function save(Raiting $object): bool {
+    function save(Rating $object): bool {
         $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :mark, :date_added)",
             params: [
-                'raiting_id' => $object->raiting_id?? "NULL",
+                'rating_id' => $object->rating_id?? "NULL",
                 'author_id' => $object->author_id,
                 'software_id' => $object->software_id,
                 'mark' => $object->mark,
@@ -42,8 +44,8 @@ class RaitingRepository implements Repository {
     function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE $class WHERE raiting_id = :raiting_id;",
-            params: ['raiting_id' => $id]
+            query: "DELETE $class WHERE rating_id = :rating_id;",
+            params: ['rating_id' => $id]
         );
     }
 }

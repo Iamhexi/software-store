@@ -4,8 +4,10 @@ require_once __DIR__.'/../PDODatabase.php';
 require_once __DIR__.'/../Review.php';
 
 class ReviewRepository implements Repository {
+    
     private Database $database = new PDODatabase;
     private const CLASS_NAME = 'Review';
+
     function find(int $id): ?Review {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(

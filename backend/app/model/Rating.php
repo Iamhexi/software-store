@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__.'/PDODatabase.php';
 
-class Raiting {
+class Rating {
 
     public function __construct( 
-        private ?int $raiting_id,
+        private ?int $rating_id,
         private int $author_id,
         private int $software_id,
         private int $mark,
@@ -18,6 +18,6 @@ class Raiting {
     }
 
     public function __toString(): string {
-        return "Raiting: $this->mark";
+        return "Rating: $this->mark";
     }
 }
