@@ -1,18 +1,18 @@
 <?php 
 require_once __DIR__.'/Repository.php';
 require_once __DIR__.'/../PDODatabase.php';
-require_once __DIR__.'/../Review.php';
+require_once __DIR__.'/../Rating.php';
 
-class ReviewRepository implements Repository {
+class RatingRepository implements Repository {
     
     private Database $database = new PDODatabase;
-    private const CLASS_NAME = 'Review';
+    private const CLASS_NAME = 'Rating';
 
-    function find(int $id): ?Review {
+    function find(int $id): ?Rating {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE review_id = :review_id;",
-            params: ['review_id' => $id],
+            query: "SELECT * FROM $created_class WHERE rating_id = :rating_id;",
+            params: ['rating_id' => $id],
             class_name: $created_class,
             number: 1
         );
@@ -26,19 +26,17 @@ class ReviewRepository implements Repository {
         );
     }
     
-    function save(Review $object): bool {
+    function save(Rating $object): bool {
         $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
-            query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :title, :description, :date_added, :date_last_updated)",
+            query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :mark, :date_added)",
             params: [
-                'review_id' => $object->review_id?? "NULL",
+                'rating_id' => $object->rating_id?? "NULL",
                 'author_id' => $object->author_id,
                 'software_id' => $object->software_id,
-                'title' => $object->title,
-                'description' => $object->description,
-                'date_added' => $object->date_added,
-                'date_last_updated' => $object->date_last_updated
+                'mark' => $object->mark,
+                'date_added' => $object->date_added
             ]
         );
     }
@@ -46,8 +44,8 @@ class ReviewRepository implements Repository {
     function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE $class WHERE review_id = :review_id;",
-            params: ['review_id' => $id]
+            query: "DELETE $class WHERE rating_id = :rating_id;",
+            params: ['rating_id' => $id]
         );
     }
 }
