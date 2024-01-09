@@ -12,7 +12,7 @@ class User {
         private AccountType $account_type
     ) {}
 
-    public function change_password(): void {
+    public function change_password(string $password): void {
         $this->password_hash = password_hash($this->password_hash, Config::HASHING_ALGORITHM);
     }
 

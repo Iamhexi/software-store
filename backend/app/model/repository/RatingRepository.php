@@ -5,8 +5,12 @@ require_once __DIR__.'/../Rating.php';
 
 class RatingRepository implements Repository {
     
-    private Database $database = new PDODatabase;
+    private Database $database;
     private const CLASS_NAME = 'Rating';
+
+    public function __construct() {
+        $this->database = new PDODatabase;
+    }
 
     function find(int $id): ?Rating {
         $created_class = self::CLASS_NAME;

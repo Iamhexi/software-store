@@ -6,14 +6,22 @@ class PDODatabase implements Database {
     private ?PDO $pdo = null;
 
     public function __construct() {
+        try {
+            $this->create_pdo();
+        } catch (PDOException $e) {
+            Logger::log($e->getMessage(), Priority::ERROR);
+        }
+    }
+
+    // emits an exception if connection fails
+    private function create_pdo(): void {
         $database_host = Config::DATABASE_HOST;
         $database_name = Config::DATABASE_NAME;
-
-        $this->pdo ?? new PDO(
+        $this->pdo = new PDO(
             "mysql:host=$database_host;dbname=$database_name;charset=utf8",
             Config::DATABASE_USER,
             Config::DATABASE_PASSWORD
-            );
+        );
     }
     
     public function execute_query(string $query, array $params = []): bool {

@@ -4,8 +4,13 @@ require_once __DIR__.'/../PDODatabase.php';
 require_once __DIR__.'/../User.php';
 
 class UserRepository implements Repository {
-    private Database $database = new PDODatabase;
+
+    private Database $database;
     static string $table_name = 'User';
+
+    public function __construct() {
+        $this->database = new PDODatabase;
+    }
 
     public function find($id): ?User {
         $table = self::$table_name;
