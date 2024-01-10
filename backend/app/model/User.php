@@ -12,8 +12,8 @@ class User {
         private AccountType $account_type
     ) {}
 
-    public function change_password(): void {
-        $this->password_hash = password_hash($this->password_hash, Config::HASHING_ALGORITHM);
+    public function change_password(string $password): void {
+        $this->password_hash = password_hash($this->$password, Config::HASHING_ALGORITHM);
     }
 
     public function change_account_type(AccountType $account_type): void {
