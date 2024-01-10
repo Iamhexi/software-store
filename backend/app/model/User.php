@@ -24,10 +24,14 @@ class User {
         return password_verify($password, $this->password_hash);
     }
 
-    public function __get(string $name): mixed {
-        if (!property_exists($this, $name))
-            throw new Exception("Property $name does not exist");
-        return $this->$name;
+    public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+
+        if ($propertyName === 'account_creation_date')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+
+        return $this->$propertyName;
     }
 
     public function __toString(): string {

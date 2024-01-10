@@ -1,27 +1,27 @@
 <?php 
 require __DIR__.'/../Config.php';
-class Review {
+class StatuteViolationReport {
     public function __construct(
-        private ?int $review_id,
-        private int $author_id,
+        private ?int $report_id,
         private int $software_id,
-        private string $title,
+        private int $user_id,
+        private int $rule_point,
         private string $description,
         private DateTime $date_added = new DateTime,
-        private DateTime $date_last_updated = new DateTime
+        private string $review_status
     ) {}
 
     public function __get(string $propertyName): mixed {
         if (!property_exists($this, $propertyName))
             throw new Exception("Property $propertyName does not exist");
 
-        if ($propertyName === 'date_added' || $propertyName === 'date_last_updated')
-            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);    
-        
+        if ($propertyName === 'date_added')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);     
+
         return $this->$propertyName;
     }
 
     public function __toString(): string {
-        return $this->title . ': ' . $this->description;
+        return 'Description: '. $this->description . ' ; ' . $this->review_status;
     }
 }
