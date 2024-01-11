@@ -17,12 +17,8 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 ## Endpoint list
 
 - /api/user
-- /api/users
-
 - /api/software
-
 - /api/auth
-
 - /api/account_change_request
 - /api/review
 - /api/rating
@@ -50,20 +46,16 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 
 - Allowed methods: POST
 
-- Request body:
+- Query parameters (request header): login=[login]&password=[user_password]
 
-  ```json
-  {
-  	"login" : "[login]",
-  	"hashed_password" : "[hashed_password]"
-  }
-  ```
 
 - Response body (in case of a success): 
 
   ```json
   {
-  	"access_token" : "[your_token]"
+    "code" : 200,
+    "message" : "Success",
+  	"data" : "[your_token]"
   }
   ```
 
