@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__.'/../config/Config.php';
+require_once __DIR__.'/../Config.php';
+require_once __DIR__.'/Priority.php';
 
 class Logger {
     public static function log(string $message, Priority $priority): void {
@@ -13,14 +14,14 @@ class Logger {
 
     private static function echo(string $message, Priority $priority): void {
         $date = date('Y-m-d H:i:s');
-        $priority = strval($priority);
+        $priority = $priority->value;
         $message = "$date [$priority] $message\n";
         echo $message;
     }
 
     private static function file(string $message, Priority $priority): void {
         $date = date('Y-m-d H:i:s');
-        $priority = strval($priority);
+        $priority = $priority->value;
         $message = "$date [$priority] $message\n";
         file_put_contents(Config::LOG_FILE, $message, FILE_APPEND);
     }

@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__.'/PDODatabase.php';
+require_once __DIR__.'/JsonSerializableness.php';
 
-class Rating {
+class Rating implements JsonSerializable {
+    use JsonSerializableness;
 
     public function __construct( 
         private ?int $rating_id,
