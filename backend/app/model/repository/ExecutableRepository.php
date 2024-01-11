@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/Repository.php';
 
-class ExecutableRepository extends Repository {
+class ExecutableRepository implements Repository {
     private Database $database;
     private const CLASS_NAME = 'Executable';
 
