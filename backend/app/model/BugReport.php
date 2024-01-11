@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__.'/PDODatabase.php';
+require_once __DIR__.'/JsonSerializableness.php';
 
-class BugReport {
+class BugReport implements JsonSerializable {
+    use JsonSerializableness;
 
     public function __construct( 
         private ?int $report_id,

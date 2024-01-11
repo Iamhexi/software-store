@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__.'/JsonSerializableness.php';
 
-class SoftwareUnit {
+class SoftwareUnit implements JsonSerializable {
+    use JsonSerializableness;
 
     public function __construct(
         private ?int $software_id,

@@ -1,20 +1,22 @@
 <?php
 require_once __DIR__ . '/AccountType.php';
 require_once __DIR__ . '/AccountChangeRequest.php';
+require_once __DIR__ . '/JsonSerializableness.php';
 
-class User {
+class User implements JsonSerializable {
+    use JsonSerializableness;
 
     public function __construct( 
-        private ?int $user_id,
+        private ?int $user_id = null,
         private string $login,
-        private string $password_hash,
+        private string $pass_hash,
         private string $username,
-        private DateTime $account_creation_date,
+        private string|DateTime $account_creation_date = new DateTime(),
         private AccountType $account_type
     ) {}
 
     public function change_password(string $password): void {
-        $this->password_hash = password_hash($this->password_hash, Config::HASHING_ALGORITHM);
+        $this->pass_hash = password_hash($password, Config::HASHING_ALGORITHM);
     }
 
     public function change_account_type(AccountType $account_type): void {
@@ -22,7 +24,7 @@ class User {
     }
 
     public function validate_password(string $password): bool {
-        return password_verify($password, $this->password_hash);
+        return password_verify($password, $this->pass_hash);
     }
 
     public function generate_account_change_request(string $justification): AccountChangeRequest {
@@ -44,7 +46,16 @@ class User {
         return $this->$name;
     }
 
+    public function __set(string $name, mixed $value): void {
+        if ($name == 'account_creation_date' && $value !== null && !($value instanceof DateTime))
+            $this->account_creation_date = new DateTime($value);
+        if (!property_exists($this, $name))
+            throw new Exception("Property $name does not exist");
+        $this->$name = $value;
+    }
+
     public function __toString(): string {
         return "User: $this->username";
     }
+
 }
