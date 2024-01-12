@@ -2,19 +2,21 @@
 require_once __DIR__.'/../app/controller/UserController.php';
 require_once __DIR__.'/../app/middleware/AuthenticationService.php';
 require_once __DIR__.'/../app/middleware/AuthorizationService.php';
-require_once __DIR__.'/../app/middleware/Request.php';
-require_once __DIR__.'/../app/middleware/Endpoint.php';
+require_once __DIR__.'/../app/middleware/RequestHandler.php';
 
-$endpoint = Request::get_endpoint();
-$method = Request::get_request_method();
+$request = RequestHandler::get_request();
+$method = $request->method;
+$endpoint = $request->endpoint;
 
 
 switch ($endpoint) {
     case Endpoint::Auth: // authentication with a login and password to obtain a bearer token
+        $login = $request->get_query_parameter('login');
+        $password = $request->get_query_parameter('password');
         
-        $login = Request::get_query_parameter('login');
-        $password = Request::get_query_parameter('password');
-        
+        if ($login === null || $password === null)
+            Controller::send_response(400, 'Failure', 'Missing login or/and password');
+
         if ($method !== 'post') 
             Controller::send_response(405, 'Failure', 'Invalid method');
 
@@ -26,10 +28,11 @@ switch ($endpoint) {
             Controller::send_response(200, 'Success', $result);
 
         break;
+
     case Endpoint::User:
         if ($method === 'post') { // handles only registration (post) without a bearer token, otherwise requires a bearer token
             $controller = new UserController;
-            $controller->handle_request();
+            $controller->handle_request($request);
         } 
         break;
 
@@ -59,4 +62,4 @@ $controller = match ($endpoint) {
 };
 
 // Handling the request
-$controller->handle_request();
+$controller->handle_request($request);

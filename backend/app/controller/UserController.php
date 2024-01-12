@@ -50,7 +50,7 @@ class UserController extends Controller {
             if ($this->user_repository->save($user))
                 self::send_response(201, 'Success', 'User created');
             else
-                self::send_response(500, 'Failure', 'Could not create a new user. Internal error');
+                self::send_response(500, 'Failure', 'Could not create a new user. Internal error. Possibly a duplicate login.');
         }
     }
 

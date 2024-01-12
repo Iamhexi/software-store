@@ -6,8 +6,8 @@ abstract class Controller {
     abstract protected function put(): void;
     abstract protected function delete(): void;
 
-    public function handle_request(): void {
-        match(Request::get_request_method()) {
+    public function handle_request(Request $request): void {
+        match($request->method) {
             'get' => $this->get(),
             'post' => $this->post(),
             'put' => $this->put(),

@@ -1,56 +1,47 @@
 <?php
 
+// $_GET['login'] -> query parameter
+// { "login": "user"} -> body_parameters parameter
+// /api/user/1 -> path parameter
+
 class Request {
-    public static function get_request_method(): string {
-        return strtolower($_SERVER['REQUEST_METHOD']);
-    }
+    public function __construct(
+        public ?string $token_bearer,
+        public string $method,
+        public ?Endpoint $endpoint,
+        public ?int $id,
+        public array $query_parameters,
+        public array $body_parameters,
+        public array $path_parameters
+    ) {}
 
-    public static function get_request_uri(): string {
-        return $_SERVER['REQUEST_URI'];
-    }
-
-    public static function get_endpoint(): ?Endpoint {
-        // TODO: remove query params from the path!
-        $path = explode('/', $_SERVER['REQUEST_URI'])[2] ?? null;
-        return $path === null ? null : Endpoint::fromString($path);
-    }
-
-    public static function has_query_parameters(string $parameterName): bool {
-        return isset($_GET['parameterName']) && !empty($_GET['parameterName']);
-    }
-
-    public static function get_request_body(): array {
-        return json_decode(file_get_contents('php://input'), true);
-    }
-
-    public static function get_request_id(): ?int {
-        $id = explode('/', $_SERVER['REQUEST_URI'])[3] ?? null;
-        return $id === null || !is_numeric($id) ? null : intval($id);
-    }
-
-    public static function get_request_query(): array {
-        $query = explode('?', $_SERVER['REQUEST_URI'])[1] ?? null;
-        if ($query === null)
-            return [];
-        $query = explode('&', $query);
-        $query_array = [];
-        foreach ($query as $key_value) {
-            $key_value = explode('=', $key_value);
-            $query_array[$key_value[0]] = $key_value[1];
-        }
-        return $query_array;
-    }
-
-    public static function get_query_parameter(string $key): ?string {
-        $query = explode('?', $_SERVER['REQUEST_URI'])[1] ?? null;
-        if ($query === null)
-            return null;
-        $query = explode('&', $query);
-        foreach ($query as $key_value) {
-            $key_value = explode('=', $key_value);
-            if ($key_value[0] === $key)
-                return $key_value[1];
-        }
+    public function get_query_parameter(string $parameter_name): ?string { 
+        if (key_exists($parameter_name, $this->query_parameters))
+            return $this->query_parameters[$parameter_name];
         return null;
+    }
+
+    public function has_query_parameter(string $parameter_name): bool {
+        return key_exists($parameter_name, $this->query_parameters);
+    }
+
+    public function get_body_parameter(string $parameter_name): ?string {
+        if (key_exists($parameter_name, $this->body_parameters))
+            return $this->body_parameters[$parameter_name];
+        return null;
+    }
+
+    public function has_body_parameter(string $parameter_name): bool {
+        return key_exists($parameter_name, $this->body_parameters);
+    }
+
+    public function get_path_parameter(string $parameter_name): ?string {
+        if (key_exists($parameter_name, $this->path_parameters))
+            return $this->path_parameters[$parameter_name];
+        return null;
+    }
+
+    public function has_path_parameter(string $parameter_name): bool {
+        return key_exists($parameter_name, $this->path_parameters);
     }
 }
