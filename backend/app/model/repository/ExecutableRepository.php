@@ -5,8 +5,8 @@ class ExecutableRepository implements Repository {
     private Database $database;
     private const CLASS_NAME = 'Executable';
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     public function find(int $id): ?Executable {

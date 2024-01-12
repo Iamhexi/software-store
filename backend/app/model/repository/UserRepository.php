@@ -10,8 +10,8 @@ class UserRepository implements Repository {
     private Database $database;
     static string $table_name = 'User';
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     public function find(int $id): ?User {

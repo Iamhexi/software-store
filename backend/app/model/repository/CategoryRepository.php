@@ -6,8 +6,8 @@ class CategoryRepository {
     private Database $database;
     private const CLASS_NAME = 'Category';
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     public function find(int $id): ?Category {

@@ -3,6 +3,7 @@ require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/Controller.php';
 
 class UserController extends Controller {
+
     private UserRepository $user_repository;
 
     public function __construct() {
@@ -17,8 +18,8 @@ class UserController extends Controller {
         return $this->exists($key) && is_numeric($key) && $key >= 0;
     }
 
-    public function get(): void {
-        $id = explode('/', $_SERVER['REQUEST_URI'])[3] ?? null;
+    protected function get(Request $request): void {
+        $id = $request->id;
         if (!$this->exists($id))
             self::send_response(200, 'Success', $this->user_repository->findAll());
         else if (!$this->isCorrectPrimaryKey($id))
@@ -30,11 +31,10 @@ class UserController extends Controller {
             else
                 self::send_response(200, 'Success', $user);
         }
-        // PHP won't encode object's private properties to JSON unless implement JsonSerializable interface
     }
 
-    public function post(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
+    protected function post(Request $request): void {
+        $data = $request->body_parameters;
         if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_type']))
             self::send_response(400, 'Failure', 'Missing data');
         else {
@@ -54,8 +54,8 @@ class UserController extends Controller {
         }
     }
 
-    public function put(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
+    protected function put(Request $request): void {
+        $data = $request->body_parameters;
         if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_creation_date']) || !$this->exists($data['account_type']))
             self::send_response(400, 'Failure', 'Missing data');
         else {
@@ -74,8 +74,8 @@ class UserController extends Controller {
         }
     }
 
-    public function delete(): void {
-        $id = explode('/', $_SERVER['REQUEST_URI'])[3] ?? null;
+    protected function delete(Request $request): void {
+        $id = $request->id;
         if (!$this->exists($id) || !is_numeric($id))
             self::send_response(400, 'Failure', 'Missing or invalid id');
         if ($this->user_repository->find($id) === null)

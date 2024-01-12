@@ -7,8 +7,8 @@ class DownloadRepository implements Repository {
     private Database $database;
     private const CLASS_NAME = 'Download';
 
-    public function __construct() {
-        $this->database = new Database;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     public function find(int $id): ?Download {

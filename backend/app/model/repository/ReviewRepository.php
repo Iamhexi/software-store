@@ -8,8 +8,8 @@ class ReviewRepository implements Repository {
     private Database $database;
     private const CLASS_NAME = 'Review';
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     function find(int $id): ?Review {

@@ -7,8 +7,8 @@ class TokenRepository implements Repository {
 
     private Database $database;
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     public function find(string|int $id): ?Token {

@@ -6,8 +6,8 @@ class SoftwareVersionRepository {
 
     private Database $database;
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     function find(int $id): ?SoftwareVersion {

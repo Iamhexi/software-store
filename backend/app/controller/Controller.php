@@ -1,17 +1,17 @@
 <?php
 
 abstract class Controller {
-    abstract protected function get(): void;
-    abstract protected function post(): void;
-    abstract protected function put(): void;
-    abstract protected function delete(): void;
+    abstract protected function get(Request $request): void;
+    abstract protected function post(Request $request): void;
+    abstract protected function put(Request $request): void;
+    abstract protected function delete(Request $request): void;
 
     public function handle_request(Request $request): void {
         match($request->method) {
-            'get' => $this->get(),
-            'post' => $this->post(),
-            'put' => $this->put(),
-            'delete' => $this->delete()
+            'get' => $this->get($request),
+            'post' => $this->post($request),
+            'put' => $this->put($request),
+            'delete' => $this->delete($request),
         };
     }
 
