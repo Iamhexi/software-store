@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../../../app/model/Exectuable.php';
+
 use PHPUnit\Framework\TestCase;
 
 class ExecutableTest extends TestCase {

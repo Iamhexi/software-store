@@ -29,9 +29,8 @@ class UserTest extends TestCase
     /** @test
      *  @dataProvider accountTypesToTests
      */
-    public function testChangeAccountType(string $accountType): void
+    public function testChangeAccountType(AccountType $newAccountType): void
     {
-        $newAccountType = AccountType::fromString($accountType);
 
         $this->user->change_account_type($newAccountType);
 
@@ -96,13 +95,13 @@ class UserTest extends TestCase
 
     public static function accountTypesToTests(): array{
         return [
-            ['author'], ['administrator'], ['client']
+            [AccountType::ADMIN], [AccountType::SOFTWARE_AUTHOR], [AccountType::CLIENT], [AccountType::GUEST]
         ];
     }
 
     public static function nonClientAccountTypesToTests(): array{
         return [
-            [AccountType::ADMIN], [AccountType::SOFTWARE_AUTHOR]
+            [AccountType::ADMIN], [AccountType::SOFTWARE_AUTHOR], [AccountType::GUEST]
         ];
     }
 }
