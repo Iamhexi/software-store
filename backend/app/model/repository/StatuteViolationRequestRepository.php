@@ -29,7 +29,7 @@ class StatuteViolationRequestRepository {
         return $this->database->execute_query(
             query: "INSERT INTO StatuteViolationRequest VALUES (:report_id, :software_id, :description, :rule_point, :date_added, :review_status)",
             params: [
-                'report_id' => $object->report_id ?? "NULL",
+                'report_id' => $object->report_id ?? NULL,
                 'software_id' => $object->software_id,
                 'description' => $object->description,
                 'rule_point' => $object->rule_point,

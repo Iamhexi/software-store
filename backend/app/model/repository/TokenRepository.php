@@ -11,7 +11,7 @@ class TokenRepository implements Repository {
         $this->database = new PDODatabase;
     }
 
-    public function find(int $id): ?Token {
+    public function find(string|int $id): ?Token {
         $obj = $this->database->get_rows(
             query: "SELECT * FROM Token WHERE token = :token",
             params: ['token' => $id],
@@ -21,7 +21,7 @@ class TokenRepository implements Repository {
 
         if ($obj === null)
             return null;
-
+        
         return new Token(
             token: $obj->token,
             user_id: $obj->user_id,

@@ -5,11 +5,15 @@ require_once __DIR__ . '/Endpoint.php';
 
 class AuthorizationService {
     private TokenRepository $token_repository;
-    private TokenRepository $user_repository;
+    private UserRepository $user_repository;
 
+    public function __construct() {
+        $this->token_repository = new TokenRepository;
+        $this->user_repository = new UserRepository;
+    }
 
     public function authorize(Token $token, Endpoint $endpoint): bool {
-        $user_id = $this->token_repository->find($token->token)->user_id;
+        $user_id =  $this->token_repository->find($token->token)->user_id;
         if ($user_id === null)
             return false;
 
@@ -21,22 +25,23 @@ class AuthorizationService {
     }
 
     private function has_access(AccountType $role, Endpoint $endpoint): bool {
+
         $allowed_for_software_author = [
-            Endpoint::Auth => ['get', 'post'],
-            Endpoint::User => ['get'],
-            Endpoint::Software => ['get', 'post', 'put', 'delete'],
-            Endpoint::SoftwareVersion => ['get', 'post', 'put', 'delete'],
-            Endpoint::Review => ['get', 'post', 'put', 'delete'],
-            Endpoint::Download => ['get', 'post'],
-            Endpoint::BugReport => ['get', 'post']
+            Endpoint::Auth->value => ['get', 'post'],
+            Endpoint::User->value => ['get'],
+            Endpoint::Software->value => ['get', 'post', 'put', 'delete'],
+            Endpoint::SoftwareVersion->value => ['get', 'post', 'put', 'delete'],
+            Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
+            Endpoint::Download->value => ['get', 'post'],
+            Endpoint::BugReport->value => ['get', 'post']
             // TODO: add other more privileges
         ];
 
         $allowed_for_client = [
-            Endpoint::Auth => ['get', 'post'],
-            Endpoint::User => ['get'],
-            Endpoint::Review => ['get', 'post', 'put', 'delete'],
-            Endpoint::Download => ['get', 'post'],
+                Endpoint::Auth->value => ['get', 'post'],
+                Endpoint::User->value => ['get'],
+                Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
+                Endpoint::Download->value => ['get', 'post'],
         ];
 
         $request_method = strtolower($_SERVER['REQUEST_METHOD']);
@@ -45,15 +50,15 @@ class AuthorizationService {
             case AccountType::ADMIN:
                 return true;
             case AccountType::SOFTWARE_AUTHOR:
-                if (key_exists($endpoint, $allowed_for_software_author)) {
+                if (key_exists($endpoint->value, $allowed_for_software_author)) {
                     $allowed_methods = $allowed_for_software_author[$endpoint];
                     return in_array($request_method, $allowed_methods);
                 } else
                     return false;    
                 
             case AccountType::CLIENT:   
-                if (key_exists($endpoint, $allowed_for_client)) {
-                    $allowed_methods = $allowed_for_client[$endpoint];
+                if (key_exists($endpoint->value, $allowed_for_client)) {
+                    $allowed_methods = $allowed_for_client[$endpoint->value];
                     return in_array($request_method, $allowed_methods);
                 } else
                     return false;

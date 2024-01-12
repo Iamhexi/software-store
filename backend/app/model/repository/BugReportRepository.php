@@ -37,7 +37,7 @@ class BugReportRepository implements Repository {
             query: "INSERT INTO $created_class VALUES (:report_id, :software_id, :user_id, :title, 
                     :description_of_steps_to_get_bug, :bug_description, :date_added, :review_status)",
             params: [
-                'report_id' => $object->report_id?? "NULL",
+                'report_id' => $object->report_id?? NULL,
                 'software_id' => $object->software_id,
                 'user_id' => $object->user_id,
                 'title' => $object->title,

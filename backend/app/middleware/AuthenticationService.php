@@ -12,7 +12,7 @@ class AuthenticationService {
         $this->token_repository = new TokenRepository;
     }
 
-    public function getBearerToken(): ?Token{
+    public function get_bearer_token(): ?Token{
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
         if (str_starts_with($authHeader, 'Bearer ')) {
             $textualToken = substr($authHeader, 7);
@@ -44,7 +44,7 @@ class AuthenticationService {
         return new Token(
             token: bin2hex(random_bytes(Config::AUTH_TOKEN_LENGTH/2)),
             user_id: $user->user_id,
-            expires_at: new DateTime( time() + Config::EXPIRATION_TIME_IN_SECONDS )
+            expires_at: new DateTime("@" . strval(time() + Config::EXPIRATION_TIME_IN_SECONDS) )
         );
     }
 }

@@ -30,7 +30,7 @@ class AccountChangeRequestRepository {
         return $this->database->execute_query(
             query: "INSERT INTO AccountChangeRequest VALUES (:request_id, :user_id, :description, :date_submitted, :review_status)",
             params: [
-                'request_id' => $object->request_id?? "NULL",
+                'request_id' => $object->request_id?? NULL,
                 'user_id' => $object->user_id,
                 'description' => $object->description,
                 'date_submitted' => $object->date_submitted->format('Y-m-d H:i:s'),

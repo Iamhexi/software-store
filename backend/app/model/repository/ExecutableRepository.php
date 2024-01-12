@@ -32,7 +32,7 @@ class ExecutableRepository implements Repository {
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:executable_id, :version_id, :target_architecture, :date_compiled, :filepath)",
             params: [
-                'executable_id' => $object->executable_id ?? "NULL",
+                'executable_id' => $object->executable_id ?? NULL,
                 'version_id' => $object->version_id,
                 'target_architecture' => $object->target_architecture,
                 'date_compiled' => $object->date_compiled,

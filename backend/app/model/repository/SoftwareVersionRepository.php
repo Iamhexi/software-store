@@ -30,7 +30,7 @@ class SoftwareVersionRepository {
         return $this->database->execute_query(
             query: "INSERT INTO SoftwareVersion VALUES (:version_id, :software_id, :description, :date_added, :major_version, :minor_version, :patch_version)",
             params: [
-                'version_id' => $object->version_id?? "NULL",
+                'version_id' => $object->version_id?? NULL,
                 'software_id' => $object->software_id,
                 'description' => $object->description,
                 'date_added' => $object->date_added->format('Y-m-d H:i:s'),

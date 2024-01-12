@@ -34,7 +34,7 @@ class CategoryRepository {
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:category_id, :name, :description)",
             params: [
-                'category_id' => $object->category_id ?? "NULL",
+                'category_id' => $object->category_id ?? NULL,
                 'name' => $object->name,
                 'description' => $object->description
             ]

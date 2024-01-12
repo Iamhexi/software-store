@@ -29,7 +29,7 @@ class SourceCodeRepository {
         return $this->database->execute_query(
             query: "INSERT INTO SourceCode VALUES (:code_id, :version_id, :filepath)",
             params: [
-                'code_id' => $object->code_id?? "NULL",
+                'code_id' => $object->code_id?? NULL,
                 'version_id' => $object->version_id,
                 'filepath' => $object->filepath
             ]

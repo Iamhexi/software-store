@@ -35,7 +35,7 @@ class DownloadRepository implements Repository {
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:download_id, :user_id, :executable_id, :download_date)",
             params: [
-                'download_id' => $object->download_id?? "NULL",
+                'download_id' => $object->download_id?? NULL,
                 'user_id' => $object->user_id,
                 'executable_id' => $object->executable_id,
                 'download_date' => $object->download_date

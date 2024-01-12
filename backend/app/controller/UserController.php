@@ -75,7 +75,7 @@ class UserController extends Controller {
     }
 
     public function delete(): void {
-        $id = $_GET['id'];
+        $id = explode('/', $_SERVER['REQUEST_URI'])[3] ?? null;
         if (!$this->exists($id) || !is_numeric($id))
             self::send_response(400, 'Failure', 'Missing or invalid id');
         else if ($this->user_repository->delete($id))

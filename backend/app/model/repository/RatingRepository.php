@@ -36,7 +36,7 @@ class RatingRepository implements Repository {
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :mark, :date_added)",
             params: [
-                'rating_id' => $object->rating_id?? "NULL",
+                'rating_id' => $object->rating_id?? NULL,
                 'author_id' => $object->author_id,
                 'software_id' => $object->software_id,
                 'mark' => $object->mark,
