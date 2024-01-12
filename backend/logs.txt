@@ -1,0 +1,1 @@
+2024-01-12 11:54:48 [ERROR] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'software_store.Token' doesn't exist
