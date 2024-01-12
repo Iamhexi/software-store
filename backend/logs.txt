@@ -1,0 +1,1 @@
+2024-01-12 00:29:45 [ERROR] SQLSTATE[22007]: Invalid datetime format: 1366 Incorrect integer value: 'NULL' for column `software_store`.`User`.`user_id` at row 1

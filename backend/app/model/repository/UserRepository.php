@@ -39,6 +39,41 @@ class UserRepository implements Repository {
     
     }
 
+    public function find_by(string $column, mixed $value): ?User {
+        $table = self::$table_name;
+
+        if (!property_exists(self::$table_name, $column)) {
+            Logger::log("Column $column does not exist in table $table", Priority::ERROR);
+            return null;
+        }
+
+        if ($column === 'user_id')
+            return $this->find($value);
+
+
+        $obj = $this->database->get_rows(
+            query: "SELECT * FROM $table WHERE $column = :value",
+            params: ['value' => $value],
+            class_name: self::$table_name,
+            number: 1
+        );
+
+        
+        if ($obj === null)
+            return null;
+
+    
+        return new User(
+            $obj->user_id,
+            $obj->login,
+            $obj->pass_hash,
+            $obj->username,
+            new DateTime($obj->account_creation_date),
+            AccountType::fromString($obj->account_type)
+        );
+    
+    }
+
     public function findAll(): array {
         $table = self::$table_name;
         $rows = $this->database->get_rows(
@@ -69,10 +104,10 @@ class UserRepository implements Repository {
                 params: [
                     'user_id' => $object->user_id ?? "NULL",
                     'login' => $object->login,
-                    'pass_hash' => $object->password_hash,
+                    'pass_hash' => $object->pass_hash,
                     'username' => $object->username,
-                    'account_creation_date' => $object->account_creation_date,
-                    'account_type' => $object->account_type
+                    'account_creation_date' => $object->account_creation_date->format('Y-m-d H:i:s'),
+                    'account_type' => $object->account_type->value
                 ]
             );
         
@@ -81,7 +116,7 @@ class UserRepository implements Repository {
             params: [
                 'user_id' => $object->user_id,
                 'login' => $object->login,
-                'pass_hash' => $object->password_hash,
+                'pass_hash' => $object->pass_hash,
                 'username' => $object->username,
                 'account_creation_date' => $object->account_creation_date,
                 'account_type' => $object->account_type->value

@@ -1,21 +1,22 @@
 <?php
 
 enum AccountType: string {
-    case ADMIN = 'administrator';
+    case ADMIN = 'admin';
     case SOFTWARE_AUTHOR = 'author';
     case CLIENT = 'client';
-    case INCORRECT = '';
+    case GUEST = 'guest';
 
     public static function fromString(string $account_type): AccountType {
         switch ($account_type) {
-            case 'administrator':
+            case 'admin':
                 return self::ADMIN;
             case 'author':
                 return self::SOFTWARE_AUTHOR;
             case 'client':
                 return self::CLIENT;
+            case 'guest':
             default:
-                return self::INCORRECT;
+                return self::GUEST;
         }
     }
 }
