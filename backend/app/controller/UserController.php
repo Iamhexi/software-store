@@ -78,8 +78,11 @@ class UserController extends Controller {
         $id = explode('/', $_SERVER['REQUEST_URI'])[3] ?? null;
         if (!$this->exists($id) || !is_numeric($id))
             self::send_response(400, 'Failure', 'Missing or invalid id');
-        else if ($this->user_repository->delete($id))
+        if ($this->user_repository->find($id) === null)
+            self::send_response(500, 'Failure', "User with id = $id does not exist, thus, cannot be deleted" );
+        else if ($this->user_repository->delete($id)) {
             self::send_response(200, 'Success', 'User deleted');
+        }
         else
             self::send_response(500, 'Failure', 'Could not delete the requested user with id: ' . $id);
     }
