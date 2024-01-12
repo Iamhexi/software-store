@@ -1,3 +1,4 @@
+$pdoMock->method()->
 <?php
 require_once __DIR__.'/JsonSerializableness.php';
 
@@ -15,7 +16,8 @@ class Executable implements JsonSerializable {
     private function compile(): bool {
         
         // TODO: get source path and application name from SourceCode, SoftwareVersion, SourceCode
-        $language = ''; // C++ or Python for now, SourceCode::determineProgrammingLanguage()
+        $language = ''; 
+        // C++ or Python for now, SourceCode::determineProgrammingLanguage()
         $sourcePath = '';
         $applicationName = '';
 
@@ -26,11 +28,11 @@ class Executable implements JsonSerializable {
                     break;
 
                 case 'Windows x86_64':
-                    $command = "x86_64-w64-mingw32-g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} src/*.cpp";
+                    $command = "x86_64-w64-mingw32-g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} {$sourcePath}/src/*.cpp";
                     break;
 
                 case 'Linux arm64':
-                    $command = "g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} src/*.cpp";
+                    $command = "g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} {$sourcePath}/src/*.cpp";
                     break;
 
                 default:

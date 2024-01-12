@@ -1,6 +1,6 @@
 <?php 
 
-class StatuteViolationRequest { // Data Transfer Object
+class StatuteViolationReport { // Data Transfer Object
     public function __construct(
         public ?int $report_id,
         public int $software_id,
