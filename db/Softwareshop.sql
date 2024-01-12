@@ -131,6 +131,12 @@ CREATE TABLE SoftwareCategory
     software_id int(10) NOT NULL,
     category_id int(10) NOT NULL
 );
+CREATE TABLE Token (
+    token char(128) PRIMARY KEY,
+    user_id int(10) NOT NULL,
+    expires_at date NOT NULL
+);
+
 
 -- FOREIGN KEYS
 

@@ -7,22 +7,22 @@ abstract class Controller {
     abstract protected function delete(): void;
 
     public function handle_request(): void {
-        match($_SERVER['REQUEST_METHOD']) {
-            'GET' => $this->get(),
-            'POST' => $this->post(),
-            'PUT' => $this->put(),
-            'DELETE' => $this->delete()
+        match(strtolower($_SERVER['REQUEST_METHOD'])) {
+            'get' => $this->get(),
+            'post' => $this->post(),
+            'put' => $this->put(),
+            'delete' => $this->delete()
         };
     }
 
-    public function send_response(int $code, string $message, mixed $data): void {
-        $this->set_header();
+    public static function send_response(int $code, string $message, mixed $data): void {
+        self::set_header();
         http_response_code($code);
         echo json_encode(['code' => $code, 'message' => $message, 'data' => $data]);
         exit();
     }
     
-    private function set_header(): void {
+    private static function set_header(): void {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
         header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
