@@ -37,6 +37,8 @@ class AuthenticationService {
             $token = $this->generate_token($user);
             $this->token_repository->save($token);
             return $token->token;
+        } else {
+            return false;
         }
     }
 

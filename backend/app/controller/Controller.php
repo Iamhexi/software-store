@@ -7,7 +7,7 @@ abstract class Controller {
     abstract protected function delete(): void;
 
     public function handle_request(): void {
-        match(strtolower($_SERVER['REQUEST_METHOD'])) {
+        match(Request::get_request_method()) {
             'get' => $this->get(),
             'post' => $this->post(),
             'put' => $this->put(),
