@@ -19,7 +19,7 @@ class ExecutableRepository implements Repository {
         );
     }
 
-    public function findAll(): array {
+    public function find_all(): array {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",

@@ -11,7 +11,7 @@ class Token implements JsonSerializable {
     ) {}
 
     public function is_valid(): bool {
-        return $this->expires_at->getTimestamp() < time();
+        return $this->expires_at->getTimestamp() > time();
     }
 
     public function __get(string $name): mixed {

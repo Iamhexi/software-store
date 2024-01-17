@@ -92,7 +92,7 @@ class UserRepository implements Repository {
         );
     }
 
-    public function findAll(): array {
+    public function find_all(): array {
         $table = self::$table_name;
         $rows = $this->database->get_rows(
             query: "SELECT * FROM $table",

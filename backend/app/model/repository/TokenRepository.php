@@ -29,7 +29,7 @@ class TokenRepository implements Repository {
         );
     }
 
-    public function findAll(): array {
+    public function find_all(): array {
         return $this->database->get_rows(
             query: "SELECT * FROM Token",
             class_name: 'Token'

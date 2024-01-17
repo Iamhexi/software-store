@@ -62,4 +62,5 @@ $controller = match ($endpoint) {
 };
 
 // Handling the request
-$controller->handle_request($request);
+$response = $controller->handle_request($request);
+Controller::send_response($response->code, $response->message, $response->data);

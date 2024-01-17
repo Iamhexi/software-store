@@ -20,11 +20,29 @@ class CategoryRepository {
         );
     }
 
-    public function findAll(): array {
+    public function find_all(): array {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
             class_name: $created_class
+        );
+    }
+
+    public function find_by(string $column, mixed $value): ?Category {
+        $created_class = self::CLASS_NAME;
+        if (!property_exists($created_class, $column)) {
+            Logger::log("Column $column does not exist in table $created_class", Priority::ERROR);
+            return null;
+        }
+
+        if ($column === 'category_id')
+            return $this->find($value);
+
+        return $this->database->get_rows(
+            query: "SELECT * FROM $created_class WHERE $column = :value;",
+            params: ['value' => $value],
+            class_name: $created_class,
+            number: 1
         );
     }
 

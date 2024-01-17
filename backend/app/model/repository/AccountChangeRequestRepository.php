@@ -19,7 +19,7 @@ class AccountChangeRequestRepository {
         );
     }
 
-    function findAll(): array {
+    function find_all(): array {
         return $this->database->get_rows(
             query: "SELECT * FROM AccountChangeRequest;",
             class_name: 'AccountChangeRequest'
