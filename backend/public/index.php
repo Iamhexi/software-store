@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/../app/controller/UserController.php';
 require_once __DIR__.'/../app/controller/CategoryController.php';
+require_once __DIR__.'/../app/controller/SoftwareUnitController.php';
 require_once __DIR__.'/../app/middleware/AuthenticationService.php';
 require_once __DIR__.'/../app/middleware/AuthorizationService.php';
 require_once __DIR__.'/../app/middleware/RequestHandler.php';
@@ -59,6 +60,7 @@ if (!$authorization_service->authorize($token, $endpoint))
 $controller = match ($endpoint) {
     Endpoint::User => new UserController,
     Endpoint::Category => new CategoryController,
+    Endpoint::Software => new SoftwareUnitController,
 
     // TODO: add more implemented controllers here
 };
