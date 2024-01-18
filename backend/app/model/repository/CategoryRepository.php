@@ -76,6 +76,16 @@ class CategoryRepository {
     public function save(object $object): bool {
         $created_class = self::CLASS_NAME;
 
+        if ($object->category_id !== null && $this->find($object->category_id) !== null)
+            return $this->database->execute_query(
+                query: "UPDATE $created_class SET name = :name, description = :description WHERE category_id = :category_id;",
+                params: [
+                    'category_id' => $object->category_id,
+                    'name' => $object->name,
+                    'description' => $object->description
+                ]
+            );
+
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:category_id, :name, :description)",
             params: [
@@ -88,8 +98,9 @@ class CategoryRepository {
 
     public function delete(int $id): bool {
         $class = self::CLASS_NAME;
+
         return $this->database->execute_query(
-            query: "DELETE $class WHERE category_id = :category_id;",
+            query: "DELETE FROM $class WHERE category_id = :category_id;",
             params: ['category_id' => $id]
         );
     }
