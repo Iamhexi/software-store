@@ -35,6 +35,7 @@ class User implements JsonSerializable {
             request_id: null,
             user_id: $this->user_id,
             date_submitted: new DateTime(),
+            justification: '',
             review_status: RequestStatus::Pending,
             description: $justification
         );

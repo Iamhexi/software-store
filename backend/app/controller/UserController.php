@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/Controller.php';
+require_once __DIR__ . '/AccountChangeRequestController.php';
 
 class UserController extends Controller {
 
@@ -19,6 +20,11 @@ class UserController extends Controller {
     }
 
     protected function get(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'account_change_request') {
+            $account_change_request_controller = new AccountChangeRequestController;
+            return $account_change_request_controller->get($request);
+        }
+
         $id = $request->id;
         if (!$this->exists($id))
             return new Response(200, 'Success', $this->user_repository->find_all());
@@ -34,6 +40,10 @@ class UserController extends Controller {
     }
 
     protected function post(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'account_change_request') {
+            $account_change_request_controller = new AccountChangeRequestController;
+            return $account_change_request_controller->handle_request($request);
+        }
         $data = $request->body_parameters;
         if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_type']))
             return new Response(400, 'Failure', 'Missing data');
@@ -55,6 +65,11 @@ class UserController extends Controller {
     }
 
     protected function put(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'account_change_request') {
+            $account_change_request_controller = new AccountChangeRequestController;
+            return $account_change_request_controller->put($request);
+        }
+
         $data = $request->body_parameters;
         if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_creation_date']) || !$this->exists($data['account_type']))
             return new Response(400, 'Failure', 'Missing data');
@@ -75,6 +90,11 @@ class UserController extends Controller {
     }
 
     protected function delete(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'account_change_request') {
+            $account_change_request_controller = new AccountChangeRequestController;
+            return $account_change_request_controller->delete($request);
+        }
+
         $id = $request->id;
         if (!$this->exists($id) || !is_numeric($id))
             return new Response(400, 'Failure', 'Missing or invalid id');

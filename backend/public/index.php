@@ -31,7 +31,7 @@ switch ($endpoint) {
         break;
 
     case Endpoint::User:
-        if ($method === 'post') { // handles only registration (post) without a bearer token, otherwise requires a bearer token
+        if ($method === 'post' && $request->get_path_parameter(2) === null) { // handles only registration (post) without a bearer token, otherwise requires a bearer token
             $controller = new UserController;
             $controller->handle_request($request);
         } 

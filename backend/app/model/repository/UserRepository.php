@@ -39,7 +39,7 @@ class UserRepository implements Repository {
     
     }
 
-    public function find_by(string $column, mixed $value): ?User {
+    public function find_by(string $column, mixed $value): ?object {
         $table = self::$table_name;
 
         if (!property_exists(self::$table_name, $column)) {
