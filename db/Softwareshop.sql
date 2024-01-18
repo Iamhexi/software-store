@@ -281,8 +281,11 @@ END $$
 
 CREATE PROCEDURE PurgeSoftware(software_id INT)
 BEGIN
-    DELETE FROM SoftwareUnit WHERE SoftwareUnit.software_id = software_id;
-    DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
+DELETE
+    FROM BugReport
+    WHERE BugReport.version_id IN (SELECT version_id
+                                   FROM SoftwareVersion
+                                   WHERE software_id = SoftwareVersion.software_id);
     DELETE
     FROM SourceCode
     WHERE SourceCode.version_id IN (SELECT version_id
@@ -290,11 +293,8 @@ BEGIN
                                     WHERE software_id = SoftwareVersion.software_id);
     DELETE FROM Rating WHERE Rating.software_id = software_id;
     DELETE FROM Review WHERE Review.software_id = software_id;
-    DELETE
-    FROM BugReport
-    WHERE BugReport.version_id IN (SELECT version_id
-                                   FROM SoftwareVersion
-                                   WHERE software_id = SoftwareVersion.software_id);
+    DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
+    DELETE FROM SoftwareUnit WHERE SoftwareUnit.software_id = software_id;
 END $$
 
 CREATE PROCEDURE BlockSoftware(software_id_in INT)
@@ -502,10 +502,11 @@ TO Administrator@localhost;
 
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Executable TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Rating TO SoftwareAuthor@localhost;
-GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.BugReport TO SoftwareAuthor@localhost;
+GRANT SELECT, UPDATE, INSERT ON software_store.BugReport TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Review TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SourceCode TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareUnit TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareCategory TO SoftwareAuthor@localhost;
 
 GRANT SELECT, INSERT
 ON software_store.Download
