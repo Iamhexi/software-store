@@ -279,7 +279,7 @@ END $$
 
 -- PROCEDURES
 
-CREATE PROCEDURE PurgeSoftware(software_id INT)
+CREATE OR REPLACE PROCEDURE PurgeSoftware(software_id INT)
 BEGIN
 DELETE
     FROM BugReport
@@ -291,6 +291,20 @@ DELETE
     WHERE SourceCode.version_id IN (SELECT version_id
                                     FROM SoftwareVersion
                                     WHERE software_id = SoftwareVersion.software_id);
+    DELETE
+    FROM Download
+    WHERE Download.executable_id IN (SELECT executable_id 
+                                    FROM Executable
+                                    WHERE Executable.version_id IN (SELECT version_id
+                                                                    FROM SoftwareVersion
+                                                                    WHERE SoftwareVersion.software_id = software_id));
+    DELETE
+    FROM Executable
+    WHERE Executable.version_id IN (SELECT version_id
+                                    FROM SoftwareVersion
+                                    WHERE SoftwareVersion.software_id = software_id);
+    DELETE FROM StatuteViolationReport WHERE StatuteViolationReport.software_id = software_id;
+    DELETE FROM SoftwareCategory WHERE SoftwareCategory.software_id = software_id;
     DELETE FROM Rating WHERE Rating.software_id = software_id;
     DELETE FROM Review WHERE Review.software_id = software_id;
     DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
