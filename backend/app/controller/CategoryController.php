@@ -43,16 +43,19 @@ class CategoryController extends Controller {
     }
 
     public function post(Request $request): Response {
-        $category_name = $request->get_body_parameter('name') ?? null;
+        $category_name = $request->get_body_parameter('name');
+        $description = $request->get_body_parameter('description');
 
         if ($category_name === null)
-            return new Response(400, 'failure', null);
+            return new Response(400, 'failure', 'Cannot insert a category without a name');
+        else if ($description === null)
+            return new Response(400, 'failure', 'Cannot insert a category without a description');
 
-        $category = $this->category_repository->find_by('category_name', $category_name);
+        $category = $this->category_repository->find_by('name', $category_name);
         if ($category !== null)
-            return new Response(400, 'failure', null);
+            return new Response(400, 'failure', 'Cannot insert a category with the same name as already existing one.');
 
-        $category = new Category(null, $category_name);
+        $category = new Category(null, $category_name, $description);
         $category = $this->category_repository->save($category);
         return new Response(201, 'success', $category);
     }

@@ -63,6 +63,9 @@ class CategoryRepository {
             number: 1
         );
 
+        if ($row === null)
+            return null;
+
         return new Category(
             category_id: $row->category_id,
             name: $row->name,
