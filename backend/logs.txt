@@ -1,1 +1,2 @@
 2024-01-12 11:54:48 [ERROR] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'software_store.Token' doesn't exist
+2024-01-17 23:55:56 [ERROR] Column category_name does not exist in table Category

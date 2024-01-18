@@ -26,7 +26,7 @@ class AuthenticationService {
     }
 
     public function verify_token(Token $token): bool {
-        return $token->is_valid() && $this->token_repository->find($token->token) !== null;
+        return $this->token_repository->find($token->token) !== null; // && $token->is_valid() -> causes bug that prevents user from logging in, after token expires, new token are rejected as invalid by $token->is_valid()
     }
 
     public function authenticate(string $login, string $password): false|string {

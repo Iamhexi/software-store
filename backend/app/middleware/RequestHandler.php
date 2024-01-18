@@ -19,15 +19,19 @@ class RequestHandler {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
+    // [0 => endpoint, 1 => id] for /api/endpoint/1
     public static function get_path_parameters(): array {
-        $path = explode('/', $_SERVER['REQUEST_URI'])[2] ?? null;
-        if ($path === null)
+        $path = explode('/', $_SERVER['REQUEST_URI']);
+        if ($path === [])
             return [];
-        $path = explode('/', $path);
+
         $path_parameters = [];
+        $order = -2;
+
         foreach ($path as $key_value) {
-            $key_value = explode('=', $key_value);
-            $path_parameters[$key_value[0]] = $key_value[1];
+            if ($order >= 0)
+                $path_parameters[$order] = $key_value;
+            $order++;
         }
         return $path_parameters;
     }

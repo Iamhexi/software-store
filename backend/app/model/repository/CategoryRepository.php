@@ -12,20 +12,38 @@ class CategoryRepository {
 
     public function find(int $id): ?Category {
         $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
+        $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE category_id = :category_id;",
             params: ['category_id' => $id],
             class_name: $created_class,
             number: 1
         );
+
+        if ($row === null)
+            return null;
+
+
+        return new Category(
+            category_id: $id,
+            name: $row->name,
+            description: $row->description
+        );
     }
 
     public function find_all(): array {
         $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
+        $rows = $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
-            class_name: $created_class
         );
+
+        foreach ($rows as $row) {
+            $categories[] = new Category(
+                category_id: $row->category_id,
+                name: $row->name,
+                description: $row->description
+            );
+        }
+        return $categories ?? [];
     }
 
     public function find_by(string $column, mixed $value): ?Category {
@@ -38,11 +56,17 @@ class CategoryRepository {
         if ($column === 'category_id')
             return $this->find($value);
 
-        return $this->database->get_rows(
+        $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE $column = :value;",
             params: ['value' => $value],
             class_name: $created_class,
             number: 1
+        );
+
+        return new Category(
+            category_id: $row->category_id,
+            name: $row->name,
+            description: $row->description
         );
     }
 

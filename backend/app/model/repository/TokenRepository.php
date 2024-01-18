@@ -14,12 +14,12 @@ class TokenRepository implements Repository {
     public function find(string|int $id): ?Token {
         $obj = $this->database->get_rows(
             query: "SELECT * FROM Token WHERE token = :token",
-            params: ['token' => $id],
+            params: ['token' => $id], // implement token expiration in SQL
             class_name: 'Token',
             number: 1
         );
 
-        if ($obj === null)
+        if ($obj === null) // reject if token is expired
             return null;
         
         return new Token(

@@ -615,3 +615,12 @@ INSERT INTO Executable VALUES (NULL, 2, "x64", "2024-05-14", "/path/to/executabl
 INSERT INTO Executable VALUES (NULL, 2, "x86", "2024-02-27", "/path/to/executable/5/app.msi");
 INSERT INTO Executable VALUES (NULL, 2, "x64", "2023-10-24", "/path/to/executable/1/app.deb");
 INSERT INTO Executable VALUES (NULL, 2, "x86", "2023-11-23", "/path/to/executable/8/app.exe");
+
+INSERT INTO Category VALUES(NULL, "Games", "Games are fun");
+INSERT INTO Category VALUES(NULL, "Utilities", "Utilities are useful");
+INSERT INTO Category VALUES(NULL, "Productivity", "Productivity is important");
+INSERT INTO Category VALUES(NULL, "Security", "Security is important");
+INSERT INTO Category VALUES(NULL, "Education", "Education is important");
+INSERT INTO Category VALUES(NULL, "Graphics", "Graphics are important");
+INSERT INTO Category VALUES(NULL, "Networking", "Networking is important");
+INSERT INTO Category VALUES(NULL, "Development", "Development is important");

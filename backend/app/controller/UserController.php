@@ -4,10 +4,10 @@ require_once __DIR__ . '/Controller.php';
 
 class UserController extends Controller {
 
-    private UserRepository $user_repository;
+    private Repository $user_repository;
 
-    public function __construct() {
-        $this->user_repository = new UserRepository;
+    public function __construct(Repository $user_repository = new UserRepository) {
+        $this->user_repository = $user_repository;
     }
 
     private function exists(mixed $value): bool {
