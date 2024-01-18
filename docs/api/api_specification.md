@@ -19,7 +19,7 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 - /api/user
 - /api/software
 - /api/auth
-- /api/account_change_request
+- /api/user/{userId}/account_change_request
 - /api/review
 - /api/rating
 - /api/bug_report
@@ -28,26 +28,20 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 - /api/download
 - /api/source_code
 
-## /api/user
-
-- URI: /api/user/{user_id}
+## /api/user/{userId}
+- Summary: Allows CRUD operations on the user with the provided `userId`.
 - Allowed methods: POST, GET, PUT, DELETE
 - Required privileges: administrator, owner of the account
 
-## /api/users
-
-- URI: /api/users
+## /api/user/{userId}
+- Summary: Gets all users available.
 - Allowed methods: GET
 - Authorised users: administrator
 
 ## /api/auth
-
-- URI: /api/auth
-
+- Summary: After providing `login` and `password` correct query parameters, the bearer token is returned.
 - Allowed methods: POST
-
 - Query parameters (request header): login=[login]&password=[user_password]
-
 
 - Response body (in case of a success): 
 
@@ -61,13 +55,9 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 
 - Authorised users: everybody (**including unregistered users**)
 
-## /api/account_change_request
-
-- URI: /api/auth/{request_id}
+## /api/user/{userId}/account_change_request
+- Summary: Manages account type change request connected with the specific user.
 - Allowed methods: POST, GET, PUT, DELETE
-- omit `request_id` for a request using POST method
-- PUT method requires: `description`, `review_status`, `user_id` in the request **body** and  `request_id` in request **header**
-- POST method requires: `description`, `user_id` in the request **body**
 - Authorised users: administrator, concerned client (GET, POST)
 
 ##  Other endpoints
