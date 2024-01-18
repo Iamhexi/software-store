@@ -27,14 +27,17 @@ class AuthorizationService {
     private function has_access(AccountType $role, Endpoint $endpoint): bool {
 
         $allowed_for_software_author = [
-            Endpoint::Auth->value => ['get', 'post'],
-            Endpoint::User->value => ['get'],
             Endpoint::Software->value => ['get', 'post', 'put', 'delete'],
             Endpoint::SoftwareVersion->value => ['get', 'post', 'put', 'delete'],
             Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
+            Endpoint::SourceCode->value => ['get', 'post', 'put', 'delete'],
             Endpoint::Download->value => ['get', 'post'],
-            Endpoint::BugReport->value => ['get', 'post']
-            // TODO: add other more privileges
+            Endpoint::BugReport->value => ['get', 'post', 'put'],
+            Endpoint::User->value => ['get'],
+            Endpoint::Auth->value => ['get', 'post'],
+            Endpoint::Category->value => ['get'],
+            Endpoint::Rating->value => ['get','post','put','delete'],
+            Endpoint::StatuteViolationRequest->value => ['post'],
         ];
 
         $allowed_for_client = [
@@ -42,7 +45,15 @@ class AuthorizationService {
                 Endpoint::User->value => ['get'],
                 Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
                 Endpoint::Download->value => ['get', 'post'],
+                Endpoint::Rating->value => ['get','post','put','delete'],
+                Endpoint::StatuteViolationRequest->value => ['post'], 
+                Endpoint::Software->value => ['get'], 
+                Endpoint::SoftwareVersion->value => ['get'], 
+                Endpoint::Category->value => ['get'], 
+                Endpoint::AccountChangeRequest->value => ['get','post'], 
+                Endpoint::BugReport->value => ['post'], 
         ];
+
 
         $request_method = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -51,7 +62,7 @@ class AuthorizationService {
                 return true;
             case AccountType::SOFTWARE_AUTHOR:
                 if (key_exists($endpoint->value, $allowed_for_software_author)) {
-                    $allowed_methods = $allowed_for_software_author[$endpoint];
+                    $allowed_methods = $allowed_for_software_author[$endpoint->value];
                     return in_array($request_method, $allowed_methods);
                 } else
                     return false;    
