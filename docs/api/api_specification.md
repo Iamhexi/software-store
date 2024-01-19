@@ -17,7 +17,7 @@ Useful resource: https://learn.microsoft.com/en-us/azure/architecture/best-pract
 ## Endpoint list
 
 - /api/user
-- /api/software
+- /api/software, api/software/{softwareId}/rating, api/software/{softwareId}/rating/average, api/software/{softwareId}/rating/count
 - /api/auth
 - /api/user/{userId}/account_change_request
 - /api/review
