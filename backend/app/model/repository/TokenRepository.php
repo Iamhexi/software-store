@@ -7,21 +7,25 @@ class TokenRepository implements Repository {
 
     private Database $database;
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
-    public function find(int $id): ?Token {
+    public function find_by(string $column, mixed $value): ?object {
+        return null;
+    }
+
+    public function find(string|int $id): ?Token {
         $obj = $this->database->get_rows(
             query: "SELECT * FROM Token WHERE token = :token",
-            params: ['token' => $id],
+            params: ['token' => $id], // implement token expiration in SQL
             class_name: 'Token',
             number: 1
         );
 
-        if ($obj === null)
+        if ($obj === null) // reject if token is expired
             return null;
-
+        
         return new Token(
             token: $obj->token,
             user_id: $obj->user_id,
@@ -29,7 +33,7 @@ class TokenRepository implements Repository {
         );
     }
 
-    public function findAll(): array {
+    public function find_all(): array {
         return $this->database->get_rows(
             query: "SELECT * FROM Token",
             class_name: 'Token'

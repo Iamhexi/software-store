@@ -9,6 +9,7 @@ class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
         public ?int $request_id,
         public int $user_id,
         public string $description,
+        public string $justification = '',
         public DateTime $date_submitted,
         public RequestStatus $review_status
     ) {}
@@ -25,5 +26,4 @@ class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
         else if (!property_exists($this, $name))
             throw new Exception("Property $name does not exist");
         return $this->$name;
-    }
 }

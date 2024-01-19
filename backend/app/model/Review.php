@@ -14,8 +14,12 @@ class Review implements JsonSerializable {
     ) {}
 
     public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+
         if ($propertyName === 'date_added' || $propertyName === 'date_last_updated')
-            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);    
+        
         return $this->$propertyName;
     }
 

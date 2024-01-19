@@ -5,8 +5,8 @@ require_once __DIR__ . '/../StatuteViolationRequest.php';
 class StatuteViolationRequestRepository {
     private Database $database;
 
-    public function __construct() {
-        $this->database = new PDODatabase;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
     }
 
     function find(int $id): ?StatuteViolationRequest {
@@ -18,7 +18,7 @@ class StatuteViolationRequestRepository {
         );
     }
 
-    function findAll(): array {
+    function find_all(): array {
         return $this->database->get_rows(
             query: "SELECT * FROM StatuteViolationRequest;",
             class_name: 'StatuteViolationRequest'
@@ -29,7 +29,7 @@ class StatuteViolationRequestRepository {
         return $this->database->execute_query(
             query: "INSERT INTO StatuteViolationRequest VALUES (:report_id, :software_id, :description, :rule_point, :date_added, :review_status)",
             params: [
-                'report_id' => $object->report_id ?? "NULL",
+                'report_id' => $object->report_id ?? NULL,
                 'software_id' => $object->software_id,
                 'description' => $object->description,
                 'rule_point' => $object->rule_point,

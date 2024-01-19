@@ -1,20 +1,27 @@
 <?php 
-
-class StatuteViolationReport { // Data Transfer Object
+require __DIR__.'/../Config.php';
+class StatuteViolationReport {
     public function __construct(
-        public ?int $report_id,
-        public int $software_id,
-        public string $description,
-        public int $rule_point,
-        public DateTime $date_added,
-        public string $review_status
+        private ?int $report_id,
+        private int $software_id,
+        private int $user_id,
+        private int $rule_point,
+        private string $description,
+        private DateTime $date_added = new DateTime,
+        private string $review_status
     ) {}
 
-    public function __get(string $name): mixed {
-        if ($name === 'date_added')
-            return $this->date_added->format('Y-m-d H:i:s');
-        if (!property_exists($this, $name))
-            throw new Exception("Property $name does not exist");
-        return $this->$name;
+    public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+
+        if ($propertyName === 'date_added')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);     
+
+        return $this->$propertyName;
+    }
+
+    public function __toString(): string {
+        return 'Description: '. $this->description . ' ; ' . $this->review_status;
     }
 }

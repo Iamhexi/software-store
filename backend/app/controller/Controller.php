@@ -1,17 +1,19 @@
 <?php
+require_once __DIR__.'/../middleware/Request.php';
+require_once __DIR__.'/../middleware/Response.php';
 
 abstract class Controller {
-    abstract protected function get(): void;
-    abstract protected function post(): void;
-    abstract protected function put(): void;
-    abstract protected function delete(): void;
+    abstract protected function get(Request $request): Response;
+    abstract protected function post(Request $request): Response;
+    abstract protected function put(Request $request): Response;
+    abstract protected function delete(Request $request): Response;
 
-    public function handle_request(): void {
-        match(strtolower($_SERVER['REQUEST_METHOD'])) {
-            'get' => $this->get(),
-            'post' => $this->post(),
-            'put' => $this->put(),
-            'delete' => $this->delete()
+    public function handle_request(Request $request): Response {
+        return match($request->method) {
+            'get' => $this->get($request),
+            'post' => $this->post($request),
+            'put' => $this->put($request),
+            'delete' => $this->delete($request),
         };
     }
 
