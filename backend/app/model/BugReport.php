@@ -16,10 +16,14 @@ class BugReport implements JsonSerializable {
         private string $review_status
     ) {}
 
-    public function __get(string $name): mixed {
-        if (!property_exists($this, $name))
-            throw new Exception("Property $name does not exist");
-        return $this->$name;
+    public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+        
+        if ($propertyName === 'date_added')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+        
+        return $this->$propertyName;
     }
 
     public function __toString(): string {

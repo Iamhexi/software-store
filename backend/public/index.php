@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__.'/../app/controller/UserController.php';
+require_once __DIR__.'/../app/controller/ReviewController.php';
 require_once __DIR__.'/../app/controller/CategoryController.php';
 require_once __DIR__.'/../app/controller/BugReportController.php';
+require_once __DIR__.'/../app/controller/SoftwareUnitController.php';
 require_once __DIR__.'/../app/middleware/AuthenticationService.php';
 require_once __DIR__.'/../app/middleware/AuthorizationService.php';
 require_once __DIR__.'/../app/middleware/RequestHandler.php';
@@ -32,9 +34,11 @@ switch ($endpoint) {
         break;
 
     case Endpoint::User:
-        if ($method === 'post' && $request->get_path_parameter(2) === null) { // handles only registration (post) without a bearer token, otherwise requires a bearer token
+        // Registration without a bearer token
+        if ($method === 'post' && $request->get_path_parameter(2) === null) {
             $controller = new UserController;
-            $controller->handle_request($request);
+            $response = $controller->handle_request($request);
+            Controller::send_response($response->code, $response->message, $response->data);
         } 
         break;
 
@@ -61,6 +65,8 @@ $controller = match ($endpoint) {
     Endpoint::User => new UserController,
     Endpoint::Category => new CategoryController,
     Endpoint::BugReport => new BugReportController,
+    Endpoint::Software => new SoftwareUnitController,
+    Endpoint::Review => new ReviewController
 
     // TODO: add more implemented controllers here
 };

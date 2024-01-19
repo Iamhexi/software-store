@@ -29,16 +29,18 @@ class SourceCodeRepository {
         return $this->database->execute_query(
             query: "INSERT INTO SourceCode VALUES (:code_id, :version_id, :filepath)",
             params: [
-                'code_id' => $object->code_id?? NULL,
+                'code_id' => $object->code_id,
                 'version_id' => $object->version_id,
                 'filepath' => $object->filepath
             ]
         );
     }
 
+    
     function delete(int $id): bool {
+        $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE SourceCode WHERE code_id = :code_id;",
+            query: "DELETE $class WHERE code_id = :code_id;",
             params: ['code_id' => $id]
         );
     }
