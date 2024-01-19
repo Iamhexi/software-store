@@ -9,9 +9,14 @@ class Review implements JsonSerializable {
         private int $software_id,
         private string $title,
         private string $description,
-        private DateTime $date_added = new DateTime,
-        private DateTime $date_last_updated = new DateTime
-    ) {}
+        private string|DateTime $date_added = new DateTime,
+        private string|DateTime $date_last_updated = new DateTime
+    ) {
+        if (is_string($date_added))
+            $this->date_added = new DateTime($date_added);
+        if (is_string($date_last_updated))
+            $this->date_last_updated = new DateTime($date_last_updated);
+    }
 
     public function __get(string $propertyName): mixed {
         if (!property_exists($this, $propertyName))

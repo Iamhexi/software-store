@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../app/controller/UserController.php';
+require_once __DIR__.'/../app/controller/ReviewController.php';
 require_once __DIR__.'/../app/controller/CategoryController.php';
 require_once __DIR__.'/../app/controller/BugReportController.php';
 require_once __DIR__.'/../app/controller/SoftwareUnitController.php';
@@ -64,7 +65,8 @@ $controller = match ($endpoint) {
     Endpoint::User => new UserController,
     Endpoint::Category => new CategoryController,
     Endpoint::BugReport => new BugReportController,
-    Endpoint::Software => new SoftwareUnitController
+    Endpoint::Software => new SoftwareUnitController,
+    Endpoint::Review => new ReviewController
 
     // TODO: add more implemented controllers here
 };

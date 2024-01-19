@@ -37,8 +37,8 @@ class RatingController extends Controller {
             return new Response(400, 'failure', 'Cannot insert a rating without a user id');
         else if ($mark === null)
             return new Response(400, 'failure', 'Cannot insert a rating without a mark');
-        else if (!is_numeric($mark) || $mark < 0 || $mark > 5)
-            return new Response(400, 'failure', 'Cannot insert a rating with a mark that is not a number between 0 and 5');
+        else if (!is_numeric($mark) || $mark < 1 || $mark > 5)
+            return new Response(400, 'failure', 'Cannot insert a rating with a mark that is not a number between 1 and 5');
 
         $result = $this->rating_repository->save(new Rating(
             rating_id: null,
