@@ -1,16 +1,14 @@
 <?php
 require_once __DIR__ .'/Repository.php';
 require_once __DIR__ .'/../Category.php';
+require_once __DIR__.'/../PDODatabase.php';
 
-class CategoryRepository {
-    private Database $database;
+class CategoryRepository implements Repository {
+
+    private Database $database = new PDODatabase;
     private const CLASS_NAME = 'Category';
-
-    public function __construct(Database $database = new PDODatabase) {
-        $this->database = $database;
-    }
-
-    public function find(int $id): ?Category {
+    
+    function find(int $id): ?Category {
         $created_class = self::CLASS_NAME;
         $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE category_id = :category_id;",
@@ -31,7 +29,7 @@ class CategoryRepository {
     }
 
     public function find_all(): array {
-        $created_class = self::CLASS_NAME;
+        $created_class = 'stdClass';
         $rows = $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
         );
@@ -85,6 +83,10 @@ class CategoryRepository {
                     'description' => $object->description
                 ]
             );
+    }
+    
+    function save(Category $object): bool {
+        $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:category_id, :name, :description)",

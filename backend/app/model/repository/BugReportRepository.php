@@ -81,11 +81,11 @@ class BugReportRepository implements Repository {
         $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
-            query: "INSERT INTO $created_class VALUES (:report_id, :software_id, :user_id, :title, 
+            query: "INSERT INTO $created_class VALUES (:report_id, :version_id, :user_id, :title, 
                     :description_of_steps_to_get_bug, :bug_description, :date_added, :review_status)",
             params: [
-                'report_id' => $object->report_id?? NULL,
-                'software_id' => $object->software_id,
+                'report_id' => $object->report_id?? "NULL",
+                'version_id' => $object->version_id,
                 'user_id' => $object->user_id,
                 'title' => $object->title,
                 'description_of_steps_to_get_bug' => $object->description_of_steps_to_get_bug,

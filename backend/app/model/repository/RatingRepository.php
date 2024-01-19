@@ -22,7 +22,7 @@ class RatingRepository implements Repository {
         );
     }
     
-    function find_all(): array {
+    public function fina_all(): array {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",

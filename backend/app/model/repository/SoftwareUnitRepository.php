@@ -91,19 +91,21 @@ class SoftwareUnitRepository implements Repository {
         return $this->database->execute_query(
             query: "UPDATE SoftwareUnit SET author_id = :author_id, name = :name, description = :description, link_to_graphic = :link_to_graphic, is_blocked = :is_blocked WHERE software_id = :software_id;",
             params: [
-                'software_id' => $object->software_id,
-                'author_id' => $object->author_id,
-                'name' => $object->name,
-                'description' => $object->description,
-                'link_to_graphic' => $object->link_to_graphic,
-                'is_blocked' => $object->is_blocked ? 1 : 0
-            ]
+                'software_id' => $object->software_id, //TODO: finish it]
+        );
+    }
+
+    
+    function findAll(): array {
+        $created_class = self::CLASS_NAME;
+        return $this->database->get_rows(
+            query: "SELECT * FROM $created_class;",
+            class_name: $created_class
         );
     }
 
     public function delete(int $id): bool {
 
-        // TODO: repair, the procedure violates the foreign key constraint
         return $this->database->execute_query(
             query: "CALL PurgeSoftware(:software_id);",
             params: ['software_id' => $id]

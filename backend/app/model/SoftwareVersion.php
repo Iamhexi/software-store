@@ -23,4 +23,19 @@ class SoftwareVersion implements JsonSerializable {
     public function __toString(): string {
         return "SoftwareVersion: {$this->major_version}.{$this->minor_version}.{$this->patch_version}";
     }
+      
+    public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+
+        if ($propertyName === 'date_added')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+
+        return $this->$propertyName;
+    }
+
+    public function __toString(): string {
+        return 'Software_id: '. $this->software_id . ' ; ' . $this->description . 
+        ' ; ' . $this->major_version . '.' . $this->minor_version . '.' . $this->patch_version;
+    }
 }

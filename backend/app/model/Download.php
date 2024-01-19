@@ -11,12 +11,6 @@ class Download implements JsonSerializable {
         private DateTime $download_date
     ) {}
 
-    public function __get(string $property): mixed {
-        if (!property_exists($this, $property))
-            throw new Exception("Property $property does not exist");
-        return $this->$property;
-    }
-
     public function __set(string $property, int|DateTime $value): void {
         if (!property_exists($this, $property))
             throw new Exception("Property $property does not exist");
@@ -24,7 +18,19 @@ class Download implements JsonSerializable {
             $date = new DateTime();
             $value = $date->setTimestamp($value);
         }
+    }
 
-        $this->$property = $value;
+    public function __get(string $propertyName): mixed {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+    
+        if ($propertyName === 'date_download')
+            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+        
+        return $this->$propertyName;
+    }
+
+    public function __toString(): string {
+        return 'Date_download: ' . $this->date_download;
     }
 }

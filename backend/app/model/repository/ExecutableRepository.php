@@ -10,6 +10,7 @@ class ExecutableRepository implements Repository {
     }
 
     public function find(int $id): ?Executable {
+
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE executable_id = :executable_id;",
@@ -18,14 +19,16 @@ class ExecutableRepository implements Repository {
             number: 1
         );
     }
+  
+    public function findAll(): array {
 
-    public function find_all(): array {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
             class_name: $created_class
         );
     }
+
     public function save(object $object): bool {
         $created_class = self::CLASS_NAME;
 
@@ -42,6 +45,7 @@ class ExecutableRepository implements Repository {
     }
 
     public function delete(int $id): bool {
+
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
             query: "DELETE $class WHERE executable_id = :executable_id;",
