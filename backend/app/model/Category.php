@@ -1,6 +1,6 @@
 
 <?php 
-require __DIR__.'/../Config.php';
+require_once __DIR__.'/../Config.php';
 class Category {
     public function __construct(
         private ?int $category_id,

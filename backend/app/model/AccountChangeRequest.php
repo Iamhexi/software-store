@@ -26,4 +26,5 @@ class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
         else if (!property_exists($this, $name))
             throw new Exception("Property $name does not exist");
         return $this->$name;
+    }
 }

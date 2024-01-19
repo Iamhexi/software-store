@@ -91,7 +91,13 @@ class SoftwareUnitRepository implements Repository {
         return $this->database->execute_query(
             query: "UPDATE SoftwareUnit SET author_id = :author_id, name = :name, description = :description, link_to_graphic = :link_to_graphic, is_blocked = :is_blocked WHERE software_id = :software_id;",
             params: [
-                'software_id' => $object->software_id, //TODO: finish it]
+                'software_id' => $object->software_id,
+                'author_id' => $object->author_id,
+                'name' => $object->name,
+                'description' => $object->description,
+                'link_to_graphic' => $object->link_to_graphic,
+                'is_blocked' => $object->is_blocked ? 1 : 0
+            ]
         );
     }
 

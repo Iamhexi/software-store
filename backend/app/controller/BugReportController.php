@@ -5,16 +5,18 @@ require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/../model/repository/SoftwareVersionRepository.php';
 
 class BugReportController extends Controller {
-    private Repository $bugReport_repository;
+    private Repository $bug_report_repository;
     private Repository $user_repository;
-    private Repository $softwareVersion_repository;
+    private Repository $software_version_repository;
 
-    public function __construct(Repository $bugReport_repository = new BugReportRepository, 
-                                Repository $userRepository_repository = new UserRepository, 
-                                Repository $softwareVersion_repository = new SoftwareVersionRepository) {
-        $this->bugReport_repository = $bugReport_repository;
+    public function __construct(
+        Repository $bug_report_repository = new BugReportRepository, 
+        Repository $userRepository_repository = new UserRepository, 
+        Repository $software_version_repository = new SoftwareVersionRepository
+    ) {
+        $this->bug_report_repository = $bug_report_repository;
         $this->user_repository = $userRepository_repository;
-        $this->softwareVersion_repository = $softwareVersion_repository;
+        $this->software_version_repository = $software_version_repository;
     }
 
     private function exists(mixed $value): bool {
@@ -26,16 +28,16 @@ class BugReportController extends Controller {
     }
 
     protected function get(Request $request) : Response{
-        $bugReport_id = $request->id;
+        $bug_report_id = $request->get_path_parameter(1);
 
-        if (!$this->exists($bugReport_id))
-            return new Response(200, 'Success', $this->bugReport_repository->find_all());
-        else if (!$this->isCorrectPrimaryKey($bugReport_id))
+        if (!$this->exists($bug_report_id))
+            return new Response(200, 'Success', $this->bug_report_repository->find_all());
+        else if (!$this->isCorrectPrimaryKey($bug_report_id))
             return new Response(400, 'Failure', 'Invalid id');
         else {
-            $bugReport = $this->bugReport_repository->find($bugReport_id);
+            $bugReport = $this->bug_report_repository->find($bug_report_id);
             if ($bugReport === null)
-                return new Response(404, 'Failure', 'User not found');
+                return new Response(404, 'Failure', "No bug report found with the given id $bug_report_id");
             else
                 return new Response(200, 'Success', $bugReport);
         }
@@ -46,9 +48,9 @@ class BugReportController extends Controller {
         $version_id = $request->get_body_parameter('version_id');
         $bug_description = $request->get_body_parameter('bug_description');
         
-        if ($user_id === NULL)
+        if ($user_id === null)
             return new Response(400, 'failure','Cannot insert an bug report without user_id: '. $user_id);
-        else if ($version_id === NULL)
+        else if ($version_id === null)
             return new Response(400, 'failure','Cannot insert an bug report without version ID');
         else if ($bug_description)
             return new Response(400, 'failure','Cannot insert an bug report without description');
@@ -59,13 +61,13 @@ class BugReportController extends Controller {
         if ($user === null)
             return new Response(400, 'failure','Could not find user with the given user_id: '. $user_id);
 
-        $softwareVersion = $this->softwareVersion_repository->find($version_id);
+        $softwareVersion = $this->software_version_repository->find($version_id);
 
         if ($softwareVersion === null)
             return new Response(400, 'failure','Could not find software version with the given version_id: '. $version_id);
 
         $bug_report = new BugReport(
-            report_id: NULL,
+            report_id: null,
             version_id: $version_id,
             user_id: $user_id,
             title: $request->get_body_parameter('title'),
@@ -75,21 +77,21 @@ class BugReportController extends Controller {
             review_status: 'Pending'
         );
 
-        if (!$this->bugReport_repository->save($bug_report))
+        if (!$this->bug_report_repository->save($bug_report))
             return new Response(500, 'failure', 'Could not insert bug report');
         return new Response(201,'success', $bug_report);
     }
 
     public function put(Request $request): Response {
-        $report_id = $request->id;
+        $report_id = $request->get_path_parameter(1);
         $bug_description = $request->get_body_parameter('bug_description');
         $review_status = $request->get_body_parameter('review_status');
         $description_of_steps_to_get_bug = $request->get_body_parameter('description_of_steps_to_get_bug');
 
-        if ($report_id === NULL)
+        if ($report_id === null)
             return new Response(400, 'failure','Cannot update an bug report without report id');
 
-        $bug_report = $this->bugReport_repository->find($report_id);
+        $bug_report = $this->bug_report_repository->find($report_id);
 
         if ($bug_report === null)
             return new Response(400, 'failure', 'Could not find bug report with given report_id: '. $report_id);
@@ -103,7 +105,7 @@ class BugReportController extends Controller {
         if ($description_of_steps_to_get_bug !== null)
             $bug_report->description_of_steps_to_get_bug = $description_of_steps_to_get_bug;
 
-        if (!$this->bugReport_repository->save($bug_report))
+        if (!$this->bug_report_repository->save($bug_report))
             return new Response(500, 'failure', 'Could not update bug report');
         return new Response(200, 'success', $bug_report);
 
@@ -115,11 +117,11 @@ class BugReportController extends Controller {
         if ($report_id === null)
             return new Response(400, 'failure', 'Cannot delete bug report without a report id');
 
-        $bug_report = $this->bugReport_repository->find($report_id);
+        $bug_report = $this->bug_report_repository->find($report_id);
         if ($bug_report === null)
             return new Response(404, 'failure', 'Could not find bug report with the given report_id: '. $report_id);
 
-        if (!$this->bugReport_repository->delete($report_id))
+        if (!$this->bug_report_repository->delete($report_id))
             return new Response(500, 'failure', 'Could not delete bug report');
         return new Response(200, 'success', 'Bug report has been deleted with the given report_id ' . $report_id);
     }

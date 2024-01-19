@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/JsonSerializableness.php';
-require __DIR__.'/../Config.php';
+require_once __DIR__.'/../Config.php';
 
 class SoftwareUnit implements JsonSerializable {
     use JsonSerializableness;

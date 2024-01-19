@@ -14,16 +14,6 @@ class SoftwareVersion implements JsonSerializable {
         private ?int $patch_version
     ) {}
 
-    public function __get(string $name): mixed {
-        if (!property_exists($this, $name))
-            throw new Exception("Property $name does not exist");
-        return $this->$name;
-    }
-
-    public function __toString(): string {
-        return "SoftwareVersion: {$this->major_version}.{$this->minor_version}.{$this->patch_version}";
-    }
-      
     public function __get(string $propertyName): mixed {
         if (!property_exists($this, $propertyName))
             throw new Exception("Property $propertyName does not exist");

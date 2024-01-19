@@ -5,8 +5,12 @@ require_once __DIR__.'/../PDODatabase.php';
 
 class CategoryRepository implements Repository {
 
-    private Database $database = new PDODatabase;
+    private Database $database;
     private const CLASS_NAME = 'Category';
+
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
+    }
     
     function find(int $id): ?Category {
         $created_class = self::CLASS_NAME;
@@ -85,19 +89,6 @@ class CategoryRepository implements Repository {
             );
     }
     
-    function save(Category $object): bool {
-        $created_class = self::CLASS_NAME;
-
-        return $this->database->execute_query(
-            query: "INSERT INTO $created_class VALUES (:category_id, :name, :description)",
-            params: [
-                'category_id' => $object->category_id ?? NULL,
-                'name' => $object->name,
-                'description' => $object->description
-            ]
-        );
-    }
-
     public function delete(int $id): bool {
         $class = self::CLASS_NAME;
 
