@@ -11,7 +11,7 @@ class SoftwareVersion implements JsonSerializable {
         private DateTime $date_added,
         private int $major_version,
         private int $minor_version,
-        private int $patch_version
+        private ?int $patch_version
     ) {}
 
     public function __get(string $name): mixed {

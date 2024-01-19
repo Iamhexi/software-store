@@ -22,7 +22,7 @@ class SoftwareUnit implements JsonSerializable {
         $this->is_blocked = false;
     }
 
-    public function release_new_version(string $description, int $major, int $minor, int $patch): SoftwareVersion {
+    public function release_new_version(string $description, int $major, int $minor): SoftwareVersion {
         return new SoftwareVersion(
             version_id: null,
             software_id: $this->software_id,
@@ -30,20 +30,20 @@ class SoftwareUnit implements JsonSerializable {
             date_added: new DateTime(),
             major_version: $major,
             minor_version: $minor,
-            patch_version: $patch
+            patch_version: NUll
         );
     }
 
     private function is_graphic_link_valid(string $link): bool {
-        return filter_var($this->link_to_graphic, FILTER_VALIDATE_URL)
-            && preg_match('/\.(png|jpg|jpeg|gif|webp)$/i', $this->link_to_graphic);
+        return filter_var($link, FILTER_VALIDATE_URL)
+            && preg_match('/\.(png|jpg|jpeg|gif|webp)$/i', $link);
     }
 
     public function __set(string $name, mixed $value): void {
         if ($name == 'software_id')
             throw new Exception("Cannot change the software_id");
         else if ($name == 'link_to_graphic') {
-            $this->is_graphic_link_valid($this->link_to_graphic)
+            $this->is_graphic_link_valid($value)
                 ? $this->link_to_graphic = $value
                 : throw new Exception("Invalid graphic link. Must be a valid URL to an image file ending with jpg, png et cetera.");
         }

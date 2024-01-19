@@ -1,5 +1,6 @@
 <?php
 
+
 enum AccountType: string {
     case ADMIN = 'admin';
     case SOFTWARE_AUTHOR = 'author';
