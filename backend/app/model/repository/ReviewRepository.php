@@ -58,26 +58,61 @@ class ReviewRepository implements Repository {
     }
     
     function save(object $object): bool {
+        if ($this->in_database($object))
+            return $this->update($object);
+        return $this->insert($object);
+    }
+
+    private function update(object $object): bool {
+        $created_class = self::CLASS_NAME;
+
+        return $this->database->execute_query(
+            query: "UPDATE $created_class SET author_id = :author_id, software_id = :software_id, title = :title, description = :description, date_added = :date_added, date_last_updated = :date_last_updated WHERE review_id = :review_id;",
+            params: [
+                'review_id' => $object->review_id,
+                'author_id' => $object->author_id,
+                'software_id' => $object->software_id,
+                'title' => $object->title,
+                'description' => $object->description,
+                'date_added' => $object->date_added,
+                'date_last_updated' => $object->date_last_updated
+            ]
+        );
+    }
+
+    private function insert(object $object): bool {
         $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :title, :description, :date_added, :date_last_updated)",
             params: [
-                'review_id' => $object->review_id?? NULL,
+                'review_id' => $object->review_id,
                 'author_id' => $object->author_id,
                 'software_id' => $object->software_id,
                 'title' => $object->title,
                 'description' => $object->description,
-                'date_added' => $object->date_added ?? date("Y-m-d"),
-                'date_last_updated' => $object->date_last_updated ?? date("Y-m-d")
+                'date_added' => $object->date_added,
+                'date_last_updated' => $object->date_last_updated
             ]
         );
+    }
+
+    private function in_database(Review $review): bool {
+        $created_class = self::CLASS_NAME;
+        $row = $this->database->get_rows(
+            query: "SELECT * FROM $created_class WHERE review_id = :review_id;",
+            params: ['review_id' => $review->review_id],
+            class_name: 'stdClass',
+            number: 1
+        );  
+
+        return $row !== null;
     }
     
     function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE $class WHERE review_id = :review_id;",
+            query: "DELETE FROM $class WHERE review_id = :review_id;",
             params: ['review_id' => $id]
         );
     }
