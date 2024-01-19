@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/Controller.php';
-require_once __DIR__ . '/../model/repository/BugRepository.php';
+require_once __DIR__ . '/../model/repository/BugReportRepository.php';
 require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/../model/repository/SoftwareVersionRepository.php';
 

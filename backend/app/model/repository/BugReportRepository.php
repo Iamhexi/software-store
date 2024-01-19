@@ -77,7 +77,7 @@ class BugReportRepository implements Repository {
         );
     }
     
-    function save(BugReport $object): bool {
+    public function save(object $object): bool {
         $created_class = self::CLASS_NAME;
 
         return $this->database->execute_query(
@@ -96,7 +96,7 @@ class BugReportRepository implements Repository {
         );
     }
     
-    function delete(int $id): bool {
+    public function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
             query: "DELETE $class WHERE report_id = :report_id;",
