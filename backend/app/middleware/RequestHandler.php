@@ -49,7 +49,8 @@ class RequestHandler {
     }
 
     public static function get_endpoint(): ?Endpoint {
-        // TODO: remove query params from the path!
+        // $pathWithoutQuery = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
         $path = explode('/', $_SERVER['REQUEST_URI'])[2] ?? null;
         return $path === null ? null : Endpoint::fromString($path);
     }
