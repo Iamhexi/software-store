@@ -1,43 +1,41 @@
-<?php 
-require_once __DIR__.'/Repository.php';
-require_once __DIR__.'/../PDODatabase.php';
-require_once __DIR__.'/../SourceCode.php';
+<?php
+require_once __DIR__ . '/Repository.php';
+require_once __DIR__ . '/../SourceCode.php';
 
-class SourceCodeRepository implements Repository {
+class SourceCodeRepository {
+    private Database $database;
 
-    private Database $database = new PDODatabase;
-    private const CLASS_NAME = 'SourceCode';
-    
-    function find(int $id): ?SoftwareUnit {
-        $created_class = self::CLASS_NAME;
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
+    }
+
+    function find(int $id): ?SourceCode {
         return $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE code_id = :code_id;",
+            query: "SELECT * FROM SourceCode WHERE code_id = :code_id;",
             params: ['code_id' => $id],
-            class_name: $created_class,
+            class_name: 'SourceCode',
             number: 1
         );
     }
-    
-    function findAll(): array {
-        $created_class = self::CLASS_NAME;
+
+    function find_all(): array {
         return $this->database->get_rows(
-            query: "SELECT * FROM $created_class;",
-            class_name: $created_class
+            query: "SELECT * FROM SourceCode;",
+            class_name: 'SourceCode'
         );
     }
-    
-    function save(SourceCode $object): bool {
-        $created_class = self::CLASS_NAME;
 
+    function save(SourceCode $object): bool {
         return $this->database->execute_query(
-            query: "INSERT INTO $created_class VALUES (:code_id, :version_id, :filepath)",
+            query: "INSERT INTO SourceCode VALUES (:code_id, :version_id, :filepath)",
             params: [
-                'code_id' => $object->code_id ?? "NULL",
+                'code_id' => $object->code_id,
                 'version_id' => $object->version_id,
                 'filepath' => $object->filepath
             ]
         );
     }
+
     
     function delete(int $id): bool {
         $class = self::CLASS_NAME;

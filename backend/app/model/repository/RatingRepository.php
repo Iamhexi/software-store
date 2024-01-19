@@ -5,8 +5,12 @@ require_once __DIR__.'/../Rating.php';
 
 class RatingRepository implements Repository {
     
-    private Database $database = new PDODatabase;
+    private Database $database;
     private const CLASS_NAME = 'Rating';
+
+    public function __construct(Database $database = new PDODatabase) {
+        $this->database = $database;
+    }
 
     function find(int $id): ?Rating {
         $created_class = self::CLASS_NAME;
@@ -18,7 +22,7 @@ class RatingRepository implements Repository {
         );
     }
     
-    function findAll(): array {
+    public function fina_all(): array {
         $created_class = self::CLASS_NAME;
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
@@ -32,7 +36,7 @@ class RatingRepository implements Repository {
         return $this->database->execute_query(
             query: "INSERT INTO $created_class VALUES (:review_id, :author_id, :software_id, :mark, :date_added)",
             params: [
-                'rating_id' => $object->rating_id?? "NULL",
+                'rating_id' => $object->rating_id?? NULL,
                 'author_id' => $object->author_id,
                 'software_id' => $object->software_id,
                 'mark' => $object->mark,

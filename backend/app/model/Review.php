@@ -1,6 +1,8 @@
 <?php 
 require __DIR__.'/../Config.php';
-class Review {
+class Review implements JsonSerializable {
+    use JsonSerializableness;
+
     public function __construct(
         private ?int $review_id,
         private int $author_id,

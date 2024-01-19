@@ -1,19 +1,31 @@
 <?php
 require_once __DIR__.'/Database.php';
 require_once __DIR__.'/../Config.php';
+require_once __DIR__.'/User.php';
+require_once __DIR__.'/../utility/Logger.php';
+require_once __DIR__.'/../utility/Priority.php';
+
 
 class PDODatabase implements Database {   
     private ?PDO $pdo = null;
 
     public function __construct() {
+        try {
+            $this->create_pdo();
+        } catch (PDOException $e) {
+            Logger::log($e->getMessage(), Priority::ERROR);
+        }
+    }
+
+    // emits an exception if connection fails
+    private function create_pdo(): void {
         $database_host = Config::DATABASE_HOST;
         $database_name = Config::DATABASE_NAME;
-
-        $this->pdo ?? new PDO(
+        $this->pdo = new PDO(
             "mysql:host=$database_host;dbname=$database_name;charset=utf8",
             Config::DATABASE_USER,
             Config::DATABASE_PASSWORD
-            );
+        );
     }
     
     public function execute_query(string $query, array $params = []): bool {
@@ -28,7 +40,7 @@ class PDODatabase implements Database {
         return $result;
     }
 
-    public function get_rows(string $query, array $params = [], string $class_name = 'stdClass', int $number = PHP_INT_MAX): array|User|null {
+    public function get_rows(string $query, array $params = [], string $class_name = 'stdClass', int $number = PHP_INT_MAX): array|object|null {
 
         $statement = $this->pdo->prepare($query);
         $statement->execute($params);
@@ -37,6 +49,11 @@ class PDODatabase implements Database {
         
         if ($number === PHP_INT_MAX)
             $result = $statement->fetchAll();
+        else if ($number === 1) {
+            $result = $statement->fetchObject(); // returns false on failure
+            if ($result === false)
+                $result = null;
+            }
         else {
             $result = [];
             for($i = 0; $i < $number; $i++)

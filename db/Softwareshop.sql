@@ -131,6 +131,12 @@ CREATE TABLE SoftwareCategory
     software_id int(10) NOT NULL,
     category_id int(10) NOT NULL
 );
+CREATE TABLE Token (
+    token char(128) PRIMARY KEY,
+    user_id int(10) NOT NULL,
+    expires_at date NOT NULL
+);
+
 
 -- FOREIGN KEYS
 
@@ -273,22 +279,36 @@ END $$
 
 -- PROCEDURES
 
-CREATE PROCEDURE PurgeSoftware(software_id INT)
+CREATE OR REPLACE PROCEDURE PurgeSoftware(software_id INT)
 BEGIN
-    DELETE FROM SoftwareUnit WHERE SoftwareUnit.software_id = software_id;
-    DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
+DELETE
+    FROM BugReport
+    WHERE BugReport.version_id IN (SELECT version_id
+                                   FROM SoftwareVersion
+                                   WHERE software_id = SoftwareVersion.software_id);
     DELETE
     FROM SourceCode
     WHERE SourceCode.version_id IN (SELECT version_id
                                     FROM SoftwareVersion
                                     WHERE software_id = SoftwareVersion.software_id);
+    DELETE
+    FROM Download
+    WHERE Download.executable_id IN (SELECT executable_id 
+                                    FROM Executable
+                                    WHERE Executable.version_id IN (SELECT version_id
+                                                                    FROM SoftwareVersion
+                                                                    WHERE SoftwareVersion.software_id = software_id));
+    DELETE
+    FROM Executable
+    WHERE Executable.version_id IN (SELECT version_id
+                                    FROM SoftwareVersion
+                                    WHERE SoftwareVersion.software_id = software_id);
+    DELETE FROM StatuteViolationReport WHERE StatuteViolationReport.software_id = software_id;
+    DELETE FROM SoftwareCategory WHERE SoftwareCategory.software_id = software_id;
     DELETE FROM Rating WHERE Rating.software_id = software_id;
     DELETE FROM Review WHERE Review.software_id = software_id;
-    DELETE
-    FROM BugReport
-    WHERE BugReport.version_id IN (SELECT version_id
-                                   FROM SoftwareVersion
-                                   WHERE software_id = SoftwareVersion.software_id);
+    DELETE FROM SoftwareVersion WHERE SoftwareVersion.software_id = software_id;
+    DELETE FROM SoftwareUnit WHERE SoftwareUnit.software_id = software_id;
 END $$
 
 CREATE PROCEDURE BlockSoftware(software_id_in INT)
@@ -496,10 +516,11 @@ TO Administrator@localhost;
 
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Executable TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Rating TO SoftwareAuthor@localhost;
-GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.BugReport TO SoftwareAuthor@localhost;
+GRANT SELECT, UPDATE, INSERT ON software_store.BugReport TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.Review TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SourceCode TO SoftwareAuthor@localhost;
 GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareUnit TO SoftwareAuthor@localhost;
+GRANT SELECT, DELETE, UPDATE, INSERT ON software_store.SoftwareCategory TO SoftwareAuthor@localhost;
 
 GRANT SELECT, INSERT
 ON software_store.Download
@@ -542,6 +563,7 @@ FLUSH PRIVILEGES; -- Save privileges
 
 -- Example data
 
+INSERT INTO User VALUES (NULL, "admin", "$argon2id$v=19$m=65536,t=4,p=1$MkF0UEMzVm5ySERJNmQ0dA$2nkv2r+JLVW7rf0rCxY69afC9CmS36DXYgk0CFhsxtU", "Administrator", "2021-01-01", "admin");
 INSERT INTO User VALUES (NULL, "emily7388", "enqtneykmezqltaraectumahapfigttcnjkwchdtzxacwjrnmsppjsdsgeqjpbhnmlggoybyabiqdwddqstcvricpzlcwgmuolqnrfcjwbmploibxbawvnsyjlchbnvw", "Emily", "2023-05-11", "author");
 INSERT INTO User VALUES (NULL, "emily4071", "nrkinrtuvbbkddseelnnbliauiuvexqtipdlamkinacwksgzoblsnsoijuqphzuthmiwyownlpqpwmulkcnodcduumjxcdsxpsxzszudrrhxypxpaiffdzlbomrqfgbv", "Emily", "2023-10-17", "client");
 INSERT INTO User VALUES (NULL, "john8308", "xyfxittfqpjardzdcwkgjuxvyywtvjhmnkahbozmujkvouwzjhdoognfhxijinepzamfmpdumpasjerswijcuohdhqomonypuvgurxudbjwbtfrgdtwfaeelnnipbhrw", "John", "2023-04-10", "author");
@@ -609,3 +631,12 @@ INSERT INTO Executable VALUES (NULL, 2, "x64", "2024-05-14", "/path/to/executabl
 INSERT INTO Executable VALUES (NULL, 2, "x86", "2024-02-27", "/path/to/executable/5/app.msi");
 INSERT INTO Executable VALUES (NULL, 2, "x64", "2023-10-24", "/path/to/executable/1/app.deb");
 INSERT INTO Executable VALUES (NULL, 2, "x86", "2023-11-23", "/path/to/executable/8/app.exe");
+
+INSERT INTO Category VALUES(NULL, "Games", "Games are fun");
+INSERT INTO Category VALUES(NULL, "Utilities", "Utilities are useful");
+INSERT INTO Category VALUES(NULL, "Productivity", "Productivity is important");
+INSERT INTO Category VALUES(NULL, "Security", "Security is important");
+INSERT INTO Category VALUES(NULL, "Education", "Education is important");
+INSERT INTO Category VALUES(NULL, "Graphics", "Graphics are important");
+INSERT INTO Category VALUES(NULL, "Networking", "Networking is important");
+INSERT INTO Category VALUES(NULL, "Development", "Development is important");
