@@ -14,11 +14,26 @@ class BugReportRepository implements Repository {
     
     function find(int $id): ?BugReport {
         $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
+        $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE report_id = :report_id;",
             params: ['report_id' => $id],
             class_name: $created_class,
             number: 1
+        );
+
+        if ($row === null)
+            return null;
+
+
+        return new BugReport(
+            report_id: $id,
+            version_id: $row->version_id,
+            user_id: $row->user_id,
+            title: $row->title,
+            description_of_steps_to_get_bug: $row->description_of_steps_to_get_bug,
+            bug_description: $row->bug_description,
+            date_added: $row->date_added,
+            review_status: $row->review_status
         );
     }
     
@@ -27,6 +42,38 @@ class BugReportRepository implements Repository {
         return $this->database->get_rows(
             query: "SELECT * FROM $created_class;",
             class_name: $created_class
+        );
+    }
+
+    public function find_by(string $column, mixed $value): ?BugReport {
+        $created_class = self::CLASS_NAME;
+        if (!property_exists($created_class, $column)) {
+            Logger::log("Column $column does not exist in table $created_class", Priority::ERROR);
+            return null;
+        }
+
+        if ($column === 'report_id')
+            return $this->find($value);
+
+        $row = $this->database->get_rows(
+            query: "SELECT * FROM $created_class WHERE $column = :value;",
+            params: ['value' => $value],
+            class_name: $created_class,
+            number: 1
+        );
+
+        if ($row === null)
+            return null;
+
+        return new BugReport(
+            report_id: $row->report_id,
+            version_id: $row->version_id,
+            user_id: $row->user_id,
+            title: $row->title,
+            description_of_steps_to_get_bug: $row->description_of_steps_to_get_bug,
+            bug_description: $row->bug_description,
+            date_added: $row->date_added,
+            review_status: $row->review_status
         );
     }
     

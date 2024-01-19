@@ -80,7 +80,7 @@ class UserController extends Controller {
                 login: $login ,
                 pass_hash: $password_hash,
                 username: $data['username'],
-                account_type: new AccountType($data['account_type'])
+                account_type: AccountType::fromString($data['account_type'])
             );
             if ($this->user_repository->save($user))
                 return new Response(201, 'Success', 'User created');
