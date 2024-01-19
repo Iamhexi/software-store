@@ -81,7 +81,7 @@ class BugReportController extends Controller {
     }
 
     public function put(Request $request): Response {
-        $report_id = $request->get_body_parameter('report_id');
+        $report_id = $request->id;
         $bug_description = $request->get_body_parameter('bug_description');
         $review_status = $request->get_body_parameter('review_status');
         $description_of_steps_to_get_bug = $request->get_body_parameter('description_of_steps_to_get_bug');
@@ -110,7 +110,7 @@ class BugReportController extends Controller {
     }
 
     public function delete(Request $request): Response {
-        $report_id = $request->get_body_parameter('report_id');
+        $report_id = $request->id;
 
         if ($report_id === null)
             return new Response(400, 'failure', 'Cannot delete bug report without a report id');
