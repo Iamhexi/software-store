@@ -563,6 +563,7 @@ FLUSH PRIVILEGES; -- Save privileges
 
 -- Example data
 
+INSERT INTO User VALUES (NULL, "admin", "$argon2id$v=19$m=65536,t=4,p=1$MkF0UEMzVm5ySERJNmQ0dA$2nkv2r+JLVW7rf0rCxY69afC9CmS36DXYgk0CFhsxtU", "Administrator", "2021-01-01", "admin");
 INSERT INTO User VALUES (NULL, "emily7388", "enqtneykmezqltaraectumahapfigttcnjkwchdtzxacwjrnmsppjsdsgeqjpbhnmlggoybyabiqdwddqstcvricpzlcwgmuolqnrfcjwbmploibxbawvnsyjlchbnvw", "Emily", "2023-05-11", "author");
 INSERT INTO User VALUES (NULL, "emily4071", "nrkinrtuvbbkddseelnnbliauiuvexqtipdlamkinacwksgzoblsnsoijuqphzuthmiwyownlpqpwmulkcnodcduumjxcdsxpsxzszudrrhxypxpaiffdzlbomrqfgbv", "Emily", "2023-10-17", "client");
 INSERT INTO User VALUES (NULL, "john8308", "xyfxittfqpjardzdcwkgjuxvyywtvjhmnkahbozmujkvouwzjhdoognfhxijinepzamfmpdumpasjerswijcuohdhqomonypuvgurxudbjwbtfrgdtwfaeelnnipbhrw", "John", "2023-04-10", "author");

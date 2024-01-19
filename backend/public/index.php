@@ -2,6 +2,7 @@
 require_once __DIR__.'/../app/controller/UserController.php';
 require_once __DIR__.'/../app/controller/CategoryController.php';
 require_once __DIR__.'/../app/controller/BugReportController.php';
+require_once __DIR__.'/../app/controller/SoftwareUnitController.php';
 require_once __DIR__.'/../app/middleware/AuthenticationService.php';
 require_once __DIR__.'/../app/middleware/AuthorizationService.php';
 require_once __DIR__.'/../app/middleware/RequestHandler.php';
@@ -32,7 +33,9 @@ switch ($endpoint) {
         break;
 
     case Endpoint::User:
-        if ($method === 'post' && $request->get_path_parameter(2) === null) { // handles only registration (post) without a bearer token, otherwise requires a bearer token
+        // Registration without a bearer token
+        // TODO: it's BROKEN! remeber you cannot just remove the second condition as it allows the subcontrollers to handle requests
+        if ($method === 'post' && ($request->get_path_parameter(2) === null || !is_numeric($request->get_path_parameter(2)))) { // handles only registration (post) without a bearer token, otherwise requires a bearer token
             $controller = new UserController;
             $controller->handle_request($request);
         } 
@@ -61,6 +64,7 @@ $controller = match ($endpoint) {
     Endpoint::User => new UserController,
     Endpoint::Category => new CategoryController,
     Endpoint::BugReport => new BugReportController,
+    Endpoint::Software => new SoftwareUnitController
 
     // TODO: add more implemented controllers here
 };

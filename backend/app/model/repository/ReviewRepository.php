@@ -19,7 +19,7 @@ class ReviewRepository implements Repository {
             params: ['review_id' => $id],
             class_name: $created_class,
             number: 1
-        );
+        );  
     }
     
     function find_all(): array {
@@ -41,8 +41,8 @@ class ReviewRepository implements Repository {
                 'software_id' => $object->software_id,
                 'title' => $object->title,
                 'description' => $object->description,
-                'date_added' => $object->date_added,
-                'date_last_updated' => $object->date_last_updated
+                'date_added' => $object->date_added ?? date("Y-m-d"),
+                'date_last_updated' => $object->date_last_updated ?? date("Y-m-d")
             ]
         );
     }
@@ -54,4 +54,29 @@ class ReviewRepository implements Repository {
             params: ['review_id' => $id]
         );
     }
+
+    public function find_by(string $column, $value): ?Review {
+        $created_class = self::CLASS_NAME;
+        $row = $this->database->get_rows(
+            query: "SELECT * FROM $created_class WHERE $column = :value;",
+            params: ['value' => $value],
+            class_name: $created_class,
+            number: 1
+        );
+    
+
+        if ($row === null)
+            return null;
+
+            
+        return new Review(
+            review_id: $row->review_id,
+            author_id: $row->author_id,
+            software_id: $row->software_id,
+            title: $row->title,
+            description: $row->description,
+            date_added: new DateTime($row->date_added),
+            date_last_updated: new DateTime($row->date_last_updated)
+        );
+    }   
 }
