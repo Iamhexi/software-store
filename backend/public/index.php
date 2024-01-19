@@ -34,7 +34,7 @@ switch ($endpoint) {
 
     case Endpoint::User:
         // Registration without a bearer token
-        if ($method === 'post' && $request->get_path_parameter(2) === null) { // handles only registration (post) without a bearer token, otherwise requires a bearer token
+        if ($method === 'post' && $request->get_path_parameter(2) === null) {
             $controller = new UserController;
             $response = $controller->handle_request($request);
             Controller::send_response($response->code, $response->message, $response->data);

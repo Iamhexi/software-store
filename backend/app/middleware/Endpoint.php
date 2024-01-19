@@ -5,7 +5,7 @@ enum Endpoint : string {
     case User = 'user';
     case Software = 'software';
     case Category = 'category';
-    case AccountChangeRequest = 'account_change_request';
+    case AccountChangeRequest = 'user/{userId}/account_change_request';
     case Review = 'review';
     case Rating = 'rating';
     case BugReport = 'bug_report';
@@ -25,11 +25,11 @@ enum Endpoint : string {
                 return self::Software;
             case 'category':
                 return self::Category;
-            case 'account_change_request':
+            case 'user/{userId}/account_change_request':
                 return self::AccountChangeRequest;
             case 'review':
                 return self::Review;
-            case 'rating':
+            case 'software/{softwareId}/rating/average':
                 return self::Rating;
             case 'bug_report':
                 return self::BugReport;

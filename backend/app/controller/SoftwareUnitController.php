@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/Controller.php';
+require_once __DIR__ . '/RatingController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
 
 class SoftwareUnitController extends Controller {
@@ -10,6 +11,11 @@ class SoftwareUnitController extends Controller {
     }
 
     public function get(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'rating') {
+            $rating_controller = new RatingController;
+            return $rating_controller->get($request);
+        }
+
         $software_unit_id = $request->get_path_parameter(1);
         $name = $request->get_query_parameter('name');
 
@@ -34,6 +40,11 @@ class SoftwareUnitController extends Controller {
     }
 
     public function post(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'rating') {
+            $rating_controller = new RatingController;
+            return $rating_controller->post($request);
+        }
+
         $software_id = $request->get_path_parameter(1);
         $name = $request->get_body_parameter('name');
         $author_id = $request->get_body_parameter('author_id');
