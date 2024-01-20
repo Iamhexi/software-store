@@ -28,6 +28,16 @@ class Review implements JsonSerializable {
         return $this->$propertyName;
     }
 
+    public function __set(string $propertyName, mixed $value): void {
+        if (!property_exists($this, $propertyName))
+            throw new Exception("Property $propertyName does not exist");
+
+        if ($propertyName === 'date_added' || $propertyName === 'date_last_updated')
+            $this->$propertyName = is_string($value) ? new DateTime($value) : $value;
+        else
+            $this->$propertyName = $value;
+    }
+
     public function __toString(): string {
         return $this->title . ': ' . $this->description;
     }

@@ -9,8 +9,8 @@ To finish the backend, do all the tasks below:
 - [x] Client may get detalied information about a given software unit.
 - [ ] Client may download an executable.
 - [x] Client may post a review.
-- [ ] Client may post edit their own review.
-- [ ] Client may remove their own review.
+- [x] Client may edit their own review.
+- [x] Client may remove their own review.
 - [x] Client may post a rating for a software unit.
 - [ ] Client may remove their own rating for a software unit.
 - [x] Client may browse reviews.
@@ -26,6 +26,6 @@ To finish the backend, do all the tasks below:
 - [ ] Administrator may browse statute violation reports.
 - [ ] Administrator may unblock/block software units.
 - [x] Administrator may remove software units.
-- [ ] Administrator may remove any review.
+- [x] Administrator may remove any review.
 - [x] Administrator may remove any account that belongs to a software author or client.
 - [ ] Administrator may download source code of any software unit.
