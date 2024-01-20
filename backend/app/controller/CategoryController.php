@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../model/repository/CategoryRepository.php';
+require_once __DIR__ . '/../model/Category.php';
 require_once __DIR__ . '/Controller.php';
 
 class CategoryController extends Controller {
@@ -56,8 +57,11 @@ class CategoryController extends Controller {
             return new Response(400, 'failure', 'Cannot insert a category with the same name as already existing one.');
 
         $category = new Category(null, $category_name, $description);
-        $category = $this->category_repository->save($category);
-        return new Response(201, 'success', $category);
+        $result = $this->category_repository->save($category);
+        if ($result === true)
+            return new Response(201, 'success', $category);
+        else
+            return new Response(500, 'failure', 'Could not create new category due to an internal error');
     }
 
     public function put(Request $request): Response {

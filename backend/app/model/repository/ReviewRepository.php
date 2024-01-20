@@ -57,27 +57,11 @@ class ReviewRepository implements Repository {
         return $reviews ?? [];
     }
     
-    function save(object $object): bool {
+
+     public function save(object $object): bool {
         if ($this->in_database($object))
             return $this->update($object);
         return $this->insert($object);
-    }
-
-    private function update(object $object): bool {
-        $created_class = self::CLASS_NAME;
-
-        return $this->database->execute_query(
-            query: "UPDATE $created_class SET author_id = :author_id, software_id = :software_id, title = :title, description = :description, date_added = :date_added, date_last_updated = :date_last_updated WHERE review_id = :review_id;",
-            params: [
-                'review_id' => $object->review_id,
-                'author_id' => $object->author_id,
-                'software_id' => $object->software_id,
-                'title' => $object->title,
-                'description' => $object->description,
-                'date_added' => $object->date_added,
-                'date_last_updated' => $object->date_last_updated
-            ]
-        );
     }
 
     private function insert(object $object): bool {
@@ -109,6 +93,19 @@ class ReviewRepository implements Repository {
         return $row !== null;
     }
     
+    private function update(Review $review): bool {
+        $table = self::CLASS_NAME;
+        return $this->database->execute_query(
+            query: "UPDATE $table SET title = :title, description = :description, date_last_updated = :date_last_updated WHERE review_id = :review_id",
+            params: [
+                'review_id' => $review->review_id?? NULL,
+                'title' => $review->title,
+                'description' => $review->description,
+                'date_last_updated' => $review->date_last_updated ?? date("Y-m-d")
+            ]
+        );
+    }
+
     function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(

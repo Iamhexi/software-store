@@ -45,21 +45,6 @@ class DownloadRepository implements Repository {
             ]
         );
     }
-
-    function save(Download $object): bool {
-        $created_class = self::CLASS_NAME;
-
-        return $this->database->execute_query(
-            query: "INSERT INTO $created_class VALUES (:download_id, :user_id, :executable_id, 
-            :date_download)",
-            params: [
-                'download_id' => $object->download_id?? "NULL",
-                'user_id' => $object->user_id,
-                'executable_id' => $object->executable_id,
-                'date_download' => $object->date_download
-            ]
-        );
-    }
     
     function delete(int $id): bool {
         $class = self::CLASS_NAME;
