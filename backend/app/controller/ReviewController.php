@@ -49,12 +49,36 @@ class ReviewController extends Controller {
             else
                 return new Response(500, 'Failure', 'Internal server error');
         }
-
     }
 
     public function put(Request $request): Response {
-        // TODO: implmenet this
         $id = $request->get_path_parameter(1);
+        $title = $request->get_body_parameter('title');
+        $description = $request->get_body_parameter('description');
+
+        if ($id === null || !is_numeric($id))
+            return new Response(400, 'Failure','Could not update Review without review_id');
+
+        $review = $this->review_repository->find($id);
+        if ($review === null)
+            return new Response(404, 'Failure', 'Review not found');
+        else if ($title === null || $description === null)
+            return new Response(400, 'Failure', 'Missing data');
+    
+        $result = $this->review_repository->save(new Review(
+            review_id: $id,
+            author_id: -1,
+            software_id: -1,
+            title: $title,
+            description: $description,
+            date_last_updated: new DateTime(),
+            date_added: ''
+        ));
+        if ($result)
+            return new Response(201, 'Success', 'Review updated');
+        else
+            return new Response(500, 'Failure', "Could not update the review");
+
     }
 
     public function delete(Request $request): Response {

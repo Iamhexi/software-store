@@ -70,20 +70,30 @@ class UserController extends Controller {
             return $account_change_request_controller->put($request);
         }
 
+        $user_id = $request->get_path_parameter(1);
+        if (!$this->exists($user_id) || !is_numeric($user_id))
+            return new Response(400, 'Failure','Could not update User without user_id');
+        
         $data = $request->body_parameters;
-        if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_creation_date']) || !$this->exists($data['account_type']))
+        if (!$this->exists($data['login']) || !$this->exists($data['password']) || !$this->exists($data['username']) || !$this->exists($data['account_type']))
             return new Response(400, 'Failure', 'Missing data');
         else {
             $login = $data['login'];
+            $user = $this->user_repository->find_by('login',$login);
+            if ($user->user_id != $user_id)
+                return new Response(400, 'Failure','Login: '. $login . ' is already used');
+            
             $password_hash = password_hash($data['password'], Config::HASHING_ALGORITHM);
             $user = new User(
-                login: $login ,
+                user_id: $user_id,
+                login: $login,
                 pass_hash: $password_hash,
                 username: $data['username'],
+                account_creation_date: '',  #date should be not changed
                 account_type: AccountType::fromString($data['account_type'])
             );
             if ($this->user_repository->save($user))
-                return new Response(201, 'Success', 'User created');
+                return new Response(201, 'Success', 'User updated');
             else
                 return new Response(500, 'Failure', "Could not update the requested user with login: $login");
         }

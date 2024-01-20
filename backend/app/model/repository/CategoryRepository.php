@@ -33,9 +33,10 @@ class CategoryRepository implements Repository {
     }
 
     public function find_all(): array {
-        $created_class = 'stdClass';
+        $table = self::CLASS_NAME;
         $rows = $this->database->get_rows(
-            query: "SELECT * FROM $created_class;",
+            query: "SELECT * FROM $table",
+            class_name: 'stdClass'
         );
 
         foreach ($rows as $row) {
@@ -45,6 +46,23 @@ class CategoryRepository implements Repository {
                 description: $row->description
             );
         }
+        return $categories ?? [];
+    }
+
+    public function find_all_categories_for_software(int $software_id): array {
+        $table = 'SoftwareCategory';
+        $rows = $this->database->get_rows(
+            query: "SELECT category_id FROM $table WHERE software_id = $software_id",
+            class_name: 'stdClass'
+        );
+
+        if ($rows === null)
+            return [null];
+
+        foreach ($rows as $row) {
+            $categories[] = $this->find($row->category_id);
+        }
+
         return $categories ?? [];
     }
 
@@ -87,6 +105,7 @@ class CategoryRepository implements Repository {
                     'description' => $object->description
                 ]
             );
+        else return false;
     }
     
     public function delete(int $id): bool {

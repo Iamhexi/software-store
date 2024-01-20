@@ -64,7 +64,7 @@ class UserRepository implements Repository {
     
     
     return new User(
-        $obj->user_id,
+            $obj->user_id,
             $obj->login,
             $obj->pass_hash,
             $obj->username,
@@ -136,13 +136,12 @@ class UserRepository implements Repository {
     private function update(User $user): bool {
         $table = self::$table_name;
         return $this->database->execute_query(
-            query: "UPDATE $table SET login = :login, pass_hash = :pass_hash, username = :username, account_creation_date = :account_creation_date, account_type = :account_type WHERE user_id = :user_id",
+            query: "UPDATE $table SET login = :login, pass_hash = :pass_hash, username = :username, account_type = :account_type WHERE user_id = :user_id",
             params: [
                 'user_id' => $user->user_id,
                 'login' => $user->login,
                 'pass_hash' => $user->pass_hash,
                 'username' => $user->username,
-                'account_creation_date' => is_string($user->account_creation_date) ? $user->account_creation_date : $user->account_creation_date->format('Y-m-d H:i:s'),
                 'account_type' => $user->account_type->value
             ]
         );

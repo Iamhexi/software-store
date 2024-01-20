@@ -66,8 +66,9 @@ $controller = match ($endpoint) {
     Endpoint::Category => new CategoryController,
     Endpoint::BugReport => new BugReportController,
     Endpoint::Software => new SoftwareUnitController,
-    Endpoint::Review => new ReviewController
+    Endpoint::Review => new ReviewController,
 
+    default => Controller::send_response(400, 'Failure', 'Wrong endpoint')
     // TODO: add more implemented controllers here
 };
 
