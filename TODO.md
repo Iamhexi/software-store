@@ -17,7 +17,7 @@ To finish the backend, do all the tasks below:
 - [x] Client may see average raiting of a software unit.
 - [x] Client may report a software bug.
 - [ ] Client may report a statute violation by a software unit.
-- [ ] Client may request to change their account type from client to software author.
+- [x] Client may request a change to their account type from Client to Software Author.
 - [x] Software author may add new software units.
 - [x] Software author may modify their own software units.
 - [x] Software author may read the bug reports regarding their software units.
@@ -29,3 +29,6 @@ To finish the backend, do all the tasks below:
 - [x] Administrator may remove any review.
 - [x] Administrator may remove any account that belongs to a software author or client.
 - [ ] Administrator may download source code of any software unit.
+
+## Bugs
+- [ ] Make a bearer token expire after the time in Config.

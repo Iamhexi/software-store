@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/JsonSerializableness.php';
+require_once __DIR__.'/Version.php';
 
 class SoftwareVersion implements JsonSerializable {
     use JsonSerializableness;
@@ -9,9 +10,7 @@ class SoftwareVersion implements JsonSerializable {
         private int $software_id,
         private string $description,
         private DateTime $date_added,
-        private int $major_version,
-        private int $minor_version,
-        private ?int $patch_version
+        private Version $version
     ) {}
 
     public function __get(string $propertyName): mixed {

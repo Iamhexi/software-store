@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/RatingController.php';
+require_once __DIR__ . '/SoftwareVersionController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
 
 class SoftwareUnitController extends Controller {
@@ -11,9 +12,13 @@ class SoftwareUnitController extends Controller {
     }
 
     public function get(Request $request): Response {
+         
         if ($request->get_path_parameter(2) === 'rating') {
             $rating_controller = new RatingController;
             return $rating_controller->get($request);
+        } else if ($request->get_path_parameter(2) === 'version') {
+            $software_version_controller = new SoftwareVersionController;
+            return $software_version_controller->get($request);
         }
 
         $software_unit_id = $request->get_path_parameter(1);
@@ -43,6 +48,9 @@ class SoftwareUnitController extends Controller {
         if ($request->get_path_parameter(2) === 'rating') {
             $rating_controller = new RatingController;
             return $rating_controller->post($request);
+        } else if ($request->get_path_parameter(2) === 'version') {
+            $software_version_controller = new SoftwareVersionController;
+            return $software_version_controller->post($request);
         }
 
         $software_id = $request->get_path_parameter(1);
@@ -79,6 +87,14 @@ class SoftwareUnitController extends Controller {
     }
 
     public function put(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'rating') {
+            $rating_controller = new RatingController;
+            return $rating_controller->put($request);
+        } else if ($request->get_path_parameter(2) === 'version') {
+            $software_version_controller = new SoftwareVersionController;
+            return $software_version_controller->put($request);
+        }
+
         $software_unit_id = $request->get_path_parameter(1);
         $name = $request->get_body_parameter('name');
         $description = $request->get_body_parameter('description');
@@ -113,6 +129,13 @@ class SoftwareUnitController extends Controller {
     }
 
     public function delete(Request $request): Response {
+        if ($request->get_path_parameter(2) === 'rating') {
+            $rating_controller = new RatingController;
+            return $rating_controller->delete($request);
+        } else if ($request->get_path_parameter(2) === 'version') {
+            $software_version_controller = new SoftwareVersionController;
+            return $software_version_controller->delete($request);
+        }
         $software_unit_id = $request->get_path_parameter(1);
 
         if ($software_unit_id === null)

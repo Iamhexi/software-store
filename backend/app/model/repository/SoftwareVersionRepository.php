@@ -28,52 +28,60 @@ class SoftwareVersionRepository implements Repository {
             return null;
         }
 
+        $row = null;
+
         if ($column === 'version_id')
             return $this->find($value);
         else if ($column === 'software_id')
-            return $this->database->get_rows(
+            $row = $this->database->get_rows(
                 query: "SELECT * FROM $created_class WHERE software_id = :software_id;",
                 params: ['software_id' => $value],
-                class_name: $created_class,
                 number: 1
             );
-        else if ($column === 'major_version')
-            return $this->database->get_rows(
-                query: "SELECT * FROM $created_class WHERE major_version = :major_version;",
-                params: ['major_version' => $value],
-                class_name: $created_class,
+        else if ($column === 'version') {
+            $major_version = $value->major_version;
+            $minor_version = $value->minor_version;
+            $patch_version = $value->patch_version;
+            $this->database->get_rows(
+                query: "SELECT * FROM $created_class WHERE major_version = :major_version AND minor_version = :minor_version AND patch_version = :patch_version;",
+                params: [
+                    'major_version' => $major_version,
+                    'minor_version' => $minor_version,
+                    'patch_version' => $patch_version
+                ],
                 number: 1
             );
-        else if ($column === 'minor_version')
-            return $this->database->get_rows(
-                query: "SELECT * FROM $created_class WHERE minor_version = :minor_version;",
-                params: ['minor_version' => $value],
-                class_name: $created_class,
-                number: 1
-            );
-        else if ($column === 'patch_version')
-            return $this->database->get_rows(
-                query: "SELECT * FROM $created_class WHERE patch_version = :patch_version;",
-                params: ['patch_version' => $value],
-                class_name: $created_class,
-                number: 1
-            );
+            
+        }
         else if ($column === 'date_added')
-            return $this->database->get_rows(
+            $row = $this->database->get_rows(
                 query: "SELECT * FROM $created_class WHERE date_added = :date_added;",
                 params: ['date_added' => $value],
-                class_name: $created_class,
                 number: 1
             );
         else if ($column === 'description')
-            return $this->database->get_rows(
+            $row = $this->database->get_rows(
                 query: "SELECT * FROM $created_class WHERE description = :description;",
                 params: ['description' => $value],
-                class_name: $created_class,
                 number: 1
             );
         else
             return null;
+
+        if ($row === null)
+            return null;
+        
+        return new SoftwareVersion(
+            version_id: $row->version_id,
+            software_id: $row->software_id,
+            description: $row->description,
+            date_added: new DateTime($row->date_added),
+            version: new Version(
+                major: $row->major_version,
+                minor: $row->minor_version,
+                patch: $row->patch_version
+            )
+        );
     }
     
     public function find_all(): array {
@@ -94,10 +102,10 @@ class SoftwareVersionRepository implements Repository {
                 'version_id' => $object->version_id?? NULL,
                 'software_id' => $object->software_id,
                 'description' => $object->description,
-                'date_added' => $object->date_added->format('Y-m-d'),
-                'major_version' => $object->major_version,
-                'minor_version' => $object->minor_version,
-                'patch_version' => $object->patch_version
+                'date_added' => $object->date_added,
+                'major_version' => $object->version->major,
+                'minor_version' => $object->version->minor,
+                'patch_version' => $object->version->patch
             ]
         );
     }
