@@ -3,12 +3,16 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/RatingController.php';
 require_once __DIR__ . '/SoftwareVersionController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
+require_once __DIR__ . '/../model/repository/CategoryRepository.php';
 
 class SoftwareUnitController extends Controller {
     private SoftwareUnitRepository $software_unit_repository;
+    private CategoryRepository $category_repository;
 
-    public function __construct(SoftwareUnitRepository $software_unit_repository = new SoftwareUnitRepository) {
+    public function __construct(SoftwareUnitRepository $software_unit_repository = new SoftwareUnitRepository, 
+                                CategoryRepository $category_repository = new CategoryRepository()) {
         $this->software_unit_repository = $software_unit_repository;
+        $this->category_repository = $category_repository;
     }
 
     public function get(Request $request): Response {
@@ -78,7 +82,7 @@ class SoftwareUnitController extends Controller {
             name: $name,
             description: $description,
             link_to_graphic: '',
-            is_blocked: false
+            is_blocked: false,
         );
 
         if (!$this->software_unit_repository->save($software))

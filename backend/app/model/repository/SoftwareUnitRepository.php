@@ -1,12 +1,19 @@
 <?php
 require_once __DIR__ . '/../SoftwareUnit.php';
 require_once __DIR__ . '/Repository.php';
+require_once __DIR__ . '/CategoryRepository.php';
 
 class SoftwareUnitRepository implements Repository {
     private Database $database;
+    private CategoryRepository $category_repository;
 
-    public function __construct(Database $database = new PDODatabase) {
+    private const CLASS_NAME = 'SoftwareUnit';
+
+
+    public function __construct(Database $database = new PDODatabase,
+                                CategoryRepository $category_repository = new CategoryRepository()) {
         $this->database = $database;
+        $this->category_repository = $category_repository;
     }
 
     public function find(int $id): ?SoftwareUnit {
@@ -20,31 +27,38 @@ class SoftwareUnitRepository implements Repository {
         if ($row === null)
             return null;
 
+        $categories = $this->category_repository->find_all_categories_for_software($id);
+      
         return new SoftwareUnit(
             software_id: $row->software_id,
             author_id: $row->author_id,
             name: $row->name,
             description: $row->description,
             link_to_graphic: $row->link_to_graphic,
-            is_blocked: $row->is_blocked
+            is_blocked: $row->is_blocked,
+            categories: $categories
         );
     }
 
     public function find_all(): array {
+        $created_class = self::CLASS_NAME;
         $rows =  $this->database->get_rows(
-            query: "SELECT * FROM SoftwareUnit;",
+            query: "SELECT * FROM $created_class",
             class_name: 'stdClass'
         );
 
-        foreach ($rows as $row)
+        foreach ($rows as $row){
+            $categories = $this->category_repository->find_all_categories_for_software($row->software_id);
             $software_units[] = new SoftwareUnit(
                 software_id: $row->software_id,
                 author_id: $row->author_id,
                 name: $row->name,
                 description: $row->description,
                 link_to_graphic: $row->link_to_graphic,
-                is_blocked: $row->is_blocked
+                is_blocked: $row->is_blocked,
+                categories: $categories
             );
+        }
         return $software_units ?? [];
     }
     
@@ -59,13 +73,16 @@ class SoftwareUnitRepository implements Repository {
         if ($row === null)
             return null;
 
+        $categories = $this->category_repository->find_all_categories_for_software($row->software_id);
+
         return new SoftwareUnit(
             software_id: $row->software_id,
             author_id: $row->author_id,
             name: $row->name,
             description: $row->description,
             link_to_graphic: $row->link_to_graphic,
-            is_blocked:  intval($row->is_blocked) === 1 ? true : false
+            is_blocked:  intval($row->is_blocked) === 1 ? true : false,
+            categories: $categories
         );
     }
 
@@ -74,7 +91,7 @@ class SoftwareUnitRepository implements Repository {
         if ($object->software_id !== null)
             return $this->update($object);
 
-        $this->database->execute_query(
+        return $this->database->execute_query(
             query: "INSERT INTO SoftwareUnit VALUES (:software_id, :author_id, :name, :description, :link_to_graphic, :is_blocked)",
             params: [
                 'software_id' => $object->software_id,
@@ -102,14 +119,6 @@ class SoftwareUnitRepository implements Repository {
     }
 
     
-    function findAll(): array {
-        $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
-            query: "SELECT * FROM $created_class;",
-            class_name: $created_class
-        );
-    }
-
     public function delete(int $id): bool {
 
         return $this->database->execute_query(

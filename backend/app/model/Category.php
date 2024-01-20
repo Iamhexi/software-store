@@ -1,7 +1,9 @@
 
 <?php 
 require_once __DIR__.'/../Config.php';
-class Category {
+class Category implements JsonSerializable {
+    use JsonSerializableness;
+    
     public function __construct(
         private ?int $category_id,
         private string $name,
@@ -13,6 +15,12 @@ class Category {
             throw new Exception("Property $propertyName does not exist");
 
         return $this->$propertyName;
+    }
+
+    public function __set(string $name, mixed $value): void {
+        if (!property_exists($this, $name))
+            throw new Exception("Property $name does not exist");
+        $this->$name = $value;
     }
 
     public function __toString(): string {

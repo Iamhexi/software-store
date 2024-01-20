@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/JsonSerializableness.php';
 require_once __DIR__.'/../Config.php';
+require_once __DIR__.'/Category.php';
 
 class SoftwareUnit implements JsonSerializable {
     use JsonSerializableness;
@@ -11,7 +12,8 @@ class SoftwareUnit implements JsonSerializable {
         private string $name,
         private string $description,
         private string $link_to_graphic,
-        private bool $is_blocked
+        private bool $is_blocked,
+        private array $categories = []
     ) {}
 
     public function block(): void {

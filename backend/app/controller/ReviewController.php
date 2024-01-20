@@ -49,12 +49,10 @@ class ReviewController extends Controller {
             else
                 return new Response(500, 'Failure', 'Internal server error');
         }
-
     }
 
     public function put(Request $request): Response {
-        $id = $request->get_path_parameter(1);
-        
+        $id = $request->get_path_parameter(1);    
         $title = $request->get_body_parameter('title');
         $description = $request->get_body_parameter('description');
 
