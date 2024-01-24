@@ -19,4 +19,9 @@ class Token implements JsonSerializable {
             throw new Exception("Property $name does not exist");
         return $this->$name;
     }
+
+    public function __toString(): string {
+        date_timezone_set($this->expires_at, timezone_open('Europe/Warsaw'));
+        return $this->token . '/USER:' . $this->user_id . '/TIME:' . $this->expires_at->format(Config::DB_DATETIME_FORMAT);
+    }
 }
