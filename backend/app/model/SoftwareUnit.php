@@ -24,18 +24,6 @@ class SoftwareUnit implements JsonSerializable {
         $this->is_blocked = false;
     }
 
-    public function release_new_version(string $description, int $major, int $minor): SoftwareVersion {
-        return new SoftwareVersion(
-            version_id: null,
-            software_id: $this->software_id,
-            description: $description,
-            date_added: new DateTime(),
-            major_version: $major,
-            minor_version: $minor,
-            patch_version: NUll
-        );
-    }
-
     private function is_graphic_link_valid(string $link): bool {
         return filter_var($link, FILTER_VALIDATE_URL)
             && preg_match('/\.(png|jpg|jpeg|gif|webp)$/i', $link);

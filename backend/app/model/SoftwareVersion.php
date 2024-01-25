@@ -27,4 +27,12 @@ class SoftwareVersion implements JsonSerializable {
         return 'Software_id: '. $this->software_id . ' ; ' . $this->description . 
         ' ; ' . $this->major_version . '.' . $this->minor_version . '.' . $this->patch_version;
     }
+    public function __properties(): array {
+        return array_keys(get_object_vars($this));
+    }
+    
+    public static function getPropertyNames() : array {
+        $rating = new SoftwareVersion(1, 0, '', new DateTime(), new Version(1,1,1));
+        return $rating->__properties();
+    }
 }

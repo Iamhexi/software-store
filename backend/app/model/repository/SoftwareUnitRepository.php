@@ -88,14 +88,13 @@ class SoftwareUnitRepository implements Repository {
 
 
         foreach ($rows as $row) {
-
             $objects[] = new $class_name(
-                request_id: $row->request_id,
-                user_id: $row->user_id,
+                software_id: $row->software_id,
+                author_id: $row->author_id,
+                name: $row->name,
                 description: $row->description,
-                justification: $row->justification,
-                date_submitted: new DateTime($row->date_submitted),
-                review_status: $row->review_status === 0 ? RequestStatus::Pending : RequestStatus::from($row->review_status)
+                link_to_graphic: $row->link_to_graphic,
+                is_blocked: $row->is_blocked,
             );
         }
 

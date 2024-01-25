@@ -32,3 +32,5 @@ To finish the backend, do all the tasks below:
 
 ## Bugs
 - [x] Make a bearer token expire after the time specified in Config.
+- [ ] SoftwareUnit can't be searched by categories (implement View??).
+- [ ] Can't delete SoftwareVersion, Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
