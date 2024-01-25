@@ -46,7 +46,9 @@ class AuthenticationService {
         }
     }
 
-    public function get_indentity(Token $token): ?Identity {
+    public function get_indentity(?Token $token): ?Identity {
+        if ($token === null)
+            return null;
         $user = $this->user_repository->find($token->user_id);
         if ($user === null)
             return null;
