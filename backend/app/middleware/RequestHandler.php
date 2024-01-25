@@ -9,13 +9,10 @@ class RequestHandler {
         $method = self::get_request_method();
         $endpoint = self::get_endpoint();
 
-        // if its not loging AND registering
-        if (!($method === 'post' && $endpoint === Endpoint::Auth) && !($method === 'post'&& $endpoint === Endpoint::User)) {
         $token_bearer = self::get_token_bearer(); // as text
         $token_bearer = $authentication->instantiate_token($token_bearer); // as Token object
 
         $identity = $authentication->get_indentity($token_bearer);
-        }
 
         $id = self::get_request_id();
         $query_parameters = self::get_request_query();
