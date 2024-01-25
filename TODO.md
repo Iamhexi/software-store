@@ -5,7 +5,7 @@ To finish the backend, do all the tasks below:
 
 ## Fuctional requirements
 - [x] Unregisted user may sign up.
-- [ ] Client may search the repository for software units.
+- [x] Client may search the repository for software units.
 - [x] Client may get detalied information about a given software unit.
 - [ ] Client may download an executable.
 - [x] Client may post a review.
@@ -24,11 +24,11 @@ To finish the backend, do all the tasks below:
 - [x] Software author may remove the bug reports regarding their software units.
 - [ ] Administrator may accept/reject clients' account change requests.
 - [ ] Administrator may browse statute violation reports.
-- [ ] Administrator may unblock/block software units.
+- [x] Administrator may unblock/block software units.
 - [x] Administrator may remove software units.
 - [x] Administrator may remove any review.
 - [x] Administrator may remove any account that belongs to a software author or client.
 - [ ] Administrator may download source code of any software unit.
 
 ## Bugs
-- [x] Make a bearer token expire after the time in Config.
+- [x] Make a bearer token expire after the time specified in Config.

@@ -20,7 +20,7 @@ class ReviewController extends Controller {
             else
                 return new Response(200, 'Success', $review);
         } else if ($software_id !== null && is_numeric($software_id)) {
-            return new Response(200, 'Success', $this->review_repository->find_by('software_id', $software_id));
+            return new Response(200, 'Success', $this->review_repository->find_by(['software_id' => $software_id]));
         } else {
             return new Response(200, 'Success', $this->review_repository->find_all());
         }

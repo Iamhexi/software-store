@@ -20,7 +20,7 @@ class RatingController extends Controller {
         else if ($request->get_path_parameter(2) === 'count')
             return new Response(200, 'success', ['count' => $this->rating_repository->get_count($software_id)]);
 
-        $rating = $this->rating_repository->find_by('software_id', $software_id);
+        $rating = $this->rating_repository->find_by(['software_id' => $software_id]);
         if ($rating === null)
             return new Response(404, 'failure', 'Could not find any rating with the given software id ' . $software_id);
         return new Response(200, 'success', ['rating' => $rating]);

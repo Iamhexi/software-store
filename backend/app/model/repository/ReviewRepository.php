@@ -114,28 +114,44 @@ class ReviewRepository implements Repository {
         );
     }
 
-    public function find_by(string $column, $value): ?object {
-        $created_class = self::CLASS_NAME;
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE $column = :value;",
-            params: ['value' => $value],
-            class_name: 'stdClass',
-            number: 1
-        );
-    
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['review_id', 'author_id', 'software_id', 'title', 'description', 'date_added', 'date_last_updated'];
 
-        if ($row === null)
-            return null;
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
+        }
 
-            
-        return new Review(
-            review_id: $row->review_id,
-            author_id: $row->author_id,
-            software_id: $row->software_id,
-            title: $row->title,
-            description: $row->description,
-            date_added: new DateTime($row->date_added),
-            date_last_updated: new DateTime($row->date_last_updated)
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
-    }   
+
+
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                review_id: $row->review_id,
+                author_id: $row->author_id,
+                software_id: $row->software_id,
+                title: $row->title,
+                description: $row->description,
+                date_added: new DateTime($row->date_added),
+                date_last_updated: new DateTime($row->date_last_updated)
+            );
+        }
+
+        return $objects ?? [];
+    }
 }

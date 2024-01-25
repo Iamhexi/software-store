@@ -78,26 +78,44 @@ class StatuteViolationReportRepository implements Repository {
 
         return $reports ?? [];
     }
-    public function find_by(string $column, mixed $value): ?object {
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM StatuteViolationReport WHERE $column = :$column;",
-            params: [$column => $value],
-            class_name: 'stdClass',
-            number: 1
+    public function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['report_id', 'software_id', 'user_id', 'rule_point', 'description', 'date_added', 'review_status'];
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
+        }
+
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($row === null)
-            return null;
 
-        return new StatuteViolationReport(
-            report_id: $row->report_id,
-            software_id: $row->software_id,
-            user_id: $row->user_id,
-            rule_point: $row->rule_point,
-            description: $row->description,
-            date_added: $row->date_added,
-            review_status: $row->review_status
-        );
+
+        foreach ($rows as $row) {
+            $objects[] = new $class_name(
+                report_id: $row->report_id,
+                software_id: $row->software_id,
+                user_id: $row->user_id,
+                rule_point: $row->rule_point,
+                description: $row->description,
+                date_added: $row->date_added,
+                review_status: $row->review_status
+            );
+        }
+
+        return $objects ?? [];
     }
 
     public function find_by_2_col(string $column1, mixed $value1,string $column2, mixed $value2): ?object {

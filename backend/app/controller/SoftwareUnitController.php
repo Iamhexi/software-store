@@ -10,18 +10,21 @@ class SoftwareUnitController extends Controller {
     private SoftwareUnitRepository $software_unit_repository;
     private CategoryRepository $category_repository;
 
-    public function __construct(SoftwareUnitRepository $software_unit_repository = new SoftwareUnitRepository, 
-                                CategoryRepository $category_repository = new CategoryRepository()){
+    public function __construct(
+        SoftwareUnitRepository $software_unit_repository = new SoftwareUnitRepository, 
+        CategoryRepository $category_repository = new CategoryRepository()
+    ) {
         $this->software_unit_repository = $software_unit_repository;
         $this->category_repository = $category_repository;
     }
 
     public function get(Request $request): Response {
          
-        if ($request->get_path_parameter(2) === 'rating') {
+        $location = $request->get_path_parameter(2);
+        if ($location === 'rating') {
             $rating_controller = new RatingController;
             return $rating_controller->get($request);
-        } else if ($request->get_path_parameter(2) === 'version') {
+        } else if ($location === 'version') {
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->get($request);
         }
@@ -34,24 +37,86 @@ class SoftwareUnitController extends Controller {
         $software_unit_id = $request->get_path_parameter(1);
         $name = $request->get_query_parameter('name');
 
-        if ($software_unit_id === null && $name === null) {
+        if ($this->requests_all($request)){
+
             $software_units = $this->software_unit_repository->find_all();
             if ($software_units === null)
                 return new Response(404, 'failure', 'Could not find any software units');
             return new Response(200, 'success', $software_units);
-        
-        } else if ($name !== null) {
-            $software_unit = $this->software_unit_repository->find_by('name', $name);
+
+        } else if ($this->requests_filtered($request)) {
+
+            $name = $this->get_requested_parameter_name($request);
+            $software_units = $this->software_unit_repository->find_by([$name => $request->get_query_parameter($name)]);
+            if ($software_units === null)
+                return new Response(404, 'failure', 'Could not find any software units matching the given criterion: ' . $name . ' = ' . $request->get_query_parameter($name));
+            return new Response(200, 'success', $software_units);
+
+        } else if ($this->requests_single($request)) {
+
+            if (!$this->is_id_valid($software_unit_id))
+                return new Response(400, 'failure', 'Invalid software unit id. Id must be a positive integer.');
+            $software_unit = $this->software_unit_repository->find($software_unit_id);
             if ($software_unit === null)
-                return new Response(404, 'failure', 'Could not find software unit with the given name ' . $name);
+                return new Response(404, 'failure', 'Could not find software unit with the given id ' . $software_unit_id);
             return new Response(200, 'success', $software_unit);
+
         }
 
-        $software_unit = $this->software_unit_repository->find($software_unit_id);
-        if ($software_unit === null)
-            return new Response(404, 'failure', 'Could not find software unit with the given id ' . $software_unit_id);
+        return new Response(400, 'failure', 'Invalid request.');
+    }
 
-        return new Response(200, 'success', $software_unit);
+    private function requests_all(Request $request): bool {
+        $category_id = $request->get_query_parameter('category_id');
+        $author_id = $request->get_query_parameter('author_id');
+        $is_blocked = $request->get_query_parameter('is_blocked');
+        $name = $request->get_query_parameter('name');
+
+        if ($category_id !== null || $author_id !== null || $is_blocked !== null || $name !== null)
+            return false;
+        return true;
+    }
+
+    private function requests_filtered(Request $request): bool {
+        $category_id = $request->get_query_parameter('category_id');
+        $author_id = $request->get_query_parameter('author_id');
+        $is_blocked = $request->get_query_parameter('is_blocked');
+        $name = $request->get_query_parameter('name');
+
+        if ($category_id === null && $author_id === null && $is_blocked === null && $name === null)
+            return false;
+        return true;
+    }
+
+    private function get_requested_parameter_name(Request $request) {
+        $category_id = $request->get_query_parameter('category_id');
+        $author_id = $request->get_query_parameter('author_id');
+        $is_blocked = $request->get_query_parameter('is_blocked');
+        $name = $request->get_query_parameter('name');
+
+        if ($category_id !== null)
+            return 'category_id';
+        else if ($author_id !== null)
+            return 'author_id';
+        else if ($is_blocked !== null)
+            return 'is_blocked';
+        else if ($name !== null)
+            return 'name';
+        return null;
+    }
+
+    private function requests_single(Request $request): bool {
+        $software_id = $request->get_path_parameter(1);
+
+        if ($software_id === null)
+            return false;
+        return true;
+    }
+
+    private function is_id_valid(mixed $id): bool {
+        if (!is_numeric($id) || $id < 0)
+            return false;
+        return true;
     }
 
     public function post(Request $request): Response {
@@ -82,7 +147,7 @@ class SoftwareUnitController extends Controller {
             return new Response(400, 'failure', 'Cannot insert a software unit without an author id');
 
 
-        $software = $this->software_unit_repository->find_by('name', $name);
+        $software = $this->software_unit_repository->find_by(['name' => $name]);
         if ($software !== null)
             return new Response(404, 'failure', 'Could add software with the given name ' . $name . ' as this name already exists');
 
@@ -135,9 +200,9 @@ class SoftwareUnitController extends Controller {
         if ($link_to_graphic !== null)
             $software_unit->link_to_graphic = $link_to_graphic;
         if ($is_blocked !== null) {
-            if ($is_blocked === 'true')
+            if ($is_blocked === 'true' || $is_blocked == 1)
                 $software_unit->is_blocked = true;
-            else if ($is_blocked === 'false')
+            else if ($is_blocked === 'false' || $is_blocked == 0)
                 $software_unit->is_blocked = false;
         }
 

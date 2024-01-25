@@ -39,34 +39,44 @@ class RatingRepository implements Repository {
         return intval($row->count);
     }
 
-    public function find_by(string $column, mixed $value): ?object {
-        $created_class = self::CLASS_NAME;
-
-        if (!property_exists($created_class, $column)) {
-            Logger::log("Column $column does not exist in table $created_class", Priority::ERROR);
-            return null;
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = array_keys(get_class_vars($class_name));
+        foreach ($allowed_columns as $column => $value) {
+            echo $column;
+        }
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
         }
 
-        if ($column === 'rating_id')
-            return $this->find($value);
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
 
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE $column = :value",
-            params: ['value' => $value],
-            class_name: $created_class,
-            number: 1
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($row === null)
-            return null;
 
-        return new Rating(
-            rating_id: $row->rating_id,
-            author_id: $row->author_id,
-            software_id: $row->software_id,
-            mark: $row->mark,
-            date_added: new DateTime($row->date_added)
-        );
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                rating_id: $row->rating_id,
+                author_id: $row->author_id,
+                software_id: $row->software_id,
+                mark: $row->mark,
+                date_added: new DateTime($row->date_added)
+            );
+        }
+
+        return $objects ?? [];
     }
 
     public function find(int $id): ?Rating {
@@ -94,7 +104,7 @@ class RatingRepository implements Repository {
             return false;
         }
 
-        if ($object->rating_id !== null || $this->find_by('author_id', $object->author_id) !== null) {
+        if ($object->rating_id !== null || $this->find_by([$object->author_id]) !== null) {
             Logger::log('Attempt to insert a duplicate rating', Priority::INFO);
             return false;
         }

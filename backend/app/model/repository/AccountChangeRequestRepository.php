@@ -5,6 +5,7 @@ require_once __DIR__ . '/../AccountChangeRequest.php';
 class AccountChangeRequestRepository {
 
     private Database $database;
+    private const CLASS_NAME = 'AccountChangeRequest';
 
     public function __construct(Database $database = new PDODatabase) {
         $this->database = $database;
@@ -19,25 +20,44 @@ class AccountChangeRequestRepository {
         );
     }
 
-    function find_by(string $column, string|int $value): ?object {
-        $object = $this->database->get_rows(
-            query: "SELECT * FROM AccountChangeRequest WHERE $column = :$column;",
-            params: [$column => $value],
-            class_name: 'AccountChangeRequest',
-            number: 1
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = array_keys(get_class_vars($class_name));
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
+        }
+
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($object === null)
-            return null;
 
-        return new AccountChangeRequest(
-            request_id: $object->request_id,
-            user_id: $object->user_id,
-            description: $object->description,
-            justification: $object->justification,
-            date_submitted: new DateTime($object->date_submitted),
-            review_status: RequestStatus::from($object->review_status)
-        );
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                request_id: $row->request_id,
+                user_id: $row->user_id,
+                description: $row->description,
+                justification: $row->justification,
+                date_submitted: new DateTime($row->date_submitted),
+                review_status: $row->review_status === 0 ? RequestStatus::Pending : RequestStatus::from($row->review_status)
+            );
+        }
+
+        return $objects ?? [];
     }
 
     function find_all(): array {

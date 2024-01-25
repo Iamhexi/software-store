@@ -16,8 +16,8 @@ class AccountChangeRequestController extends Controller {
         if ($user_id === null)
             return new Response(400, 'failure', 'Could not find account change request connected the given user id ' . $user_id);
 
-        $account_change_request = $this->account_change_request_repository->find_by('user_id', $user_id);
-        if ($account_change_request === null)
+        $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
+        if ($account_change_request === [])
             return new Response(404, 'failure', 'Could not find account change request with the given user id ' . $user_id);
 
         return new Response(200, 'success', $account_change_request);
@@ -32,7 +32,7 @@ class AccountChangeRequestController extends Controller {
         else if ($description === null)
             return new Response(400, 'failure', 'Cannot insert an account change request without a description');
 
-        $account_change_request = $this->account_change_request_repository->find_by('user_id', $user_id);
+        $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
         if ($account_change_request !== null)
             return new Response(400, 'failure', 'Cannot insert an account change request as one already exists for the user with the given user_id ' . $user_id);
         
@@ -60,9 +60,13 @@ class AccountChangeRequestController extends Controller {
         else if ($description === null && $review_status === null)
             return new Response(400, 'failure', 'Cannot update an account change request without a description or review status');
 
-        $account_change_request = $this->account_change_request_repository->find_by('user_id', $user_id);
-        if ($account_change_request === null)
+        $account_change_requests = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
+        if ($account_change_requests === [])
             return new Response(404, 'failure', 'Could not find account change request with the given user id ' . $user_id);
+
+        if (count($account_change_requests) > 1)
+            return new Response(500, 'failure', 'Found multiple account change requests with the given user id ' . $user_id);
+        $account_change_request = $account_change_requests[0];
 
         if ($description !== null)
             $account_change_request->description = $description;
@@ -81,7 +85,7 @@ class AccountChangeRequestController extends Controller {
         if ($user_id === null)
             return new Response(400, 'failure', 'Cannot delete account change request without a user id');
 
-        $account_change_request = $this->account_change_request_repository->find_by('user_id', $user_id);
+        $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
         if ($account_change_request === null)
             return new Response(404, 'failure', 'Could not find account change request with the given user id ' . $user_id);
 

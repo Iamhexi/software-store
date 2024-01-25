@@ -5,6 +5,7 @@ require_once __DIR__ . '/../SourceCode.php';
 class SourceCodeRepository {
     private Database $database;
 
+    private const CLASS_NAME = 'SourceCode';
     public function __construct(Database $database = new PDODatabase) {
         $this->database = $database;
     }

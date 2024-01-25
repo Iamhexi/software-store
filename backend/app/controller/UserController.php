@@ -25,11 +25,22 @@ class UserController extends Controller {
             return $account_change_request_controller->get($request);
         }
 
-        $id = $request->id;
+        $id = $request->get_path_parameter(1);
         if (!$this->exists($id))
             return new Response(200, 'Success', $this->user_repository->find_all());
+        else if ($request->get_query_parameter('login') !== null)
+            return new Response(200, 'Success', $this->user_repository->find_by(['login' => $request->get_query_parameter('login')]));
+        else if ($request->get_query_parameter('username') !== null)
+            return new Response(200, 'Success', $this->user_repository->find_by(['username' => $request->get_query_parameter('username')]));
+        else if ($request->get_query_parameter('account_creation_date')) {
+            $date = $request->get_query_parameter('account_creation_date');
+            if (DateTime::createFromFormat(Config::DB_DATETIME_FORMAT, $date) === false)
+                return new Response(400, 'Failure', 'Invalid date format. Date must be in the format: ' . Config::DB_DATETIME_FORMAT);
+            else
+                return new Response(200, 'Success', $this->user_repository->find_by(['account_creation_date' => $date]));
+        }
         else if (!$this->isCorrectPrimaryKey($id))
-            return new Response(400, 'Failure', 'Invalid id');
+            return new Response(400, 'Failure', 'Invalid id. Id must be a positive integer');
         else {
             $user = $this->user_repository->find($id);
             if ($user === null)
@@ -79,7 +90,14 @@ class UserController extends Controller {
             return new Response(400, 'Failure', 'Missing data');
         else {
             $login = $data['login'];
-            $user = $this->user_repository->find_by('login',$login);
+            $users = $this->user_repository->find_by(['login' => $login]);
+
+            if ($users === [])
+                return new Response(500, 'Failure', 'Could not find user with the given login. Therefore update of the requested user with login: ' . $login . ' cannot be performed');
+            else if (count($users) > 1)
+                return new Response(500, 'Failure', 'Multiple users with the given login. Therefore update of the requested user with login: ' . $login . ' cannot be performed');
+
+            $user = $users[0];
             if ($user->user_id != $user_id)
                 return new Response(400, 'Failure','Login: '. $login . ' is already used');
             

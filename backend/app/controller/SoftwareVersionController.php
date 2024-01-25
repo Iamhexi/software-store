@@ -34,7 +34,7 @@ class SoftwareVersionController extends Controller {
 
             } else { // return all software versions of the software
               
-                $software_versions = $this->software_version_repository->find_by('software_id', $software_id);
+                $software_versions = $this->software_version_repository->find_by(['software_id' => $software_id]);
                 
                 if ($software_versions === null)
                     return new Response(404, 'Failure', 'Software versions not found');
@@ -71,10 +71,10 @@ class SoftwareVersionController extends Controller {
     }
 
     private function handle_get_with_filter(int $software_id, Version $version): Response {
-        $software_version = $this->software_version_repository->find_by('version', $version);
+        $software_version = $this->software_version_repository->find_by(['version' => $version]);
         if ($software_version === null)
             return new Response(404, 'Failure', 'Software version not found');
-        else if ($software_version->software_id !== $software_id)
+        else if ($software_version[0]->software_id !== $software_id)
             return new Response(400, 'Failure', 'Software version does not belong to the software');
         return new Response(200, 'Success', $software_version);
     }
@@ -105,7 +105,7 @@ class SoftwareVersionController extends Controller {
         else if (!is_numeric($minor_version) || $minor_version < 0)
             return new Response(400, 'Failure', 'Invalid minor version. It must be a positive integer');
         else {
-            $software_version = $this->software_version_repository->find_by('software_id', $software_id);
+            $software_version = $this->software_version_repository->find_by(['software_id' => $software_id]);
             
             $software_unit = $this->software_unit_repository->find($software_id);
             
