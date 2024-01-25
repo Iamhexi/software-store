@@ -24,6 +24,6 @@ class Rating implements JsonSerializable {
     }
 
     public function __toString(): string {
-        return "Rating: $this->mark";
+        return "Rating: ". $this->mark;
     }
 }

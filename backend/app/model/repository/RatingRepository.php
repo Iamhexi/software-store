@@ -118,4 +118,16 @@ class RatingRepository implements Repository {
             params: ['rating_id' => $id]
         );
     }
+
+    public function update(Rating $rating): bool {
+        $table = self::CLASS_NAME;
+
+        return $this->database->execute_query(
+            query: "UPDATE $table SET mark = :mark WHERE user_id = :user_id",
+            params: [
+                'mark' => $rating->mark,
+                'date_added' => $rating->date_added->format(Config::DB_DATETIME_FORMAT)
+            ]
+        );
+    }
 }
