@@ -2,7 +2,7 @@
 require_once __DIR__.'/JsonSerializableness.php';
 require_once __DIR__.'/AccountType.php';
 
-class Authority implements JsonSerializable {
+class Identity implements JsonSerializable {
     use JsonSerializableness;
 
     public function __construct(

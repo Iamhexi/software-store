@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../model/repository/TokenRepository.php';
 require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/Endpoint.php';
-require_once __DIR__ . '/../model/Authority.php';
+require_once __DIR__ . '/../model/Identity.php';
 
 class AuthorizationService {
     private TokenRepository $token_repository;
@@ -13,7 +13,19 @@ class AuthorizationService {
         $this->user_repository = new UserRepository;
     }
 
-    public function authorize(Token $token, Endpoint $endpoint,Authority $authority): bool {
+    public function authorize(Request $request): bool {
+        $token = $request->token;
+        if ($token === null)
+            return false;
+
+        $endpoint = $request->endpoint;
+        $identity = $request->identity;
+        $request_method = $request->method;
+
+        return $this->authorize_using_data($token, $endpoint, $request_method);
+    }
+
+    private function authorize_using_data(Token $token, Endpoint $endpoint, string $request_method): bool {
         $user_id =  $this->token_repository->find($token->token)->user_id;
         if ($user_id === null)
             return false;
@@ -22,12 +34,15 @@ class AuthorizationService {
         if ($user === null)
             return false;
 
-        $authority->account_type = $user->account_type;
 
-        return $this->has_access($user->account_type, $endpoint);
+
+        return $this->has_access($user->account_type, $endpoint, $request_method);
     }
 
-    private function has_access(AccountType $role, Endpoint $endpoint): bool {
+    private function has_access(AccountType $role, Endpoint $endpoint, string $request_method): bool {
+
+        if (!in_array($request_method, ['get', 'post', 'put', 'delete', 'patch']))
+            return false;
 
         $allowed_for_software_author = [
             Endpoint::Software->value => ['get', 'post', 'put', 'delete'],
@@ -56,9 +71,6 @@ class AuthorizationService {
                 Endpoint::AccountChangeRequest->value => ['get','post'], 
                 Endpoint::BugReport->value => ['post'], 
         ];
-
-
-        $request_method = strtolower($_SERVER['REQUEST_METHOD']);
 
         switch ($role) {
             case AccountType::ADMIN:

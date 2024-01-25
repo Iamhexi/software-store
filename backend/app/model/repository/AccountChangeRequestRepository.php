@@ -11,7 +11,7 @@ class AccountChangeRequestRepository {
         $this->database = $database;
     }
 
-    function find(int $id): ?object {
+    public function find(int $id): ?object {
         return $this->database->get_rows(
             query: "SELECT * FROM AccountChangeRequest WHERE request_id = :request_id;",
             params: ['request_id' => $id],
@@ -20,7 +20,7 @@ class AccountChangeRequestRepository {
         );
     }
 
-    function find_by(array $conditions): array {
+    public function find_by(array $conditions): array {
         $class_name = self::CLASS_NAME;
         $allowed_columns = array_keys(get_class_vars($class_name));
 
@@ -60,14 +60,32 @@ class AccountChangeRequestRepository {
         return $objects ?? [];
     }
 
-    function find_all(): array {
+    public function find_all(): array {
         return $this->database->get_rows(
             query: "SELECT * FROM AccountChangeRequest;",
             class_name: 'AccountChangeRequest'
         );
     }
 
-    function save(AccountChangeRequest $object): bool {
+    private function exists_in_database(AccountChangeRequest $object): bool {
+        return $this->find($object->request_id) !== null;
+    }
+
+    private function update(AccountChangeRequest $object): bool {
+        return $this->database->execute_query(
+            query: "UPDATE AccountChangeRequest SET user_id = :user_id, description = :description, justification = :justification, date_submitted = :date_submitted, review_status = :review_status WHERE request_id = :request_id;",
+            params: [
+                'request_id' => $object->request_id,
+                'user_id' => $object->user_id,
+                'description' => $object->description,
+                'justification' => $object->justification,
+                'date_submitted' => $object->date_submitted->format('Y-m-d'),
+                'review_status' => $object->review_status->value
+            ]
+        );
+    }
+
+    private function insert(AccountChangeRequest $object): bool {
         return $this->database->execute_query(
             query: "INSERT INTO AccountChangeRequest VALUES (:request_id, :user_id, :description, :justification, :date_submitted, :review_status)",
             params: [
@@ -81,7 +99,13 @@ class AccountChangeRequestRepository {
         );
     }
 
-    function delete(int $id): bool {
+    public function save(AccountChangeRequest $object): bool {
+        if ($this->exists_in_database($object))
+            return $this->update($object);
+        return $this->insert($object);
+    }
+
+    public function delete(int $id): bool {
         return $this->database->execute_query(
             query: "DELETE AccountChangeRequest WHERE request_id = :request_id;",
             params: ['request_id' => $id]

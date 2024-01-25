@@ -26,4 +26,13 @@ class Rating implements JsonSerializable {
     public function __toString(): string {
         return "Rating: ". $this->mark;
     }
+
+    public function __properties(): array {
+        return array_keys(get_object_vars($this));
+    }
+
+    public static function getPropertyNames() : array {
+        $rating = new Rating(1, 0, 0, 0, new DateTime());
+        return $rating->__properties();
+    }
 }

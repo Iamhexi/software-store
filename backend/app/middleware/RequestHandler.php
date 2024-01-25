@@ -4,7 +4,13 @@ require_once __DIR__ . '/Request.php';
 
 class RequestHandler {
     public static function get_request(): Request {
-        $token_bearer = self::get_token_bearer();
+        $authentication = new AuthenticationService;
+
+        $token_bearer = self::get_token_bearer(); // as text
+        $token_bearer = $authentication->instantiate_token($token_bearer); // as Token object
+
+        $identity = $authentication->get_indentity($token_bearer);
+
         $method = self::get_request_method();
         $endpoint = self::get_endpoint();
         $id = self::get_request_id();
@@ -12,7 +18,7 @@ class RequestHandler {
         $body_parameters = self::get_request_body();
         $path_parameters = self::get_path_parameters();
 
-        return new Request($token_bearer, $method, $endpoint, $id, $query_parameters, $body_parameters, $path_parameters,null);
+        return new Request($token_bearer, $method, $endpoint, $id, $query_parameters, $body_parameters, $path_parameters, $identity);
     }
     
     public static function get_request_method(): string {

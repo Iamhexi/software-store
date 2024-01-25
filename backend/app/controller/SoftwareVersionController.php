@@ -42,7 +42,7 @@ class SoftwareVersionController extends Controller {
                 return new Response(200, 'Success', $software_versions);
 
             }
-        } else if ($version_id != null && is_numeric($version_id) && $version_id > 0) { // get single version
+        } else if ($version_id != null && is_numeric($version_id) && $version_id >= 0) { // get single version
             $software_version = $this->software_version_repository->find($version_id);
             if ($software_version === null)
                 return new Response(404, 'Failure', 'Software version not found');

@@ -640,3 +640,6 @@ INSERT INTO Category VALUES(NULL, "Education", "Education is important");
 INSERT INTO Category VALUES(NULL, "Graphics", "Graphics are important");
 INSERT INTO Category VALUES(NULL, "Networking", "Networking is important");
 INSERT INTO Category VALUES(NULL, "Development", "Development is important");
+
+INSERT INTO StatuteViolationReport VALUES (NULL, 3, 2, 15, "There is a statute violation in the software store. There is hate speech in the app. Please remove it.", '2024-01-24', 'Pending');
+INSERT INTO StatuteViolationReport VALUES (NULL, 3, 1, 15, "There is a statute violation in the software store. There is hate speech in the app. Please remove it.", '2024-01-14', 'Pending');

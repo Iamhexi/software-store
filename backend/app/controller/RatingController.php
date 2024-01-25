@@ -3,6 +3,8 @@ require_once __DIR__.'/Controller.php';
 require_once __DIR__.'/../model/repository/RatingRepository.php';
 
 // `api/software/{software_id}/rating/average`
+// `api/software/{software_id}/rating/count`
+// `api/software/{software_id}/rating/{rating_id}` - DELETE, PUT
 class RatingController extends Controller {
     private RatingRepository $rating_repository;
 
@@ -28,7 +30,7 @@ class RatingController extends Controller {
 
     public function post(Request $request): Response {
         $software_id = $request->get_path_parameter(1);
-        $user_id = $request->authority->user_id;
+        $user_id = $request->identity->user_id;
         $mark = $request->get_body_parameter('mark');
 
         if ($software_id === null)
@@ -69,7 +71,7 @@ class RatingController extends Controller {
             return new Response(404, 'failure', 'Could not find any rating with the given rating id');
         elseif ($rating->software_id !== $software_id)
             return new Response(404, 'failure', 'Rating doesn\'t match a software_id given');
-        elseif ($rating->user_id !== $request->authority->user_id)
+        elseif ($rating->author_id !== $request->identity->user_id)
             return new Response(401, 'failure', 'Rating can\'t be updated by not owner of the rating');
         else if (!is_numeric($mark) || $mark < 1 || $mark > 5)
             return new Response(400, 'failure', 'Cannot insert a rating with a mark that is not a number between 1 and 5');
@@ -81,21 +83,21 @@ class RatingController extends Controller {
     }
 
     public function delete(Request $request): Response {
-        $software_id = $request->get_path_parameter(1);
+        $software_id = intval($request->get_path_parameter(1));
 
         if ($software_id === null)
-            return new Response(400, 'failure', 'No software_id given');
+            return new Response(400, 'failure', 'No software id was given');
 
-        $rating_id = $request->get_path_parameter(3);
-        if ($rating_id === null)
-            return new Response(400, 'failure', 'No raiting_id given');
+        $rating_id = intval($request->get_path_parameter(3));
+        if ($rating_id == null)
+            return new Response(400, 'failure', 'No raiting id was given');
 
         $rating = $this->rating_repository->find($rating_id);
         if ($rating === null)
             return new Response(404, 'failure', 'Could not find any rating with the given rating id');
         elseif ($rating->software_id !== $software_id)
             return new Response(404, 'failure', 'Rating doesn\'t match a software_id given');
-        elseif ($rating->user_id !== $request->authority->user_id)
+        elseif ($rating->author_id !== $request->identity->user_id)
             return new Response(401, 'failure', 'Rating can\'t be deleted by not owner of the rating');
         else
         {

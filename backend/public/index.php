@@ -48,7 +48,7 @@ switch ($endpoint) {
 
 // Authentication with the obtained bearer token
 $authentication_service = new AuthenticationService;
-if (($token = $authentication_service->get_bearer_token()) === null)
+if (($token = $request->token) === null)
     Controller::send_response(401, 'Failure', 'Missing or invalid bearer token');
 
 if (!$authentication_service->verify_token($token))
@@ -56,13 +56,13 @@ if (!$authentication_service->verify_token($token))
 
 // Authorization
 $authorization_service = new AuthorizationService;
-$authority = new Authority($token->user_id, null);
+$identity = $authentication_service->get_indentity($token);
 
-if (!$authorization_service->authorize($token, $endpoint, $authority))
+if (!$authorization_service->authorize($request))
     Controller::send_response(403, 'Failure', 'Access forbidden. Insufficient privileges');
 
-// Copy token to request, to authorize some methods (ex. allow delete raiting, which has been added by token owner)
-$request->authority = $authority;
+// Copy token to request, to authorize some methods (ex. allow user to delete its raiting)
+$request->identity = $identity;
 
 // Routing
 $controller = match ($endpoint) {

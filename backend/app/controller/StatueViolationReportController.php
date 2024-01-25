@@ -19,7 +19,6 @@ class StatueViolationReportController extends Controller {
             return new Response(400, 'failure', 'Software_id is null');
         if ($report_id === null)
         {
-            echo 'HERE';
             $reports = $this->statute_violation_report_repository->find_All_by_id($software_id);
             if ($reports === [])
                 return new Response(404, 'failure', 'Could not find any reports');
@@ -28,16 +27,16 @@ class StatueViolationReportController extends Controller {
         else if ($this->isCorrectPrimaryKey($report_id)) {
             $report = $this->statute_violation_report_repository->find($report_id);
             if ($report === null)
-                return new Response(404, 'failure', 'Could not find report with given report_id:'. $report_id);
+                return new Response(404, 'failure', 'Could not find report with given report id:'. $report_id);
             return new Response(200, 'success', $report);
         }
         else
-            return new Response(400, 'failure', 'Wrong report_id');
+            return new Response(400, 'failure', 'Wrong report id');
     }
 
     public function post(Request $request): Response {
         $software_id = $request->get_path_parameter(1);
-        $user_id = $request->authority->user_id;
+        $user_id = $request->identity->user_id;
         $rule_point = $request->get_body_parameter('rule_point');
         $description = $request->get_body_parameter('description');
 
@@ -59,15 +58,15 @@ class StatueViolationReportController extends Controller {
         ));
 
         if ($result)
-            return new Response(200, 'success', 'Statute_violation_report has been added');
+            return new Response(200, 'success', 'Statute violation report has been added');
         else
-            return new Response(500, 'failure', 'Could not insert Statute_violation_report');
+            return new Response(500, 'failure', 'Could not insert statute violation report due to an internal error');
 
     }
 
     public function put(Request $request): Response {
         $software_id = $request->get_path_parameter(1);
-        $user_id = $request->authority->user_id;
+        $user_id = $request->identity->user_id;
         $rule_point = $request->get_body_parameter('rule_point');
         $description = $request->get_body_parameter('description');
         $report_id = $request->get_path_parameter(3);
@@ -94,40 +93,40 @@ class StatueViolationReportController extends Controller {
                 return new Response(401, 'failure', 'Cannot update a statute_violation_report if you are not an owner');
             if ($this->statute_violation_report_repository->update(new StatuteViolationReport(
                 report_id: $report_id,
-                software_id: -1,
-                user_id: -1,
+                software_id: $software_id,
+                user_id: $user_id,
                 rule_point: $rule_point,
                 description: $description,
                 date_added: new DateTime(),
                 review_status: RequestStatus::convert_string_to_request_status($review_status)
             )))
-                return new Response(201, 'Success', 'Statute_violation_report updated');
+                return new Response(201, 'Success', 'Statute violation report updated');
             else
-                return new Response(500, 'Failure', 'Could not update statute_violation_report');
+                return new Response(500, 'Failure', 'Could not update statute violation report');
         }
     }
 
     public function delete(Request $request): Response {
         $software_id = $request->get_path_parameter(1);
-        $user_id = $request->authority->user_id;
+        $user_id = $request->identity->user_id;
         $report_id = $request->get_path_parameter(3);
 
         if (!$this->isCorrectPrimaryKey($report_id))
-            return new Response(400, 'Failure','Could not update statute_violation_report without correct report_id');
+            return new Response(400, 'Failure','Could not update statute violation report without correct report id');
         if ($software_id === null)
-            return new Response(400, 'failure', 'Cannot update a statute_violation_report without a software id');
+            return new Response(400, 'failure', 'Cannot update a statute violation report without a software id');
         else if ($user_id === null)
-            return new Response(400, 'failure', 'Cannot update a statute_violation_report without a user id');
+            return new Response(400, 'failure', 'Cannot update a statute violation report without a user id');
         else {
             $report = $this->statute_violation_report_repository->find($report_id);
             if ($report === null)
-                return new Response(500, 'Failure', "Statute_violation_report with id = $report_id does not exist, thus, cannot be deleted" );
-            if ($report->user_id !== $user_id)
-                return new Response(401, 'failure', 'Cannot delete a statute_violation_report if you are not an owner');
+                return new Response(500, 'Failure', "Statute violation report with id = $report_id does not exist, thus, cannot be deleted" );
+            if ($report->user_id !== $user_id && $request->identity->account_type !== AccountType::ADMIN)
+                return new Response(401, 'failure', 'Cannot delete a statute violation report if you are not its author');
             if ($this->statute_violation_report_repository->delete($report_id))
-                return new Response(201, 'Success', 'Statute_violation_report deleted');
+                return new Response(201, 'Success', 'Statute violation report deleted');
             else
-                return new Response(500, 'Failure', 'Could not delete statute_violation_report');
+                return new Response(500, 'Failure', 'Could not delete statute violation report');
         }
     }
 

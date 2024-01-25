@@ -12,19 +12,12 @@ class AuthenticationService {
         $this->token_repository = new TokenRepository;
     }
 
-    public function get_bearer_token(): ?Token{
-        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
-        if (str_starts_with($authHeader, 'Bearer ')) {
-            $textualToken = substr($authHeader, 7);
-            return $this->convertTextToToken($textualToken);
-        }
-        return null;
-    }
-
-    private function convertTextToToken(string $textualToken): ?Token {
+    public function instantiate_token(?string $textualToken): ?Token{
+        if ($textualToken === null)
+            return null;
         return $this->token_repository->find($textualToken);
     }
-
+    
     public function verify_token(Token $token): bool {
         $token = $this->token_repository->find($token->token);
         if ($token === null || !$token->is_valid()) 
@@ -51,6 +44,13 @@ class AuthenticationService {
         } else {
             return false;
         }
+    }
+
+    public function get_indentity(Token $token): ?Identity {
+        $user = $this->user_repository->find($token->user_id);
+        if ($user === null)
+            return null;
+        return new Identity($user->user_id, $user->account_type);
     }
 
     private function generate_token(User $user): Token {

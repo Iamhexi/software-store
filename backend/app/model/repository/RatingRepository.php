@@ -41,10 +41,8 @@ class RatingRepository implements Repository {
 
     function find_by(array $conditions): array {
         $class_name = self::CLASS_NAME;
-        $allowed_columns = array_keys(get_class_vars($class_name));
-        foreach ($allowed_columns as $column => $value) {
-            echo $column;
-        }
+        $allowed_columns = Rating::getPropertyNames();
+        
         foreach ($conditions as $column => $value) {
             if (!in_array($column, $allowed_columns))
                 throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
@@ -81,11 +79,21 @@ class RatingRepository implements Repository {
 
     public function find(int $id): ?Rating {
         $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
+        $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE rating_id = :rating_id;",
             params: ['rating_id' => $id],
-            class_name: $created_class,
             number: 1
+        );
+
+        if ($row === null)
+            return null;
+
+        return new $created_class(
+            rating_id: $row->rating_id,
+            author_id: $row->author_id,
+            software_id: $row->software_id,
+            mark: $row->mark,
+            date_added: new DateTime($row->date_added)
         );
     }
     
@@ -104,7 +112,7 @@ class RatingRepository implements Repository {
             return false;
         }
 
-        if ($object->rating_id !== null || $this->find_by([$object->author_id]) !== null) {
+        if ($object->rating_id !== null || $this->find_by(['author_id' => $object->author_id]) !== []) {
             Logger::log('Attempt to insert a duplicate rating', Priority::INFO);
             return false;
         }
@@ -124,7 +132,7 @@ class RatingRepository implements Repository {
     public function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE $class WHERE rating_id = :rating_id;",
+            query: "DELETE FROM $class WHERE rating_id = :rating_id;",
             params: ['rating_id' => $id]
         );
     }
