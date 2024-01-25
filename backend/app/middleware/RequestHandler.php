@@ -6,13 +6,17 @@ class RequestHandler {
     public static function get_request(): Request {
         $authentication = new AuthenticationService;
 
+        $method = self::get_request_method();
+        $endpoint = self::get_endpoint();
+
+        // if its not loging AND registering
+        if (!($method === 'post' && $endpoint === Endpoint::Auth) && !($method === 'post'&& $endpoint === Endpoint::User)) {
         $token_bearer = self::get_token_bearer(); // as text
         $token_bearer = $authentication->instantiate_token($token_bearer); // as Token object
 
         $identity = $authentication->get_indentity($token_bearer);
+        }
 
-        $method = self::get_request_method();
-        $endpoint = self::get_endpoint();
         $id = self::get_request_id();
         $query_parameters = self::get_request_query();
         $body_parameters = self::get_request_body();

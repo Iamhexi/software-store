@@ -7,11 +7,9 @@ require_once __DIR__.'/../app/controller/SoftwareUnitController.php';
 require_once __DIR__.'/../app/middleware/AuthenticationService.php';
 require_once __DIR__.'/../app/middleware/AuthorizationService.php';
 require_once __DIR__.'/../app/middleware/RequestHandler.php';
-
 $request = RequestHandler::get_request();
 $method = $request->method;
 $endpoint = $request->endpoint;
-
 
 switch ($endpoint) {
     case Endpoint::Auth: // authentication with a login and password to obtain a bearer token
