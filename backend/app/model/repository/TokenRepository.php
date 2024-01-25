@@ -25,11 +25,13 @@ class TokenRepository implements Repository {
 
         if ($obj === null) // reject if token is expired
             return null;
-        
+
+        $date = new DateTime($obj->expires_at, new DateTimeZone('Europe/Warsaw'));
+
         return new Token(
             token: $obj->token,
             user_id: $obj->user_id,
-            expires_at: new DateTime($obj->expires_at)
+            expires_at: $date
         );
     }
 
@@ -43,13 +45,15 @@ class TokenRepository implements Repository {
     public function save(object $token): bool {
         if (!($token instanceof Token))
             return false;
-        
+        date_timezone_set($token->expires_at, timezone_open('Europe/Warsaw'));
+        $date = $token->expires_at->format(Config::DB_DATETIME_FORMAT);
+
         return $this->database->execute_query(
             query: "INSERT INTO Token (token, user_id, expires_at) VALUES (:token, :user_id, :expires_at)",
             params: [
                 'token' => $token->token,
                 'user_id' => $token->user_id,
-                'expires_at' => $token->expires_at->format('Y-m-d H:i:s')
+                'expires_at' => $date
             ]
         );
     }

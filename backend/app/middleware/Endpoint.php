@@ -9,7 +9,7 @@ enum Endpoint : string {
     case Review = 'review';
     case Rating = 'rating';
     case BugReport = 'bug_report';
-    case StatuteViolationRequest = 'statute_violation_request';
+    case StatuteViolationReport = 'statute_violation_report';
     case SoftwareVersion = 'software_version';
     case Download = 'download';
     case SourceCode = 'source_code';
@@ -33,8 +33,8 @@ enum Endpoint : string {
                 return self::Rating;
             case 'bug_report':
                 return self::BugReport;
-            case 'statute_violation_request':
-                return self::StatuteViolationRequest;
+            case 'statute_violation_report':
+                return self::StatuteViolationReport;
             case 'software_version':
                 return self::SoftwareVersion;
             case 'download':

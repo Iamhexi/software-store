@@ -91,7 +91,7 @@ class UserRepository implements Repository {
     }
 
     public function delete(int $id): bool {
-        $table = self::$table_name;
+        $table = self::CLASS_NAME;
         return $this->database->execute_query(
             query: "DELETE FROM $table WHERE user_id = :user_id",
             params: ['user_id' => $id]
@@ -99,7 +99,7 @@ class UserRepository implements Repository {
     }
 
     public function find_all(): array {
-        $table = self::$table_name;
+        $table = self::CLASS_NAME;
         $rows = $this->database->get_rows(
             query: "SELECT * FROM $table",
             class_name: 'stdClass'
@@ -125,7 +125,7 @@ class UserRepository implements Repository {
     }
 
     private function insert(User $user): bool {
-        $table = self::$table_name;
+        $table = self::CLASS_NAME;
         return $this->database->execute_query(
             query: "INSERT INTO $table VALUES (:user_id, :login, :pass_hash, :username, :account_creation_date, :account_type)",
             params: [
@@ -140,7 +140,7 @@ class UserRepository implements Repository {
     }
 
     private function update(User $user): bool {
-        $table = self::$table_name;
+        $table = self::CLASS_NAME;
         return $this->database->execute_query(
             query: "UPDATE $table SET login = :login, pass_hash = :pass_hash, username = :username, account_type = :account_type WHERE user_id = :user_id",
             params: [

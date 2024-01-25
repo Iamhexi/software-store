@@ -12,7 +12,7 @@ class RequestHandler {
         $body_parameters = self::get_request_body();
         $path_parameters = self::get_path_parameters();
 
-        return new Request($token_bearer, $method, $endpoint, $id, $query_parameters, $body_parameters, $path_parameters);
+        return new Request($token_bearer, $method, $endpoint, $id, $query_parameters, $body_parameters, $path_parameters,null);
     }
     
     public static function get_request_method(): string {

@@ -31,4 +31,4 @@ To finish the backend, do all the tasks below:
 - [ ] Administrator may download source code of any software unit.
 
 ## Bugs
-- [ ] Make a bearer token expire after the time in Config.
+- [x] Make a bearer token expire after the time in Config.

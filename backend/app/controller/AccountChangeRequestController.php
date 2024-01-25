@@ -85,7 +85,7 @@ class AccountChangeRequestController extends Controller {
         if ($user_id === null)
             return new Response(400, 'failure', 'Cannot delete account change request without a user id');
 
-        $account_change_request = $this->account_change_request_repository->find_by('user_id', $user_id);
+        $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
         if ($account_change_request === null)
             return new Response(404, 'failure', 'Could not find account change request with the given user id ' . $user_id);
 

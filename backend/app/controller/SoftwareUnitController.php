@@ -2,6 +2,7 @@
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/RatingController.php';
 require_once __DIR__ . '/SoftwareVersionController.php';
+require_once __DIR__ . '/StatueViolationReportController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
 require_once __DIR__ . '/../model/repository/CategoryRepository.php';
 
@@ -27,6 +28,11 @@ class SoftwareUnitController extends Controller {
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->get($request);
         }
+        else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
+            $statue_violation_report_controller = new StatueViolationReportController();
+            return $statue_violation_report_controller->get($request);
+        }
+
 
         $software_unit_id = $request->get_path_parameter(1);
         $name = $request->get_query_parameter('name');
@@ -121,7 +127,11 @@ class SoftwareUnitController extends Controller {
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->post($request);
         }
-
+        else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
+            $statue_violation_report_controller = new StatueViolationReportController();
+            return $statue_violation_report_controller->post($request);
+        }
+        
         $software_id = $request->get_path_parameter(1);
         $name = $request->get_body_parameter('name');
         $author_id = $request->get_body_parameter('author_id');
@@ -162,6 +172,10 @@ class SoftwareUnitController extends Controller {
         } else if ($request->get_path_parameter(2) === 'version') {
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->put($request);
+        }
+        else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
+            $statue_violation_report_controller = new StatueViolationReportController();
+            return $statue_violation_report_controller->put($request);
         }
 
         $software_unit_id = $request->get_path_parameter(1);
@@ -205,6 +219,11 @@ class SoftwareUnitController extends Controller {
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->delete($request);
         }
+        else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
+            $statue_violation_report_controller = new StatueViolationReportController();
+            return $statue_violation_report_controller->delete($request);
+        }
+
         $software_unit_id = $request->get_path_parameter(1);
 
         if ($software_unit_id === null)

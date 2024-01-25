@@ -42,7 +42,9 @@ class RatingRepository implements Repository {
     function find_by(array $conditions): array {
         $class_name = self::CLASS_NAME;
         $allowed_columns = array_keys(get_class_vars($class_name));
-
+        foreach ($allowed_columns as $column => $value) {
+            echo $column;
+        }
         foreach ($conditions as $column => $value) {
             if (!in_array($column, $allowed_columns))
                 throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
@@ -61,7 +63,6 @@ class RatingRepository implements Repository {
             query: $query,
             params: $conditions
         );
-
 
 
         foreach ($rows as $row) {
@@ -103,7 +104,7 @@ class RatingRepository implements Repository {
             return false;
         }
 
-        if ($object->rating_id !== null || $this->find_by('author_id', $object->author_id) !== null) {
+        if ($object->rating_id !== null || $this->find_by([$object->author_id]) !== null) {
             Logger::log('Attempt to insert a duplicate rating', Priority::INFO);
             return false;
         }
@@ -125,6 +126,18 @@ class RatingRepository implements Repository {
         return $this->database->execute_query(
             query: "DELETE $class WHERE rating_id = :rating_id;",
             params: ['rating_id' => $id]
+        );
+    }
+
+    public function update(Rating $rating): bool {
+        $table = self::CLASS_NAME;
+
+        return $this->database->execute_query(
+            query: "UPDATE $table SET mark = :mark WHERE user_id = :user_id",
+            params: [
+                'mark' => $rating->mark,
+                'date_added' => $rating->date_added->format(Config::DB_DATETIME_FORMAT)
+            ]
         );
     }
 }

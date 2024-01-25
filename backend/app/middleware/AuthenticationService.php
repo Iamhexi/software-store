@@ -26,8 +26,12 @@ class AuthenticationService {
     }
 
     public function verify_token(Token $token): bool {
-        return $this->token_repository->find($token->token) !== null; // && $token->is_valid() -> causes bug that prevents user from logging in, after token expires, new token are rejected as invalid by $token->is_valid()
-    }
+        $token = $this->token_repository->find($token->token);
+        if ($token === null || !$token->is_valid()) 
+            return false;
+        else
+            return true;
+        }
 
     public function authenticate(string $login, string $password): false|string {
         $user = $this->user_repository->find_by('login', $login);
@@ -46,7 +50,7 @@ class AuthenticationService {
         return new Token(
             token: bin2hex(random_bytes(Config::AUTH_TOKEN_LENGTH/2)),
             user_id: $user->user_id,
-            expires_at: new DateTime("@" . strval(time() + Config::EXPIRATION_TIME_IN_SECONDS) )
+            expires_at: new DateTime("@" . strval(time() + Config::EXPIRATION_TIME_IN_SECONDS))
         );
     }
 }

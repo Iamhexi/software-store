@@ -1,14 +1,15 @@
 <?php 
 require_once __DIR__.'/../Config.php';
-class StatuteViolationReport {
+class StatuteViolationReport implements JsonSerializable{
+    use JsonSerializableness;
     public function __construct(
         private ?int $report_id,
         private int $software_id,
         private int $user_id,
         private int $rule_point,
         private string $description,
-        private DateTime $date_added = new DateTime,
-        private string $review_status
+        private DateTime $date_added,
+        private RequestStatus $review_status
     ) {}
 
     public function __get(string $propertyName): mixed {

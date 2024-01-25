@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../model/repository/TokenRepository.php';
 require_once __DIR__ . '/../model/repository/UserRepository.php';
 require_once __DIR__ . '/Endpoint.php';
+require_once __DIR__ . '/../model/Authority.php';
 
 class AuthorizationService {
     private TokenRepository $token_repository;
@@ -12,7 +13,7 @@ class AuthorizationService {
         $this->user_repository = new UserRepository;
     }
 
-    public function authorize(Token $token, Endpoint $endpoint): bool {
+    public function authorize(Token $token, Endpoint $endpoint,Authority $authority): bool {
         $user_id =  $this->token_repository->find($token->token)->user_id;
         if ($user_id === null)
             return false;
@@ -20,6 +21,8 @@ class AuthorizationService {
         $user = $this->user_repository->find($user_id);
         if ($user === null)
             return false;
+
+        $authority->account_type = $user->account_type;
 
         return $this->has_access($user->account_type, $endpoint);
     }
@@ -37,7 +40,7 @@ class AuthorizationService {
             Endpoint::Auth->value => ['get', 'post'],
             Endpoint::Category->value => ['get'],
             Endpoint::Rating->value => ['get','post','put','delete'],
-            Endpoint::StatuteViolationRequest->value => ['post'],
+            Endpoint::StatuteViolationReport->value => ['post'],
         ];
 
         $allowed_for_client = [
@@ -46,7 +49,7 @@ class AuthorizationService {
                 Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
                 Endpoint::Download->value => ['get', 'post'],
                 Endpoint::Rating->value => ['get','post','put','delete'],
-                Endpoint::StatuteViolationRequest->value => ['post'], 
+                Endpoint::StatuteViolationReport->value => ['post'], 
                 Endpoint::Software->value => ['get'], 
                 Endpoint::SoftwareVersion->value => ['get'], 
                 Endpoint::Category->value => ['get'], 

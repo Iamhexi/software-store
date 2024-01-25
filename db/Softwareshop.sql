@@ -134,7 +134,7 @@ CREATE TABLE SoftwareCategory
 CREATE TABLE Token (
     token char(128) PRIMARY KEY,
     user_id int(10) NOT NULL,
-    expires_at date NOT NULL
+    expires_at DATETIME NOT NULL
 );
 
 

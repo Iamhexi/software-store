@@ -12,7 +12,8 @@ class Request {
         public ?int $id,
         public array $query_parameters,
         public array $body_parameters,
-        public array $path_parameters
+        public array $path_parameters,
+        public ?Authority $authority
     ) {}
 
     public function get_query_parameter(string $parameter_name): ?string { 

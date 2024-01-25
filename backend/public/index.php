@@ -56,9 +56,13 @@ if (!$authentication_service->verify_token($token))
 
 // Authorization
 $authorization_service = new AuthorizationService;
-if (!$authorization_service->authorize($token, $endpoint))
+$authority = new Authority($token->user_id, null);
+
+if (!$authorization_service->authorize($token, $endpoint, $authority))
     Controller::send_response(403, 'Failure', 'Access forbidden. Insufficient privileges');
 
+// Copy token to request, to authorize some methods (ex. allow delete raiting, which has been added by token owner)
+$request->authority = $authority;
 
 // Routing
 $controller = match ($endpoint) {
