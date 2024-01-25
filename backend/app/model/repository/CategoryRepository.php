@@ -66,31 +66,41 @@ class CategoryRepository implements Repository {
         return $categories ?? [];
     }
 
-    public function find_by(string $column, mixed $value): ?Category {
-        $created_class = self::CLASS_NAME;
-        if (!property_exists($created_class, $column)) {
-            Logger::log("Column $column does not exist in table $created_class", Priority::ERROR);
-            return null;
+    public function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['category_id', 'name', 'description'];
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
         }
 
-        if ($column === 'category_id')
-            return $this->find($value);
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
 
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE $column = :value;",
-            params: ['value' => $value],
-            class_name: $created_class,
-            number: 1
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($row === null)
-            return null;
 
-        return new Category(
-            category_id: $row->category_id,
-            name: $row->name,
-            description: $row->description
-        );
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                category_id: $row->category_id,
+                name: $row->name,
+                description: $row->description
+            );
+        }
+
+        return $objects ?? [];
     }
 
     public function save(object $object): bool {

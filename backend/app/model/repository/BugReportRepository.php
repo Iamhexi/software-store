@@ -45,36 +45,46 @@ class BugReportRepository implements Repository {
         );
     }
 
-    public function find_by(string $column, mixed $value): ?BugReport {
-        $created_class = self::CLASS_NAME;
-        if (!property_exists($created_class, $column)) {
-            Logger::log("Column $column does not exist in table $created_class", Priority::ERROR);
-            return null;
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = array_keys(get_class_vars($class_name));
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
         }
 
-        if ($column === 'report_id')
-            return $this->find($value);
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
 
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM $created_class WHERE $column = :value;",
-            params: ['value' => $value],
-            class_name: $created_class,
-            number: 1
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($row === null)
-            return null;
 
-        return new BugReport(
-            report_id: $row->report_id,
-            version_id: $row->version_id,
-            user_id: $row->user_id,
-            title: $row->title,
-            description_of_steps_to_get_bug: $row->description_of_steps_to_get_bug,
-            bug_description: $row->bug_description,
-            date_added: $row->date_added,
-            review_status: $row->review_status
-        );
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                report_id: $row->report_id,
+                version_id: $row->version_id,
+                user_id: $row->user_id,
+                title: $row->title,
+                description_of_steps_to_get_bug: $row->description_of_steps_to_get_bug,
+                bug_description: $row->bug_description,
+                date_added: new DateTime($row->date_added),
+                review_status: $row->review_status
+            );
+        }
+
+        return $objects ?? [];
     }
     
     public function save(object $object): bool {

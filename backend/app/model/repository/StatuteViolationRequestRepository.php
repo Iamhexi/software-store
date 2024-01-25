@@ -3,7 +3,9 @@ require_once __DIR__ . '/Repository.php';
 require_once __DIR__ . '/../StatuteViolationRequest.php';
 
 class StatuteViolationRequestRepository {
+
     private Database $database;
+    private const CLASS_NAME = 'StatuteViolationRequest';
 
     public function __construct(Database $database = new PDODatabase) {
         $this->database = $database;
@@ -16,6 +18,46 @@ class StatuteViolationRequestRepository {
             class_name: 'StatuteViolationRequest',
             number: 1
         );
+    }
+
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = array_keys(get_class_vars($class_name));
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
+        }
+
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
+        );
+
+
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                report_id: $row->report_id,
+                software_id: $row->software_id,
+                description: $row->description,
+                rule_point: $row->rule_point,
+                date_added: new DateTime($row->date_added),
+                review_status: RequestStatus::from($row->review_status)
+            );
+        }
+
+        return $objects ?? [];
     }
 
     function find_all(): array {

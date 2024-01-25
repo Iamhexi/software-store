@@ -62,28 +62,44 @@ class SoftwareUnitRepository implements Repository {
         return $software_units ?? [];
     }
     
-    public function find_by(string $column, mixed $value): ?object {
-        $row = $this->database->get_rows(
-            query: "SELECT * FROM SoftwareUnit WHERE $column = :$column;",
-            params: [$column => $value],
-            class_name: 'SoftwareUnit',
-            number: 1
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['software_id', 'author_id', 'name', 'description', 'link_to_graphic', 'is_blocked'];
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
+        }
+
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        if ($row === null)
-            return null;
 
-        $categories = $this->category_repository->find_all_categories_for_software($row->software_id);
 
-        return new SoftwareUnit(
-            software_id: $row->software_id,
-            author_id: $row->author_id,
-            name: $row->name,
-            description: $row->description,
-            link_to_graphic: $row->link_to_graphic,
-            is_blocked:  intval($row->is_blocked) === 1 ? true : false,
-            categories: $categories
-        );
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                request_id: $row->request_id,
+                user_id: $row->user_id,
+                description: $row->description,
+                justification: $row->justification,
+                date_submitted: new DateTime($row->date_submitted),
+                review_status: $row->review_status === 0 ? RequestStatus::Pending : RequestStatus::from($row->review_status)
+            );
+        }
+
+        return $objects ?? [];
     }
 
     public function save(object $object): bool {

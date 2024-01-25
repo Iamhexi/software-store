@@ -10,9 +10,16 @@ class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
         public int $user_id,
         public string $description,
         public string $justification = '',
-        public DateTime $date_submitted,
-        public RequestStatus $review_status
-    ) {}
+        public string|DateTime $date_submitted,
+        public string|RequestStatus $review_status
+    ) {
+        if (is_string($date_submitted))
+            $date_submitted = new DateTime($date_submitted);
+        $this->date_submitted = $date_submitted;
+
+        if (is_string($review_status))
+            $review_status = RequestStatus::from($review_status);
+    }
 
     public function __toString(): string {
         return "AccountChangeRequest: $this->request_id";

@@ -11,8 +11,8 @@ class TokenRepository implements Repository {
         $this->database = $database;
     }
 
-    public function find_by(string $column, mixed $value): ?object {
-        return null;
+    public function find_by(array $conditions): array {
+        return [];
     }
 
     public function find(string|int $id): ?Token {

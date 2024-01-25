@@ -8,18 +8,18 @@ require_once __DIR__.'/../../Config.php';
 class UserRepository implements Repository {
 
     private Database $database;
-    static string $table_name = 'User';
+    private const CLASS_NAME = 'User';
 
     public function __construct(Database $database = new PDODatabase) {
         $this->database = $database;
     }
 
     public function find(int $id): ?User {
-        $table = self::$table_name;
+        $table = self::CLASS_NAME;
         $obj = $this->database->get_rows(
             query: "SELECT * FROM $table WHERE user_id = :user_id",
             params: ['user_id' => $id],
-            class_name: self::$table_name,
+            class_name: $table,
             number: 1
         );
 
@@ -38,41 +38,47 @@ class UserRepository implements Repository {
         );
     
     }
+        
+    public function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['user_id', 'login', 'pass_hash', 'username', 'account_type', 'account_creation_date'];
 
-    public function find_by(string $column, mixed $value): ?object {
-        $table = self::$table_name;
-
-        if (!property_exists(self::$table_name, $column)) {
-            Logger::log("Column $column does not exist in table $table", Priority::ERROR);
-            return null;
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'request_id')
+                return [$this->find($value)];
         }
 
-        if ($column === 'user_id')
-            return $this->find($value);
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
 
-
-        $obj = $this->database->get_rows(
-            query: "SELECT * FROM $table WHERE $column = :value",
-            params: ['value' => $value],
-            class_name: self::$table_name,
-            number: 1
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
         );
 
-        
-        if ($obj === null)
-        return null;
-    
-    
-    return new User(
-            $obj->user_id,
-            $obj->login,
-            $obj->pass_hash,
-            $obj->username,
-            new DateTime($obj->account_creation_date),
-            AccountType::fromString($obj->account_type)
-        );
-        
+
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                user_id : $row->user_id,
+                login: $row->login,
+                pass_hash: $row->pass_hash,
+                username: $row->username,
+                account_type: AccountType::from($row->account_type),
+                account_creation_date: new DateTime($row->account_creation_date)
+            );
+        }
+
+        return $objects ?? [];
     }
+        
 
     public function save(object $object): bool {
         if (!($object instanceof User))

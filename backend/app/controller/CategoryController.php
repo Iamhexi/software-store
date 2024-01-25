@@ -24,12 +24,12 @@ class CategoryController extends Controller {
         }
 
         if ($category_name !== null) {
-            $category = $this->category_repository->find_by('name', $category_name);
+            $category = $this->category_repository->find_by(['name' => $category_name]);
             if ($category === null)
                 return new Response(404, 'failure', 'Category not found');
             return new Response(200, 'success', $category);
         } else if ($description !== null) {
-            $category = $this->category_repository->find_by('description', $description);
+            $category = $this->category_repository->find_by(['description' => $description]);
             if ($category === null)
                 return new Response(404, 'failure', 'Category not found');
             return new Response(200, 'success', $category);
@@ -52,8 +52,8 @@ class CategoryController extends Controller {
         else if ($description === null)
             return new Response(400, 'failure', 'Cannot insert a category without a description');
 
-        $category = $this->category_repository->find_by('name', $category_name);
-        if ($category !== null)
+        $categories = $this->category_repository->find_by(['name' => $category_name]);
+        if ($categories === [])
             return new Response(400, 'failure', 'Cannot insert a category with the same name as already existing one.');
 
         $category = new Category(null, $category_name, $description);
