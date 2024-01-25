@@ -18,7 +18,7 @@ class TokenRepository implements Repository {
     public function find(string|int $id): ?Token {
         $obj = $this->database->get_rows(
             query: "SELECT * FROM Token WHERE token = :token",
-            params: ['token' => $id], // implement token expiration in SQL
+            params: ['token' => $id], 
             class_name: 'Token',
             number: 1
         );
@@ -26,7 +26,7 @@ class TokenRepository implements Repository {
         if ($obj === null) // reject if token is expired
             return null;
 
-        $date = new DateTime($obj->expires_at, new DateTimeZone('Europe/Warsaw'));
+        $date = new DateTime($obj->expires_at, new DateTimeZone(Config::TIME_ZONE));
 
         return new Token(
             token: $obj->token,

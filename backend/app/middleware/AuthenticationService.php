@@ -34,9 +34,16 @@ class AuthenticationService {
         }
 
     public function authenticate(string $login, string $password): false|string {
-        $user = $this->user_repository->find_by('login', $login);
-        if ($user === null)
+        $user = $this->user_repository->find_by(['login' => $login]);
+        
+        if ($user === [])
             return false;
+
+        if (count($user) > 1)
+            Logger::log("More than one user with the same login exists. One of them have already tried to sign in", Priority::WARNING);
+
+        $user = $user[0];
+
         if ($user->validate_password($password)) {
             $token = $this->generate_token($user);
             $this->token_repository->save($token);

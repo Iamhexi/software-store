@@ -11,4 +11,5 @@ class Config {
     public const DB_DATETIME_FORMAT = 'Y-m-d H:i:s';
     public const EXPIRATION_TIME_IN_SECONDS = 3600;
     public const AUTH_TOKEN_LENGTH = 128;
+    public const TIME_ZONE = 'Europe/Warsaw';
 }
