@@ -28,7 +28,8 @@ class RequestHandler {
 
     // [0 => endpoint, 1 => id] for /api/endpoint/1
     public static function get_path_parameters(): array {
-        $path = explode('/', $_SERVER['REQUEST_URI']);
+        $pathWithoutQuery = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = explode('/', $pathWithoutQuery);
         if ($path === [])
             return [];
 

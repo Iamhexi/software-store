@@ -5,9 +5,9 @@ class Version implements JsonSerializable {
     use JsonSerializableness;
     
     public function __construct(
-        private int $major,
-        private int $minor,
-        private ?int $patch
+        private int $major_version,
+        private int $minor_version,
+        private ?int $patch_version,
     ) {}
 
     public function __get(string $propertyName): mixed {
@@ -18,7 +18,16 @@ class Version implements JsonSerializable {
     }
 
     public function __toString(): string {
-        $patch = $this->patch == null ? '0' : strval($this->patch);
-        return strval($this->major) . '_' . strval($this->minor) . '_' . $patch;
+        $patch = $this->patch_version == null ? '0' : strval($this->patch_version);
+        return strval($this->major_version) . '_' . strval($this->minor_version) . '_' . $patch;
+    }
+
+    public function __properties(): array {
+        return array_keys(get_object_vars($this));
+    }
+    
+    public static function getPropertyNames() : array {
+        $rating = new Version(1,1,1);
+        return $rating->__properties();
     }
 }

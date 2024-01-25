@@ -39,28 +39,7 @@ class SoftwareUnitTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
-    // public function testReleaseNewVersion(): void {
 
-    //     $expectedRequest = new SoftwareVersion(
-    //         version_id: null,
-    //         software_id: $this->softwareUnit->software_id,
-    //         description: 'New version description',
-    //         date_added: new DateTime(),
-    //         major_version: 1,
-    //         minor_version: 1,
-    //         patch_version: null
-    //     );
-
-            //TODO: DATE CHECK ??
-    //     $this->assertEquals($expectedRequest, $this->softwareUnit->release_new_version('New version description',1,1));
-    // }
-
-    /**
-     * @test
-     */
     public function testSetInvalidLinkToGraphic(): void {
 
         $this->expectException(Exception::class);

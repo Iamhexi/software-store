@@ -39,10 +39,10 @@ class SoftwareVersionRepository implements Repository {
   
     function find_by(array $conditions): array {
         $class_name = self::CLASS_NAME;
-        $allowed_columns = ['version_id', 'software_id', 'description', 'date_added', 'major_version', 'minor_version', 'patch_version'];
+        $allowed_columns = SoftwareVersion::getPropertyNames();
 
         foreach ($conditions as $column => $value) {
-            if (!in_array($column, $allowed_columns))
+            if (!in_array($column, $allowed_columns) && !in_array($column,Version::getPropertyNames()))
                 throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
             else if ($column === 'version_id')
                 return [$this->find($value)];
@@ -51,7 +51,7 @@ class SoftwareVersionRepository implements Repository {
         // build query
         $query = "SELECT * FROM $class_name WHERE ";
         foreach($conditions as $column => $value)
-            $query .= "$column = :$column AND";
+            $query .= " $column = :$column AND";
         
         $query = substr($query, 0, -3) . ';'; // remove the last AND
 
@@ -68,9 +68,9 @@ class SoftwareVersionRepository implements Repository {
                 description: $row->description,
                 date_added: new DateTime($row->date_added),
                 version: new Version(
-                    major: $row->major_version,
-                    minor: $row->minor_version,
-                    patch: $row->patch_version
+                    major_version: $row->major_version,
+                    minor_version: $row->minor_version,
+                    patch_version: $row->patch_version
                 )
             );
         }
@@ -97,9 +97,9 @@ class SoftwareVersionRepository implements Repository {
                 'software_id' => $object->software_id,
                 'description' => $object->description,
                 'date_added' => $object->date_added,
-                'major_version' => $object->version->major,
-                'minor_version' => $object->version->minor,
-                'patch_version' => $object->version->patch
+                'major_version' => $object->version->major_version,
+                'minor_version' => $object->version->minor_version,
+                'patch_version' => $object->version->patch_version
             ]
         );
     }
@@ -107,7 +107,7 @@ class SoftwareVersionRepository implements Repository {
     public function delete(int $id): bool {
         $class = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE $class WHERE version_id = :version_id;",
+            query: "DELETE FROM $class WHERE version_id = :version_id;",
             params: ['version_id' => $id]
         );
     }
