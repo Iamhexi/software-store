@@ -18,6 +18,7 @@ class Version implements JsonSerializable {
     }
 
     public function __toString(): string {
-        return $this->major . '.' . $this->minor . '.' . $this->patch;
+        $patch = $this->patch == null ? '0' : strval($this->patch);
+        return strval($this->major) . '_' . strval($this->minor) . '_' . $patch;
     }
 }

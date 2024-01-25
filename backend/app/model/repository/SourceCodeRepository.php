@@ -2,7 +2,7 @@
 require_once __DIR__ . '/Repository.php';
 require_once __DIR__ . '/../SourceCode.php';
 
-class SourceCodeRepository {
+class SourceCodeRepository implements Repository {
     private Database $database;
 
     private const CLASS_NAME = 'SourceCode';
@@ -10,12 +10,20 @@ class SourceCodeRepository {
         $this->database = $database;
     }
 
-    function find(int $id): ?SourceCode {
-        return $this->database->get_rows(
+    function find(int $id): ?object {
+        $row = $this->database->get_rows(
             query: "SELECT * FROM SourceCode WHERE code_id = :code_id;",
             params: ['code_id' => $id],
-            class_name: 'SourceCode',
             number: 1
+        );
+
+        if ($row === null)
+            return null;
+
+        return new SourceCode(
+            code_id: $row->code_id,
+            version_id: $row->version_id,
+            filepath: $row->filepath
         );
     }
 
@@ -26,7 +34,48 @@ class SourceCodeRepository {
         );
     }
 
-    function save(SourceCode $object): bool {
+    function find_by(array $conditions): array {
+        $class_name = self::CLASS_NAME;
+        $allowed_columns = ['code_id', 'version_id', 'filepath'];
+
+        foreach ($conditions as $column => $value) {
+            if (!in_array($column, $allowed_columns))
+                throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
+            else if ($column === 'version_id')
+                return [$this->find($value)];
+        }
+
+        // build query
+        $query = "SELECT * FROM $class_name WHERE ";
+        foreach($conditions as $column => $value)
+            $query .= "$column = :$column AND";
+        
+        $query = substr($query, 0, -3) . ';'; // remove the last AND
+
+        $rows = $this->database->get_rows(
+            query: $query,
+            params: $conditions
+        );
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                version_id: $row->version_id,
+                software_id: $row->software_id,
+                description: $row->description,
+                date_added: new DateTime($row->date_added),
+                version: new Version(
+                    major: $row->major_version,
+                    minor: $row->minor_version,
+                    patch: $row->patch_version
+                )
+            );
+        }
+
+        return $objects ?? [];
+    }
+
+    function save(object $object): bool {
         return $this->database->execute_query(
             query: "INSERT INTO SourceCode VALUES (:code_id, :version_id, :filepath)",
             params: [
@@ -36,7 +85,6 @@ class SourceCodeRepository {
             ]
         );
     }
-
     
     function delete(int $id): bool {
         $class = self::CLASS_NAME;

@@ -23,7 +23,7 @@ To finish the backend, do all the tasks below:
 - [x] Software author may read the bug reports regarding their software units.
 - [x] Software author may remove the bug reports regarding their software units.
 - [x] Administrator may accept/reject clients' account change requests.
-- [ ] Administrator may browse statute violation reports.
+- [x] Administrator may browse statute violation reports.
 - [x] Administrator may unblock/block software units.
 - [x] Administrator may remove software units.
 - [x] Administrator may remove any review.

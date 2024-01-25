@@ -30,9 +30,7 @@ class SoftwareUnit implements JsonSerializable {
             software_id: $this->software_id,
             description: $description,
             date_added: new DateTime(),
-            major_version: $major,
-            minor_version: $minor,
-            patch_version: NUll
+            version: new Version($major, $minor, null)
         );
     }
 
