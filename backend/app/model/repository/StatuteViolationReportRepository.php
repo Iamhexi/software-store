@@ -92,7 +92,7 @@ class StatuteViolationReportRepository implements Repository {
         // build query
         $query = "SELECT * FROM $class_name WHERE ";
         foreach($conditions as $column => $value)
-            $query .= "$column = :$column AND";
+            $query .= " $column = :$column AND";
         
         $query = substr($query, 0, -3) . ';'; // remove the last AND
 

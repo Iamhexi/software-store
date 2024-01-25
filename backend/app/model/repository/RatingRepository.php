@@ -53,7 +53,7 @@ class RatingRepository implements Repository {
         // build query
         $query = "SELECT * FROM $class_name WHERE ";
         foreach($conditions as $column => $value)
-            $query .= "$column = :$column AND";
+            $query .= " $column = :$column AND";
         
         $query = substr($query, 0, -3) . ';'; // remove the last AND
 
@@ -112,7 +112,7 @@ class RatingRepository implements Repository {
             return false;
         }
 
-        if ($object->rating_id !== null || $this->find_by(['author_id' => $object->author_id]) !== []) {
+        if ($object->rating_id !== null || $this->find_by(['author_id' => $object->author_id , 'software_id' => $object->software_id]) !== []) {
             Logger::log('Attempt to insert a duplicate rating', Priority::INFO);
             return false;
         }
