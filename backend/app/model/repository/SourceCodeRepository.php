@@ -41,7 +41,7 @@ class SourceCodeRepository implements Repository {
         foreach ($conditions as $column => $value) {
             if (!in_array($column, $allowed_columns))
                 throw new InvalidArgumentException("Column '$column' is not allowed as a condition in $class_name::find_by(...)");
-            else if ($column === 'version_id')
+            else if ($column === 'code_id')
                 return [$this->find($value)];
         }
 
@@ -60,15 +60,9 @@ class SourceCodeRepository implements Repository {
         foreach ($rows as $row) {
 
             $objects[] = new $class_name(
+                code_id: $row->code_id,
                 version_id: $row->version_id,
-                software_id: $row->software_id,
-                description: $row->description,
-                date_added: new DateTime($row->date_added),
-                version: new Version(
-                    major: $row->major_version,
-                    minor: $row->minor_version,
-                    patch: $row->patch_version
-                )
+                filepath: $row->filepath
             );
         }
 

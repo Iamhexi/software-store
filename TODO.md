@@ -28,7 +28,7 @@ To finish the backend, do all the tasks below:
 - [x] Administrator may remove software units.
 - [x] Administrator may remove any review.
 - [x] Administrator may remove any account that belongs to a software author or client.
-- [ ] Administrator may download source code of any software unit.
+- [x] Administrator may download source code of any software unit.
 
 ## Bugs
 - [x] Make a bearer token expire after the time specified in Config.

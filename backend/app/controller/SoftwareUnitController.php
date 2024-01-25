@@ -129,6 +129,10 @@ class SoftwareUnitController extends Controller {
             $rating_controller = new RatingController;
             return $rating_controller->post($request);
         } else if ($request->get_path_parameter(2) === 'version') {
+            if ($request->get_path_parameter(4) == 'source_code') {
+                $source_code_controller = new SourceCodeController;
+                return $source_code_controller->post($request);
+            }
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->post($request);
         }
