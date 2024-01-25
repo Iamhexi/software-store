@@ -18,7 +18,8 @@ class Version implements JsonSerializable {
     }
 
     public function __toString(): string {
-        return $this->major_version . '.' . $this->minor_version . '.' . $this->patch_version;
+        $patch = $this->patch_version == null ? '0' : strval($this->patch_version);
+        return strval($this->major_version) . '_' . strval($this->minor_version) . '_' . $patch;
     }
 
     public function __properties(): array {

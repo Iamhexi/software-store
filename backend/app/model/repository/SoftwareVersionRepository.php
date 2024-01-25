@@ -13,12 +13,28 @@ class SoftwareVersionRepository implements Repository {
     
     public function find(int $id): ?object {
         $created_class = self::CLASS_NAME;
-        return $this->database->get_rows(
+        $row = $this->database->get_rows(
             query: "SELECT * FROM $created_class WHERE version_id = :version_id;",
             params: ['version_id' => $id],
-            class_name: $created_class,
             number: 1
         );
+
+        if ($row === null)
+            return null;
+
+        return new $created_class(
+            version_id: $row->version_id,
+            software_id: $row->software_id,
+            description: $row->description,
+            date_added: new DateTime($row->date_added),
+            version: new Version(
+                major: $row->major_version,
+                minor: $row->minor_version,
+                patch: $row->patch_version
+            )
+        );
+
+
     }
   
     function find_by(array $conditions): array {

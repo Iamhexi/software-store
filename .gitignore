@@ -6,3 +6,4 @@ backend/vendor/*
 .vscode/
 backend/logs.txt
 software_store.session.sql
+backend/resources

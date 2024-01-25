@@ -1,6 +1,11 @@
 <?php 
 require_once __DIR__.'/../Config.php';
-class SourceCode {
+require_once __DIR__.'/JsonSerializableness.php';
+
+
+class SourceCode implements JsonSerializable {
+    use JsonSerializableness;
+
     public function __construct(
         private ?int $code_id,
         private int $version_id,

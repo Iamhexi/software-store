@@ -3,6 +3,7 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/RatingController.php';
 require_once __DIR__ . '/SoftwareVersionController.php';
 require_once __DIR__ . '/StatueViolationReportController.php';
+require_once __DIR__ . '/SourceCodeController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
 require_once __DIR__ . '/../model/repository/CategoryRepository.php';
 
@@ -25,10 +26,14 @@ class SoftwareUnitController extends Controller {
             $rating_controller = new RatingController;
             return $rating_controller->get($request);
         } else if ($location === 'version') {
+            if ($request->get_path_parameter(4) == 'source_code') {
+                $source_code_controller = new SourceCodeController;
+                return $source_code_controller->get($request);
+            }
+
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->get($request);
-        }
-        else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
+        } else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
             $statue_violation_report_controller = new StatueViolationReportController();
             return $statue_violation_report_controller->get($request);
         }
@@ -130,6 +135,10 @@ class SoftwareUnitController extends Controller {
             $rating_controller = new RatingController;
             return $rating_controller->post($request);
         } else if ($request->get_path_parameter(2) === 'version') {
+            if ($request->get_path_parameter(4) == 'source_code') {
+                $source_code_controller = new SourceCodeController;
+                return $source_code_controller->post($request);
+            }
             $software_version_controller = new SoftwareVersionController;
             return $software_version_controller->post($request);
         }
