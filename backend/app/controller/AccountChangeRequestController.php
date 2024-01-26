@@ -13,8 +13,14 @@ class AccountChangeRequestController extends Controller {
 
     public function get(Request $request): Response {
         $user_id = $request->get_path_parameter(1);
-        if ($user_id === null)
-            return new Response(400, 'failure', 'Could not find account change request connected the given user id ' . $user_id);
+        if ($user_id === '')
+        {
+            $account_change_request = $this->account_change_request_repository->find_all();
+            if  ($account_change_request === [])
+                return new Response(400, 'failure', 'Account change requests not found');
+            else
+                return new Response(200, 'success', $account_change_request);
+        }
 
         $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
         if ($account_change_request === [])
@@ -60,7 +66,7 @@ class AccountChangeRequestController extends Controller {
 
         if ($user_id === null)
             return new Response(400, 'failure', 'Cannot update an account change request without a user id');
-        else if ($description === null && $review_status === null)
+        else if ($description === null || $review_status === null)
             return new Response(400, 'failure', 'Cannot update an account change request without a description or review status');
 
         $account_change_requests = $this->account_change_request_repository->find_by(['user_id' => $user_id]);

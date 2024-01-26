@@ -53,7 +53,7 @@ class AccountChangeRequestRepository {
                 description: $row->description,
                 justification: $row->justification,
                 date_submitted: new DateTime($row->date_submitted),
-                review_status: $row->review_status === 0 ? RequestStatus::Pending : RequestStatus::from($row->review_status)
+                review_status: $row->review_status === 0 ? RequestStatus::Pending : RequestStatus::convert_string_to_request_status($row->review_status)
             );
         }
 
@@ -61,10 +61,26 @@ class AccountChangeRequestRepository {
     }
 
     public function find_all(): array {
-        return $this->database->get_rows(
+        $class_name = self::CLASS_NAME;
+
+        $rows = $this->database->get_rows(
             query: "SELECT * FROM AccountChangeRequest;",
-            class_name: 'AccountChangeRequest'
+            class_name: 'stdClass'
         );
+
+        foreach ($rows as $row) {
+
+            $objects[] = new $class_name(
+                request_id: $row->request_id,
+                user_id: $row->user_id,
+                description: $row->description,
+                justification: $row->justification,
+                date_submitted: new DateTime($row->date_submitted),
+                review_status: RequestStatus::convert_string_to_request_status($row->review_status)
+            );
+        }
+
+        return $objects ?? [];
     }
 
     private function exists_in_database(AccountChangeRequest $object): bool {
