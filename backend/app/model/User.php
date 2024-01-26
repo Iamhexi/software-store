@@ -2,6 +2,7 @@
 require_once __DIR__ . '/AccountType.php';
 require_once __DIR__ . '/AccountChangeRequest.php';
 require_once __DIR__ . '/JsonSerializableness.php';
+require_once __DIR__ . '/../Config.php';
 
 class User implements JsonSerializable {
     use JsonSerializableness;
@@ -46,7 +47,7 @@ class User implements JsonSerializable {
             throw new Exception("Property $propertyName does not exist");
 
         if ($propertyName === 'account_creation_date')
-            return $this->$propertyName->format(Config::DB_DATETIME_FORMAT);
+            return $this->$propertyName->format(Config::DB_DATE_FORMAT);
 
         return $this->$propertyName;
     }

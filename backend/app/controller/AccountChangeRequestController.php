@@ -62,12 +62,13 @@ class AccountChangeRequestController extends Controller {
     public function put(Request $request): Response {
         $user_id = $request->get_path_parameter(1);
         $description = $request->get_body_parameter('description');
+        $justification = $request->get_body_parameter('justification');
         $review_status = $request->get_body_parameter('review_status');
 
         if ($user_id === null)
             return new Response(400, 'failure', 'Cannot update an account change request without a user id');
-        else if ($description === null || $review_status === null)
-            return new Response(400, 'failure', 'Cannot update an account change request without a description or review status');
+        else if ($description === null && $review_status === null && $justification === null)
+            return new Response(400, 'failure', 'Cannot update an account change request with neither a description nor review status, nor justification');
 
         $account_change_requests = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
         if ($account_change_requests === [])
@@ -81,6 +82,8 @@ class AccountChangeRequestController extends Controller {
             $account_change_request->description = $description;
         if ($review_status !== null)
             $account_change_request->review_status = RequestStatus::from($review_status);
+        if ($justification !== null)
+            $account_change_request->justification = $justification;
 
         if (!$this->account_change_request_repository->save($account_change_request))
             return new Response(500, 'failure', 'Could not update account change request with the given user id ' . $user_id);

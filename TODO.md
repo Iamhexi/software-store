@@ -33,11 +33,13 @@ To finish the backend, do all the tasks below:
 ## Bugs
 - [x] Make a bearer token expire after the time specified in Config.
 - [ ] SoftwareUnit can't be searched by categories (implement View??).
-- [ ] Can't delete SoftwareVersion, Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
-- [ ] Change date format in SQL in user date (time is not important)
+- [ ] Can't delete SoftwareVersion if it has Executable connected with it: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
+- [x] Change date format in SQL in user date (time is not important)
 - [ ] Client can't create account change request (wrong endpoint)
-- [ ] Client can't update account (he should can update username ?)
-- [ ] Updating User can't be done if there is not matched user_id with login. If only Admin can do update, is that necessary?
+- [ ] Client can't update account (should he/she be able to update username?)
+- [ ] Updating User can't be done if there is no between user_id and login. If only Admin can do update, is that necessary?
 - [ ] Account change request update
 - [x] AVG and Count Average dont work
 
+## Nice to have's
+- [ ] Pagination for GET method's results if the upper limit of records is not specified (with default page=0)

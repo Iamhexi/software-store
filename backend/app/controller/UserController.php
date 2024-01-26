@@ -154,5 +154,9 @@ class UserController extends Controller {
             return new Response(500, 'Failure', 'Could not delete the requested user with id: ' . $id);
     }
 
+    protected function patch(Request $request): Response {
+        // TODO: implement
+    }
+
 
 }
