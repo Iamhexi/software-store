@@ -7,7 +7,7 @@ To finish the backend, do all the tasks below:
 - [x] Unregisted user may sign up.
 - [x] Client may search the repository for software units.
 - [x] Client may get detalied information about a given software unit.
-- [ ] Client may download an executable.
+- [x] Client may download an executable.
 - [x] Client may post a review.
 - [x] Client may edit their own review.
 - [x] Client may remove their own review.
@@ -39,5 +39,5 @@ To finish the backend, do all the tasks below:
 - [ ] Client can't update account (he should can update username ?)
 - [ ] Updating User can't be done if there is not matched user_id with login. If only Admin can do update, is that necessary?
 - [ ] Account change request update
-- [ ] AVG and Count Average dont work
+- [x] AVG and Count Average dont work
 
