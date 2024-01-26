@@ -17,13 +17,13 @@ class RatingController extends Controller {
 
         if ($software_id === null)
             return new Response(400, 'failure', 'Could not find rating with the given software id ' . $software_id);
-        else if ($request->get_path_parameter(2) === 'average')
+        else if ($request->get_path_parameter(3) === 'average')
             return new Response(200, 'success', ['average' => $this->rating_repository->get_average($software_id)]);
-        else if ($request->get_path_parameter(2) === 'count')
+        else if ($request->get_path_parameter(3) === 'count')
             return new Response(200, 'success', ['count' => $this->rating_repository->get_count($software_id)]);
 
         $rating = $this->rating_repository->find_by(['software_id' => $software_id]);
-        if ($rating === null)
+        if ($rating === [])
             return new Response(404, 'failure', 'Could not find any rating with the given software id ' . $software_id);
         return new Response(200, 'success', ['rating' => $rating]);
     }

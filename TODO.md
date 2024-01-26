@@ -39,3 +39,5 @@ To finish the backend, do all the tasks below:
 - [ ] Client can't update account (he should can update username ?)
 - [ ] Updating User can't be done if there is not matched user_id with login. If only Admin can do update, is that necessary?
 - [ ] Account change request update
+- [ ] AVG and Count Average dont work
+
