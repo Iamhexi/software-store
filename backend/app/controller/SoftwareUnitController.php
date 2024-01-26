@@ -224,7 +224,7 @@ class SoftwareUnitController extends Controller {
 
         if (!$this->software_unit_repository->save($software_unit))
             return new Response(500, 'failure', 'Could not update software unit with the given id ' . $software_unit_id);
-        return new Response(200, 'success', $software_unit);
+        return new Response(200, 'success', 'Software has been deleted');
     }
 
     public function delete(Request $request): Response {
@@ -251,6 +251,6 @@ class SoftwareUnitController extends Controller {
 
         if (!$this->software_unit_repository->delete($software_unit_id))
             return new Response(500, 'failure', 'Could not delete software unit with the given id ' . $software_unit_id);
-        return new Response(200, 'success', $software_unit);
+        return new Response(200, 'success', 'Software has been deleted');
     }
 }

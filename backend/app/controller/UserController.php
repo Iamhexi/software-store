@@ -29,15 +29,34 @@ class UserController extends Controller {
         if (!$this->exists($id))
             return new Response(200, 'Success', $this->user_repository->find_all());
         else if ($request->get_query_parameter('login') !== null)
-            return new Response(200, 'Success', $this->user_repository->find_by(['login' => $request->get_query_parameter('login')]));
+        {
+            $user = $this->user_repository->find_by(['login' => $request->get_query_parameter('login')]);
+            if ($user === [])
+                return new Response(404, 'Failure', 'User not found');
+            else
+                return new Response(200, 'Success', $user);
+        }
         else if ($request->get_query_parameter('username') !== null)
-            return new Response(200, 'Success', $this->user_repository->find_by(['username' => $request->get_query_parameter('username')]));
+        {
+            $user = $this->user_repository->find_by(['username' => $request->get_query_parameter('username')]);
+
+            if ($user === [])
+                return new Response(404, 'Failure', 'User not found');
+            else
+                return new Response(200, 'Success', $user);
+        }
         else if ($request->get_query_parameter('account_creation_date')) {
             $date = $request->get_query_parameter('account_creation_date');
-            if (DateTime::createFromFormat(Config::DB_DATETIME_FORMAT, $date) === false)
+            if (DateTime::createFromFormat(Config::DB_DATE_FORMAT, $date) === false)
                 return new Response(400, 'Failure', 'Invalid date format. Date must be in the format: ' . Config::DB_DATETIME_FORMAT);
             else
-                return new Response(200, 'Success', $this->user_repository->find_by(['account_creation_date' => $date]));
+            {
+                $user = $this->user_repository->find_by(['account_creation_date' => $date]);
+                if ($user === [])
+                    return new Response(404, 'Failure', 'User not found');
+                else
+                    return new Response(200, 'Success', $user);
+            }
         }
         else if (!$this->isCorrectPrimaryKey($id))
             return new Response(400, 'Failure', 'Invalid id. Id must be a positive integer');
