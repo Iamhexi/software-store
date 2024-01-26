@@ -616,10 +616,8 @@ INSERT INTO SoftwareVersion VALUES (NULL, 1, "ZbhA5pQOv2l9QmsBS4ka3eZs2ln0nidQWP
 INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
 INSERT INTO SourceCode VALUES (NULL, 5, "/path/to/source/code/5/");
 INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
-INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
 INSERT INTO SourceCode VALUES (NULL, 4, "/path/to/source/code/4/");
 INSERT INTO SourceCode VALUES (NULL, 9, "/path/to/source/code/9/");
-INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
 
 INSERT INTO Executable VALUES (NULL, 1, "arm", "2023-09-05", "/path/to/executable/4/app.dmg");
 INSERT INTO Executable VALUES (NULL, 1, "x64", "2024-05-02", "/path/to/executable/9/app.deb");

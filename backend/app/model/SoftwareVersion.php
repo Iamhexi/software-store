@@ -48,7 +48,7 @@ class SoftwareVersion implements JsonSerializable {
         return 'Software_id: '. $this->software_id . ' ; ' . $this->description . 
         ' ; ' . $this->major_version . '.' . $this->minor_version . '.' . $this->patch_version;
     }
-    public function __properties(): array {
+    public function __properties(): array { 
         return array_keys(get_object_vars($this));
     }
     

@@ -104,7 +104,7 @@ class RatingController extends Controller {
             if($this->rating_repository->delete($rating_id))
                 return new Response(200, 'success', 'Raiting has been deleted');
             else
-                return new Response(500, 'failure', 'Could not delete a rating (?)');
+                return new Response(500, 'failure', 'Could not delete a rating due to the internal error');
         }
     }
 }
