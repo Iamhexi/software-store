@@ -1,7 +1,7 @@
 # Backend Todo List
 To finish the backend, do all the tasks below:
 
-
+- [ ] Login and password in body instead in path (?)
 
 ## Fuctional requirements
 - [x] Unregisted user may sign up.
@@ -34,3 +34,7 @@ To finish the backend, do all the tasks below:
 - [x] Make a bearer token expire after the time specified in Config.
 - [ ] SoftwareUnit can't be searched by categories (implement View??).
 - [ ] Can't delete SoftwareVersion, Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
+- [ ] Change date format in SQL in user date (time is not important)
+- [ ] Client can't create account change request (wrong endpoint)
+- [ ] Client can't update account (he should can update username ?)
+- [ ] Updating User can't be done if there is not matched user_id with login. If only Admin can do update, is that necessary?

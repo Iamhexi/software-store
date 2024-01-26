@@ -33,12 +33,15 @@ class AccountChangeRequestController extends Controller {
             return new Response(400, 'failure', 'Cannot insert an account change request without a description');
 
         $account_change_request = $this->account_change_request_repository->find_by(['user_id' => $user_id]);
-        if ($account_change_request !== null)
+        if ($account_change_request !== [])
             return new Response(400, 'failure', 'Cannot insert an account change request as one already exists for the user with the given user_id ' . $user_id);
         
         $user = $this->user_repository->find($user_id);
         if ($user === null) 
             return new Response(404, 'failure', 'Could not find user with the given user id ' . $user_id);
+        if ($user->user_id !== $request->identity->user_id)
+            return new Response(401, 'failure', 'Could not create an account change request, if you are not an owner of this account');
+
 
         try {
             $account_change_request = $user->generate_account_change_request($description);
