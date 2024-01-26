@@ -28,9 +28,9 @@ class SoftwareVersionRepository implements Repository {
             description: $row->description,
             date_added: new DateTime($row->date_added),
             version: new Version(
-                major: $row->major_version,
-                minor: $row->minor_version,
-                patch: $row->patch_version
+                major_version: $row->major_version,
+                minor_version: $row->minor_version,
+                patch_version: $row->patch_version
             )
         );
 

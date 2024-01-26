@@ -2,6 +2,7 @@
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/RatingController.php';
 require_once __DIR__ . '/SoftwareVersionController.php';
+require_once __DIR__ . '/ExecutableController.php';
 require_once __DIR__ . '/StatueViolationReportController.php';
 require_once __DIR__ . '/SourceCodeController.php';
 require_once __DIR__ . '/../model/repository/SoftwareUnitRepository.php';
@@ -36,6 +37,9 @@ class SoftwareUnitController extends Controller {
         } else if ($request->get_path_parameter(2) === Endpoint::StatuteViolationReport->value) {
             $statue_violation_report_controller = new StatueViolationReportController();
             return $statue_violation_report_controller->get($request);
+        } else if ($request->get_path_parameter(2) === 'executable') {
+            $executable_controller = new ExecutableController();
+            return $executable_controller->get($request);
         }
 
         $software_unit_id = $request->get_path_parameter(1);

@@ -93,7 +93,7 @@ class UserRepository implements Repository {
     public function delete(int $id): bool {
         $table = self::CLASS_NAME;
         return $this->database->execute_query(
-            query: "DELETE FROM $table WHERE user_id = :user_id",
+            query: "CALL PurgeUser(:user_id)",
             params: ['user_id' => $id]
         );
     }
