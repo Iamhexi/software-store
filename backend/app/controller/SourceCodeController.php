@@ -49,8 +49,9 @@ class SourceCodeController extends Controller {
         $source_code = $source_code[0];
         $directory = $this->read_directory($source_code->filepath);
 
+
         if ($directory === [])
-            return new Response(200, 'success', 'The directory is empty');
+            return new Response(200, 'success', "The directory {$source_code->filepath} is empty");
 
         return new Response(200, 'Success', $directory);
 

@@ -28,18 +28,19 @@ class SourceCode implements JsonSerializable {
         $executable_filepath = $this->filepath . '/executable_' . $architecture->value . '.exe';
         $executable = new Executable(null, $this->version_id, $architecture->value, new DateTime(), $executable_filepath);
 
+
         if ($language === 'C++') {
             switch ($architecture) {
                 case Architecture::Linux_x86_64:
-                    $command = "g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} {$sourcePath}/src/*.cpp";
+                    $command = "g++ -static -static-libgcc -static-libstdc++ -o {$executable_filepath} {$sourcePath}/*.cpp";
                     break;
 
                 case Architecture::Windows_x86_64:
-                    $command = "x86_64-w64-mingw32-g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} {$sourcePath}/src/*.cpp";
+                    $command = "x86_64-w64-mingw32-g++ -static -static-libgcc -static-libstdc++ -o {$executable_filepath} {$sourcePath}/*.cpp";
                     break;
 
                 case Architecture::Linux_ARM64:
-                    $command = "aarch64-linux-gnu-g++ -static -static-libgcc -static-libstdc++ -o {$this->filepath} {$sourcePath}/src/*.cpp";
+                    $command = "aarch64-linux-gnu-g++ -static -static-libgcc -static-libstdc++ -o {$executable_filepath} {$sourcePath}/*.cpp";
                     break;
 
                 default:
@@ -68,20 +69,28 @@ class SourceCode implements JsonSerializable {
 
     private function detect_programming_language(): string {
         $files = scandir($this->filepath);
+
         foreach ($files as $file) {
-            
             if ($file === '.' || $file === '..')
                 continue;
 
             $file = strtolower($file);
             $file_extension = explode('.', $file)[1];
+            if (!isset($file_extension))
+                continue;
 
-            return match($file_extension) { // first matched files decides
-                'cpp', 'cxx', 'h', 'hpp' => 'C++',
-                'py' => 'Python',
-                default => 'Unrecognised language'
-            };
+            switch ($file_extension) {
+                case 'cpp':
+                case 'cxx':
+                case 'h':
+                case 'hpp':
+                    return 'C++';
+
+                case 'py':
+                    return 'Python';
+            }
         }
+        return 'Unrecognised language';
 
     }
 

@@ -61,14 +61,25 @@ class ExecutableController extends Controller {
             else if (!$this->executable_repository->save($executable))
                 return new Response(500, 'Failure', "The executable could not be saved");
 
-            return new Response(201, 'Success', $executable);
+            $link = $this->generate_download_link($executable->filepath);
+            return new Response(201, 'Success', $link);
         }
 
         $executable = $executables[0]; // just a heuristic
-        return new Response(200, 'Success', $executable);
-
+        
+        
+        $link = $this->generate_download_link($executable->filepath);
+        return new Response(200, 'Success', $link);
 
     }
+
+    private function generate_download_link(string $filepath): string {
+        $filepath = substr($filepath, 1); // remove the first slash
+        $path = explode('source_codes/', $filepath)[1];
+        $path = urlencode($path);
+        return Config::WEB_URL . "/api/download/?file=$path";
+    }
+        
 
     private function is_architecture_valid(string $architecture): bool {
         try { // This is not the valid use case of exceptions, but it is the easiest way to check if the architecture is valid

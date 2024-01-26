@@ -11,6 +11,23 @@ $request = RequestHandler::get_request();
 $method = $request->method;
 $endpoint = $request->endpoint;
 
+if ($request->get_path_parameter(0) === 'download') {
+    if ($request->has_query_parameter('file') === false)
+        Controller::send_response(400, 'Failure', 'Missing file query parameter');
+    
+    $file = $request->get_query_parameter('file');
+    $file = urldecode($file);
+    if (file_exists(__DIR__."/../resources/source_codes/$file") === false)
+        Controller::send_response(404, 'Failure', 'File not found');
+    // download the file
+    $filename = explode('/', $file)[1];
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename='.$file);
+    readfile(__DIR__."/../resources/source_codes/$file");
+    exit();
+
+}
 switch ($endpoint) {
     case Endpoint::Auth: // authentication with a login and password to obtain a bearer token
         $login = $request->get_query_parameter('login');
