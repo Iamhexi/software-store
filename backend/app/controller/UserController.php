@@ -155,7 +155,27 @@ class UserController extends Controller {
     }
 
     protected function patch(Request $request): Response {
-        // TODO: implement
+        $property = $request->get_path_parameter(2);
+
+        if ($property !== 'password')
+            return new Response(400, 'Failure', "Property $property cannot be changed using PATCH method");
+
+        $user_id = $request->get_path_parameter(1);
+        if (!$this->exists($user_id) || !is_numeric($user_id))
+            return new Response(400, 'Failure', 'Missing or invalid id');
+        
+        if (!$request->has_body_parameter('password'))
+            return new Response(400, 'Failure', 'Missing password parameter in the request body');
+        $new_password = $request->get_body_parameter('password');
+        
+        $user = $this->user_repository->find($user_id);
+        if ($user === null)
+            return new Response(404, 'Failure', "User with id $user_id was not found");
+
+        $user->pass_hash = password_hash($new_password, Config::HASHING_ALGORITHM);
+        if (!$this->user_repository->save($user))
+            return new Response(500, 'Failure', 'Could not change the password due to an internal error');
+        return new Response(200, 'Success', 'Password changed');
     }
 
 

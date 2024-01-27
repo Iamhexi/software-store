@@ -14,7 +14,13 @@ abstract class Controller {
             'post' => $this->post($request),
             'put' => $this->put($request),
             'delete' => $this->delete($request),
+            'patch' => $this->patch($request),
+            default => new Response(405, 'Failure', 'Method not allowed')
         };
+    }
+
+    protected function patch(Request $request): Response {
+        return new Response(405, 'Failure', 'Method not allowed');
     }
 
     public static function send_response(int $code, string $message, mixed $data): void {

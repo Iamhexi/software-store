@@ -51,7 +51,7 @@ class AuthorizationService {
             Endpoint::SourceCode->value => ['get', 'post', 'put', 'delete'],
             Endpoint::Download->value => ['get', 'post'],
             Endpoint::BugReport->value => ['get', 'post', 'put'],
-            Endpoint::User->value => ['get'],
+            Endpoint::User->value => ['get', 'patch'],
             Endpoint::Auth->value => ['get', 'post'],
             Endpoint::Category->value => ['get'],
             Endpoint::Rating->value => ['get','post','put','delete'],
@@ -60,7 +60,7 @@ class AuthorizationService {
 
         $allowed_for_client = [
                 Endpoint::Auth->value => ['get', 'post'],
-                Endpoint::User->value => ['get'],
+                Endpoint::User->value => ['get', 'patch'],
                 Endpoint::Review->value => ['get', 'post', 'put', 'delete'],
                 Endpoint::Download->value => ['get', 'post'],
                 Endpoint::Rating->value => ['get','post','put','delete'],

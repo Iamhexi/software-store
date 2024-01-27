@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../app/model/Exectuable.php';
+require_once __DIR__ . '/../../../app/model/Executable.php';
 
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ class ExecutableTest extends TestCase {
         $this->executable = new Executable(
             executable_id: 1,
             version_id: 2,
-            target_architecture: 'Linux x86_64',
+            target_architecture: 'Linux_x86_64',
             date_compiled: new DateTime(),
             filepath: '/path/to/executable'
         );

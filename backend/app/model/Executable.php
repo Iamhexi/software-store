@@ -1,6 +1,7 @@
 <?php 
 require_once __DIR__.'/../Config.php';
 require_once __DIR__.'/JsonSerializableness.php';
+require_once __DIR__ . '/Architecture.php';
 
 class Executable implements JsonSerializable {
     use JsonSerializableness;

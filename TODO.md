@@ -36,7 +36,7 @@ To finish the backend, do all the tasks below:
 - [ ] Can't delete SoftwareVersion if it has Executable connected with it: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
 - [x] Change date format in SQL in user date (time is not important)
 - [ ] Client can't create account change request (wrong endpoint)
-- [ ] Client can't update account (should he/she be able to update username?)
+- [x] Client can't update account (User should not be able to change their username.) Solution: add endpoint: /api/user/{userId}/password PATCH for Client, make /api/user/{userId} PUT for an admin only 
 - [ ] Updating User can't be done if there is no between user_id and login. If only Admin can do update, is that necessary?
 - [ ] Account change request update
 - [x] AVG and Count Average dont work
