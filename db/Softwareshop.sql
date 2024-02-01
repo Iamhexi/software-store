@@ -97,7 +97,7 @@ CREATE TABLE SoftwareVersion
 CREATE TABLE SourceCode
 (
     code_id    int(10)      NOT NULL AUTO_INCREMENT,
-    version_id int(10)      NOT NULL,
+    version_id int(10)      NOT NULL UNIQUE,
     filepath   varchar(255) NOT NULL,
     PRIMARY KEY (code_id)
 );
