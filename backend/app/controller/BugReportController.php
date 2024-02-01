@@ -31,7 +31,14 @@ class BugReportController extends Controller {
         $bug_report_id = $request->get_path_parameter(1);
 
         if (!$this->exists($bug_report_id))
-            return new Response(200, 'Success', $this->bug_report_repository->find_all());
+        {
+            $bug_reports = $this->bug_report_repository->find_all();
+            if  ($bug_reports !== [])
+                return new Response(200, 'Success', $bug_reports);
+            else
+                return new Response(404, 'Failure', 'Bug reports not found');
+
+        }
         else if (!$this->isCorrectPrimaryKey($bug_report_id))
             return new Response(400, 'Failure', 'Invalid id');
         else {
@@ -47,13 +54,19 @@ class BugReportController extends Controller {
         $user_id = $request->get_body_parameter('user_id');
         $version_id = $request->get_body_parameter('version_id');
         $bug_description = $request->get_body_parameter('bug_description');
-        
+        $description_of_steps_to_get_bug = $request->get_body_parameter('description_of_steps_to_get_bug');
+        $title = $request->get_body_parameter('title');
+
         if ($user_id === null)
             return new Response(400, 'failure','Cannot insert an bug report without user_id: '. $user_id);
         else if ($version_id === null)
             return new Response(400, 'failure','Cannot insert an bug report without version ID');
-        else if ($bug_description)
+        else if ($bug_description == null)
             return new Response(400, 'failure','Cannot insert an bug report without description');
+        else if ($title === null)
+            return new Response(400, 'failure','Cannot insert an bug report without title');
+        else if ($description_of_steps_to_get_bug === null)
+            return new Response(400, 'failure','Cannot insert an bug report without description_of_steps_to_get_bug');
 
         
         $user = $this->user_repository->find($user_id);
@@ -70,9 +83,9 @@ class BugReportController extends Controller {
             report_id: null,
             version_id: $version_id,
             user_id: $user_id,
-            title: $request->get_body_parameter('title'),
-            description_of_steps_to_get_bug: $request->get_body_parameter('description_of_steps_to_get_bug'),
-            bug_description: $request->get_body_parameter('bug_description'),
+            title: $title,
+            description_of_steps_to_get_bug: $description_of_steps_to_get_bug,
+            bug_description: $bug_description,
             date_added: new DateTime(),
             review_status: 'Pending'
         );
