@@ -13,5 +13,5 @@ class Config {
     public const EXPIRATION_TIME_IN_SECONDS = 3600;
     public const AUTH_TOKEN_LENGTH = 128;
     public const TIME_ZONE = 'Europe/Warsaw';
-    public const WEB_URL = 'http://localhost:9999';
+    public const WEB_URL = 'http://localhost:8000';
 }
