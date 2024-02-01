@@ -563,11 +563,11 @@ FLUSH PRIVILEGES; -- Save privileges
 
 -- Example data
 
-INSERT INTO User VALUES (NULL, "admin", "$argon2id$v=19$m=65536,t=4,p=1$MkF0UEMzVm5ySERJNmQ0dA$2nkv2r+JLVW7rf0rCxY69afC9CmS36DXYgk0CFhsxtU", "Administrator", "2021-01-01", "admin");
-INSERT INTO User VALUES (NULL, "emily7388", "enqtneykmezqltaraectumahapfigttcnjkwchdtzxacwjrnmsppjsdsgeqjpbhnmlggoybyabiqdwddqstcvricpzlcwgmuolqnrfcjwbmploibxbawvnsyjlchbnvw", "Emily", "2023-05-11", "author");
-INSERT INTO User VALUES (NULL, "emily4071", "nrkinrtuvbbkddseelnnbliauiuvexqtipdlamkinacwksgzoblsnsoijuqphzuthmiwyownlpqpwmulkcnodcduumjxcdsxpsxzszudrrhxypxpaiffdzlbomrqfgbv", "Emily", "2023-10-17", "client");
-INSERT INTO User VALUES (NULL, "john8308", "xyfxittfqpjardzdcwkgjuxvyywtvjhmnkahbozmujkvouwzjhdoognfhxijinepzamfmpdumpasjerswijcuohdhqomonypuvgurxudbjwbtfrgdtwfaeelnnipbhrw", "John", "2023-04-10", "author");
-INSERT INTO User VALUES (NULL, "emily7079", "lrinxzdiznnggfsvutttvmqwjnghxjgjgxvffwpugbsbcfujeysbstyrwvobtfuobtbfkaunxbogpojyccdgqziezuzpqbgbrvcmzvasczxtvbpcihdovkuupjbmiwnu", "Emily", "2024-06-21", "client");
+INSERT INTO User VALUES (1, "admin", "$argon2id$v=19$m=65536,t=4,p=1$MkF0UEMzVm5ySERJNmQ0dA$2nkv2r+JLVW7rf0rCxY69afC9CmS36DXYgk0CFhsxtU", "Administrator", "2021-01-01", "admin");
+INSERT INTO User VALUES (2, "emily7388", "enqtneykmezqltaraectumahapfigttcnjkwchdtzxacwjrnmsppjsdsgeqjpbhnmlggoybyabiqdwddqstcvricpzlcwgmuolqnrfcjwbmploibxbawvnsyjlchbnvw", "Emily", "2023-05-11", "author");
+INSERT INTO User VALUES (3, "emily4071", "nrkinrtuvbbkddseelnnbliauiuvexqtipdlamkinacwksgzoblsnsoijuqphzuthmiwyownlpqpwmulkcnodcduumjxcdsxpsxzszudrrhxypxpaiffdzlbomrqfgbv", "Emily", "2023-10-17", "client");
+INSERT INTO User VALUES (4, "john8308", "xyfxittfqpjardzdcwkgjuxvyywtvjhmnkahbozmujkvouwzjhdoognfhxijinepzamfmpdumpasjerswijcuohdhqomonypuvgurxudbjwbtfrgdtwfaeelnnipbhrw", "John", "2023-04-10", "author");
+INSERT INTO User VALUES (5, "emily7079", "lrinxzdiznnggfsvutttvmqwjnghxjgjgxvffwpugbsbcfujeysbstyrwvobtfuobtbfkaunxbogpojyccdgqziezuzpqbgbrvcmzvasczxtvbpcihdovkuupjbmiwnu", "Emily", "2024-06-21", "client");
 INSERT INTO User VALUES (NULL, "john5535", "wwlywqjiueqbqakrulyloxvshpdyaguidqgekdqtupcmjbyeuyaaajtytajysnyjfqksxgjrpaysyfjhimyruhvdgqzagvubojvkzipkhppiuykapojqudlyguunevbn", "John", "2023-11-16", "author");
 INSERT INTO User VALUES (NULL, "robert2897", "zpsbveemctwonoxbvlugzhcisbqwhfspprhyazmajhgtzvuntarucaqhcajiwrcpxrxzhcfbniacclllqncqhupshutvjqtcavvorbmvxltanckxtyoqnveapakiuwpc", "Robert", "2024-09-09", "client");
 INSERT INTO User VALUES (NULL, "robert5019", "yphnvpbgegfzwnwpgbjkgodjnluoplqwwulqywupcknuysxmqihjqfaagsytlykxqlxorokmzwbgyioeispjgomxbkwsczatijfbshhbwuukpjvxfnxwktvknkfhewyh", "Robert", "2023-10-10", "client");
@@ -616,10 +616,8 @@ INSERT INTO SoftwareVersion VALUES (NULL, 1, "ZbhA5pQOv2l9QmsBS4ka3eZs2ln0nidQWP
 INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
 INSERT INTO SourceCode VALUES (NULL, 5, "/path/to/source/code/5/");
 INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
-INSERT INTO SourceCode VALUES (NULL, 10, "/path/to/source/code/10/");
 INSERT INTO SourceCode VALUES (NULL, 4, "/path/to/source/code/4/");
 INSERT INTO SourceCode VALUES (NULL, 9, "/path/to/source/code/9/");
-INSERT INTO SourceCode VALUES (NULL, 7, "/path/to/source/code/7/");
 
 INSERT INTO Executable VALUES (NULL, 1, "arm", "2023-09-05", "/path/to/executable/4/app.dmg");
 INSERT INTO Executable VALUES (NULL, 1, "x64", "2024-05-02", "/path/to/executable/9/app.deb");
@@ -643,3 +641,9 @@ INSERT INTO Category VALUES(NULL, "Development", "Development is important");
 
 INSERT INTO StatuteViolationReport VALUES (NULL, 3, 2, 15, "There is a statute violation in the software store. There is hate speech in the app. Please remove it.", '2024-01-24', 'Pending');
 INSERT INTO StatuteViolationReport VALUES (NULL, 3, 1, 15, "There is a statute violation in the software store. There is hate speech in the app. Please remove it.", '2024-01-14', 'Pending');
+
+INSERT INTO AccountChangeRequest VALUES (1, 1, 'I would like to a new software author because I can', 'no justification yet', '2017-01-01',  'Pending');
+INSERT INTO AccountChangeRequest VALUES (2, 2, 'I would like to a new software author because I can', 'no justification yet', '2018-11-01',  'Pending');
+INSERT INTO AccountChangeRequest VALUES (3, 3, 'I would like to a new software author because I can', 'no justification yet', '2017-11-15',  'Pending');
+INSERT INTO AccountChangeRequest VALUES (4, 4, 'I would like to a new software author because I can', 'no justification yet', '2017-11-15',  'Pending');
+

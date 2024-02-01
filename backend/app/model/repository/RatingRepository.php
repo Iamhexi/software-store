@@ -19,6 +19,8 @@ class RatingRepository implements Repository {
             params: ['software_id' => $software_id],
         );
 
+        $row = $row[0];
+
         if ($row === null || $row->average === null)
             return 0.0;
 
@@ -31,6 +33,8 @@ class RatingRepository implements Repository {
             query: "SELECT COUNT(*) 'count' FROM $created_class WHERE software_id = :software_id;",
             params: ['software_id' => $software_id],
         );
+
+        $row = $row[0];
 
         if ($row === null || $row->count === null)
             return 0;

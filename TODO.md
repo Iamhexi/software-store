@@ -7,7 +7,7 @@ To finish the backend, do all the tasks below:
 - [x] Unregisted user may sign up.
 - [x] Client may search the repository for software units.
 - [x] Client may get detalied information about a given software unit.
-- [ ] Client may download an executable.
+- [x] Client may download an executable.
 - [x] Client may post a review.
 - [x] Client may edit their own review.
 - [x] Client may remove their own review.
@@ -33,11 +33,13 @@ To finish the backend, do all the tasks below:
 ## Bugs
 - [x] Make a bearer token expire after the time specified in Config.
 - [ ] SoftwareUnit can't be searched by categories (implement View??).
-- [ ] Can't delete SoftwareVersion, Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
-- [ ] Change date format in SQL in user date (time is not important)
+- [ ] Can't delete SoftwareVersion if it has Executable connected with it: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`software_store`.`Executable`, CONSTRAINT `fk_Executable_SoftwareVersion` FOREIGN KEY (`version_id`) REFERENCES `SoftwareVersion` (`version_id`))  (use procedure ??)
+- [x] Change date format in SQL in user date (time is not important)
 - [ ] Client can't create account change request (wrong endpoint)
-- [ ] Client can't update account (he should can update username ?)
-- [ ] Updating User can't be done if there is not matched user_id with login. If only Admin can do update, is that necessary?
+- [x] Client can't update account (User should not be able to change their username.) Solution: add endpoint: /api/user/{userId}/password PATCH for Client, make /api/user/{userId} PUT for an admin only 
+- [ ] Updating User can't be done if there is no between user_id and login. If only Admin can do update, is that necessary?
 - [ ] Account change request update
-- [ ] AVG and Count Average dont work
+- [x] AVG and Count Average dont work
 
+## Nice to have's
+- [ ] Pagination for GET method's results if the upper limit of records is not specified (with default page=0)

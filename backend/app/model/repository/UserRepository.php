@@ -133,7 +133,7 @@ class UserRepository implements Repository {
                 'login' => $user->login,
                 'pass_hash' => $user->pass_hash,
                 'username' => $user->username,
-                'account_creation_date' => is_string($user->account_creation_date) ? $user->account_creation_date : $user->account_creation_date->format('Y-m-d H:i:s'),
+                'account_creation_date' => is_string($user->account_creation_date) ? $user->account_creation_date : $user->account_creation_date->format(Config::DB_DATE_FORMAT),
                 'account_type' => $user->account_type->value
             ]
         );

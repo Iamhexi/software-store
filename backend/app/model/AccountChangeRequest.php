@@ -1,5 +1,6 @@
 <?php 
 require_once __DIR__ . '/RequestStatus.php';
+require_once __DIR__ . '/../Config.php';
 require_once __DIR__ . '/JsonSerializableness.php';
 
 class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
@@ -29,7 +30,7 @@ class AccountChangeRequest implements JsonSerializable { // Data Transfer Object
         if ($name === 'review_status')
             return $this->review_status->value;
         else if ($name === 'date_submitted')
-            return $this->date_submitted->format('Y-m-d H:i:s');
+            return $this->date_submitted->format(Config::DB_DATE_FORMAT);
         else if (!property_exists($this, $name))
             throw new Exception("Property $name does not exist");
         return $this->$name;

@@ -9,8 +9,11 @@ class StatuteViolationReport implements JsonSerializable{
         private int $rule_point,
         private string $description,
         private DateTime $date_added,
-        private RequestStatus $review_status
-    ) {}
+        private RequestStatus|string $review_status
+    ) {
+        if (is_string($review_status))
+            $review_status = RequestStatus::from($review_status);
+    }
 
     public function __get(string $propertyName): mixed {
         if (!property_exists($this, $propertyName))

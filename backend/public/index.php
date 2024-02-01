@@ -30,7 +30,25 @@ if ($request->get_path_parameter(0) === 'download') {
 
 }
 switch ($endpoint) {
-    case Endpoint::Auth: // authentication with a login and password to obtain a bearer token
+    case Endpoint::Auth: // authentication with a login and password toobtain a bearer token
+
+        if ($method == 'delete') {
+            $token = $request->token->token;
+            // var_dump($token);
+            if ($token === null)
+                Controller::send_response(400, 'Failure', 'Missing token');
+
+            $token_repository = new TokenRepository;
+            $token = $token_repository->find($token);
+            if ($token === null)
+                Controller::send_response(400, 'Failure', 'Token is invalid. Could not remove token which is not in the database. No need to log out.');
+
+            if ($token_repository->delete($token->token))
+                Controller::send_response(200, 'Success', 'Logged out');
+            else
+                Controller::send_response(500, 'Failure', 'Could not log out');
+        }
+
         $login = $request->get_query_parameter('login');
         $password = $request->get_query_parameter('password');
         
