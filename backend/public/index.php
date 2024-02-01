@@ -23,6 +23,7 @@ if ($request->get_path_parameter(0) === 'download') {
     $filename = explode('/', $file)[1];
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
+    header('Content-Transfer-Encoding: binary');
     header('Content-Disposition: attachment; filename='.$file);
     readfile(__DIR__."/../resources/source_codes/$file");
     exit();

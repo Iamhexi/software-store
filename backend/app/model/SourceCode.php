@@ -25,18 +25,21 @@ class SourceCode implements JsonSerializable {
         $language = $this->detect_programming_language();
         $sourcePath = $this->filepath;
 
-        $executable_filepath = $this->filepath . '/executable_' . $architecture->value . '.exe';
-        $executable = new Executable(null, $this->version_id, $architecture->value, new DateTime(), $executable_filepath);
+        $executable_filepath = $this->filepath . '/executable_' . $architecture->value;
 
 
         if ($language === 'C++') {
             switch ($architecture) {
                 case Architecture::Linux_x86_64:
                     $command = "g++ -static -static-libgcc -static-libstdc++ -o {$executable_filepath} {$sourcePath}/*.cpp";
+                    $command_zip = "zip -j $this->filepath/files_Linux_x86_64.zip $this->filepath/* -x \*.*";
+                    $path = "$this->filepath/files_Linux_x86_64.zip";
                     break;
 
                 case Architecture::Windows_x86_64:
                     $command = "x86_64-w64-mingw32-g++ -static -static-libgcc -static-libstdc++ -o {$executable_filepath} {$sourcePath}/*.cpp";
+                    $command_zip = "zip -j $this->filepath/files_Windows_x86_64.zip $this->filepath/*.exe ";
+                    $path = "$this->filepath/files_Windows_x86_64.zip";
                     break;
 
                 case Architecture::Linux_ARM64:
@@ -44,32 +47,43 @@ class SourceCode implements JsonSerializable {
                     break;
 
                 default:
-                    throw new Exception("Target architecture {$this->target_architecture} with C++ is not supported yet.");
+                    throw new Exception("Target architecture {$architecture->value} with C++ is not supported yet.");
             }
         } else if ($language === 'Python') {
             switch ($architecture) {
                 case Architecture::Linux_x86_64:
                     $command = "pyinstaller --onefile {$sourcePath}/*.py --name {$this->filepath}";
                     break;
+                case Architecture::Windows_x86_64:
+                    $command = "pyinstaller --onefile {$sourcePath}/*.py --name {$this->filepath}";
+                    break;
 
                 default:
-                    throw new Exception("Target architecture {$this->target_architecture} with Python is not supported yet.");
+                    throw new Exception("Target architecture {$architecture->value} with Python is not supported yet.");
             }
         }
 
         if (!isset($command))
            throw new Exception("The given programming language $language is not supported yet.");
 
+        $executable = new Executable(null, $this->version_id, $architecture->value, new DateTime(), $path);
+
+
         system($command, $returnCode);
-        
         if ($returnCode === 0)
-            return $executable;
+        {
+            //zipping files in folder
+            system($command_zip, $returnCode);
+            if ($returnCode === 0)
+                return $executable;
+        }
+            
         return null;
     }
 
     private function detect_programming_language(): string {
         $files = scandir($this->filepath);
-
+        
         foreach ($files as $file) {
             if ($file === '.' || $file === '..')
                 continue;

@@ -54,7 +54,6 @@ class ExecutableController extends Controller {
         if ($executables === []) {
             $architecture = Architecture::from($architecture);
             $executable = $source_code->compile($architecture);
-
             if ($executable === null)
                 return new Response(500, 'Failure', "The executable could not be compiled due to an internal error");
 

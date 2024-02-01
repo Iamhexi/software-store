@@ -75,11 +75,11 @@ class SourceCodeController extends Controller {
         $version_id = $request->get_path_parameter(3);
 
         if (!$this->exists($software_id)) 
-            return new Response(400, 'failure', 'Missing source code id. Could not provide source could without the corresponding software id');
+            return new Response(400, 'failure', 'Missing software id. Could not provide source could without the corresponding software id');
         elseif (!$this->is_primary_key($software_id))
             return new Response(400, 'failure', 'Incorrect software id. It has to be a non-negative integer.');
-        elseif (!$this->exists($software_id))
-            return new Response(400, 'failure', 'Missing source code id');
+        elseif (!$this->exists($version_id))
+            return new Response(400, 'failure', 'Missing version id');
         elseif (!$this->is_primary_key($version_id))
             return new Response(400, 'failure', 'Incorrect version id. It has to be a non-negative integer.');
 
