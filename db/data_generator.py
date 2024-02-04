@@ -118,7 +118,7 @@ def generate_statute_violation_report():
     rule_point = random.randint(1, 10)  # Assuming there are 10 rule points
     description = ''.join(random.choices(string.ascii_letters + string.digits, k=255))
     date_added = generate_date()
-    review_status = get_rand_from(["pending", "resolved"])
+    review_status = get_rand_from(["pending", "approved", "declined"])
 
     values = f'NULL, {software_id}, {user_id}, {rule_point}, "{description}", "{date_added}", "{review_status}"'
     return f'INSERT INTO StatuteViolationReport VALUES ({values})'
@@ -126,11 +126,11 @@ def generate_statute_violation_report():
 def generate_account_change_request():
     user_id = random.randint(1, 10)  # Assuming there are 10 users in the User table
     description = ''.join(random.choices(string.ascii_letters + string.digits, k=255))
-    justification = ''.join(random.choices(string.ascii_letters + string.digits, k=255))
+    justification = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
     date_submitted = generate_date()
-    review_status = get_rand_from(["pending", "approved", "rejected"])
+    review_status = get_rand_from(["pending", "approved", "declined"])
 
-    values = f'NULL, {user_id}, "{description}", "{justification}", "{date_submitted}", "{review_status}"'
+    values = f'NULL, {user_id}, "{description}", "{justification}","{date_submitted}", "{review_status}"'
     return f'INSERT INTO AccountChangeRequest VALUES ({values})'
 
 def generate_software_version():

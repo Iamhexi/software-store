@@ -2,3 +2,8 @@ docs/UML/main/*bak_*
 docs/UML/main/.*lck
 db/test_results.txt
 db/connection_configuration.cnf
+backend/vendor/*
+.vscode/
+backend/logs.txt
+software_store.session.sql
+backend/resources

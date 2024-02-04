@@ -1,0 +1,9 @@
+{
+    "classmap": [
+        "app/model/"
+    ]
+    ,
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    }
+}
