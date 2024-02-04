@@ -68,7 +68,7 @@ def generate_review():
     date_last_updated = generate_date()
 
     values = f'NULL, {author_id}, {software_id}, "{title}", "{description}", "{date_added}", "{date_last_updated}"'
-    return f'INSERT INTO Review VALUES ({values});'
+    return f'INSERT INTO Review VALUES ({values})'
 
 def generate_rating():
     author_id = random.randint(1, 10)  # Assuming there are 10 users in the User table
@@ -102,16 +102,16 @@ def generate_software_unit():
     return f'INSERT INTO SoftwareUnit VALUES ({values})'
 
 def generate_category():
-    category_id = random.randint(1, 10)  # Assuming there are 10 categories
     name = ''.join(random.choices(string.ascii_letters, k=10))
     description = ''.join(random.choices(string.ascii_letters + string.digits, k=255))
 
-    return f'INSERT INTO Category VALUES ({category_id}, "{name}", "{description}")'
+    return f'INSERT INTO Category VALUES (NULL, "{name}", "{description}")'
 
 def generate_software_category():
     software_id = random.randint(1, 10)  # Assuming there are 10 software units in the SoftwareUnit table
     category_id = random.randint(1, 10)  # Assuming there are 10 categories
-
+    return f'INSERT INTO SoftwareCategory VALUES ({software_id}, {category_id})'
+    
 def generate_statute_violation_report():
     software_id = random.randint(1, 10)  # Assuming there are 10 software units in the SoftwareUnit table
     user_id = random.randint(1, 10)  # Assuming there are 10 users in the User table

@@ -325,7 +325,7 @@ BEGIN
     WHERE SoftwareUnit.software_id = software_id_in;
 END $$
 
-CREATE PROCEDURE PurgeUser(user_id INT)
+CREATE OR REPLACE PROCEDURE PurgeUser(user_id INT)
 BEGIN
     DECLARE acc_type varchar(6);
 
@@ -335,12 +335,12 @@ BEGIN
     WHERE User.user_id = user_id;
 
     IF acc_type != 'admin' THEN
-        DELETE FROM User WHERE User.user_id = user_id;
         DELETE FROM Rating WHERE Rating.author_id = user_id;
         DELETE FROM Review WHERE Review.author_id = user_id;
         DELETE FROM AccountChangeRequest WHERE AccountChangeRequest.user_id = user_id;
         DELETE FROM BugReport WHERE BugReport.user_id = user_id;
         DELETE FROM Download WHERE Download.user_id = user_id;
+        
         IF acc_type = 'author' THEN
             DELETE
             FROM SourceCode
@@ -349,6 +349,15 @@ BEGIN
                                             WHERE SoftwareVersion.software_id IN (SELECT software_id
                                                                                   FROM SoftwareUnit
                                                                                   WHERE author_id = user_id));
+            
+            DELETE
+            FROM Executable
+            WHERE Executable.version_id IN (SELECT version_id
+                                            FROM SoftwareVersion
+                                            WHERE SoftwareVersion.software_id IN (SELECT software_id
+                                                                                  FROM SoftwareUnit
+                                                                                  WHERE author_id = user_id));
+                                                                                
             DELETE
             FROM SoftwareVersion
             WHERE SoftwareVersion.software_id IN (SELECT software_id
@@ -357,15 +366,9 @@ BEGIN
 
             DELETE FROM SoftwareUnit WHERE SoftwareUnit.author_id = user_id;
 
-            DELETE
-            FROM Executable
-            WHERE Executable.version_id IN (SELECT version_id
-                                            FROM SoftwareVersion
-                                            WHERE SoftwareVersion.software_id IN (SELECT software_id
-                                                                                  FROM SoftwareUnit
-                                                                                  WHERE author_id = user_id));
-
         END IF;
+
+        DELETE FROM User WHERE User.user_id = user_id;
     END IF;
 
 END $$
@@ -393,6 +396,7 @@ END $$
 CREATE PROCEDURE DeleteSoftwareVersion(version_id INT)
 BEGIN
     DELETE FROM SourceCode WHERE SourceCode.version_id = version_id;
+    DELETE FROM BugReport WHERE BugReport.version_id = version_id;
     DELETE
     FROM Download
     WHERE Download.executable_id IN (SELECT executable_id
@@ -425,28 +429,37 @@ BEGIN
     RETURN @listCategory;
 END $$
 
-CREATE FUNCTION GetMostPopularSoftwareAuthor()
+CREATE OR REPLACE FUNCTION GetMostPopularSoftwareAuthor()
     RETURNS INT
 BEGIN
     DECLARE author_most_popular INT;
 
-    SELECT author_id
-    INTO author_most_popular
-    FROM (SELECT author_id,
-                 COUNT((SELECT(download_id)
-                        FROM Download
-                                 INNER JOIN Executable E on Download.executable_id = E.executable_id
-                        WHERE E.version_id = SV.version_id)) AS 'downloads_per_software'
-          FROM SoftwareUnit SU
-                   INNER JOIN SoftwareVersion SV ON SV.software_id = SU.software_id
-          GROUP BY author_id
-          ORDER BY downloads_per_software DESC
-          LIMIT 1) as author_downloads;
+    SELECT
+	author_id INTO author_most_popular
+    FROM
+        (
+        SELECT
+            author_id,
+            COUNT(DISTINCT D.download_id) AS downloads_per_software
+        FROM
+            SoftwareUnit SU
+        INNER JOIN SoftwareVersion SV ON
+            SV.software_id = SU.software_id
+        INNER JOIN Executable E ON
+            E.version_id = SV.version_id
+        INNER JOIN Download D ON
+            D.executable_id = E.executable_id
+        GROUP BY
+            author_id
+        ORDER BY
+            downloads_per_software DESC
+        LIMIT 1
+    ) AS author_downloads;
 
     RETURN author_most_popular;
 END $$
 
-CREATE FUNCTION GetMostPopularSoftwareUnit(category_id INT)
+CREATE OR REPLACE FUNCTION GetMostPopularSoftwareUnitInCategory(category_id INT)
     RETURNS INT
 BEGIN
     DECLARE software_most_popular_category INT;
@@ -454,13 +467,12 @@ BEGIN
     SELECT software_id
     INTO software_most_popular_category
     FROM (SELECT SU.software_id,
-                 COUNT((SELECT(download_id)
-                        FROM Download
-                                 INNER JOIN Executable E on Download.executable_id = E.executable_id
-                        WHERE E.version_id = SV.version_id)) AS 'downloads_per_software'
+                 COUNT(DISTINCT D.download_id) AS downloads_per_software
           FROM SoftwareUnit SU
                    INNER JOIN SoftwareVersion SV ON SV.software_id = SU.software_id
-                   INNER JOIN SoftwareCategory SC on SU.software_id = SC.software_id
+                   INNER JOIN SoftwareCategory SC ON SU.software_id = SC.software_id
+                   INNER JOIN Executable E ON E.version_id = SV.version_id
+                   INNER JOIN Download D ON D.executable_id = E.executable_id
           WHERE SC.category_id = category_id
           GROUP BY software_id
           ORDER BY downloads_per_software DESC
@@ -469,7 +481,7 @@ BEGIN
     RETURN software_most_popular_category;
 END $$
 
-CREATE FUNCTION GetBestQualitySoftwareUnit()
+CREATE OR REPLACE FUNCTION GetBestQualitySoftwareUnit()
     RETURNS INT
 BEGIN
     DECLARE software_most_quality INT;
@@ -477,16 +489,14 @@ BEGIN
     SELECT software_id
     INTO software_most_quality
     FROM (SELECT SU.software_id,
-                 COUNT((SELECT(download_id)
-                        FROM Download
-                                 INNER JOIN Executable E on Download.executable_id = E.executable_id
-                        WHERE E.version_id = SV.version_id))                 AS 'downloads_per_software',
-                 COUNT((SELECT(report_id)
-                        FROM BugReport BR
-                        WHERE BR.version_id = SV.version_id
-                          AND BR.date_added < CURDATE() - INTERVAL 3 MONTH)) AS 'bugs_report_per_software'
+                 COUNT(DISTINCT D.download_id) AS downloads_per_software,
+                 COUNT(DISTINCT BR.report_id) AS bugs_report_per_software
           FROM SoftwareUnit SU
                    INNER JOIN SoftwareVersion SV ON SV.software_id = SU.software_id
+                   INNER JOIN Executable E ON E.version_id = SV.version_id
+                   INNER JOIN Download D ON D.executable_id = E.executable_id
+                   INNER JOIN BugReport BR ON BR.version_id = SV.version_id
+          WHERE BR.date_added > CURDATE() - INTERVAL 3 MONTH
           GROUP BY SU.software_id
           HAVING downloads_per_software >= 100
           ORDER BY bugs_report_per_software

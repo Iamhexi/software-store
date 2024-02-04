@@ -47,7 +47,7 @@ Istnieję cztery rodzaje użytkowników:
 10. Klient/autor oprogramowania/administrator może przeglądać recenzje i średnią z ocen.
 11. Klient/autor oprogramowania/administrator może zgłaszać błędy w oprogramowaniu do jego autorów.
 12. Klient/autor oprogramowania/administrator może zgłaszać naruszenia regulaminu do administratora.
-13. Klient/autor oprogramowania/administrator może wysłać prośbę do administratora o zmianę jego typu konta na autora oprogramowania.
+13. Klient może wysłać prośbę do administratora o zmianę jego typu konta na autora oprogramowania.
 14. Autor oprogramowania/administrator może dodawać nowe oprogramowanie do sklepu: wgrywanie kodu źródłowego na serwer, dodanie grafiki promocyjnej, wybór kategorii, opis słowny.
 15. Autor oprogramowania/administrator może aktualizować oprogramowanie, które wcześniej dodał.
 16. Autor oprogramowania/administrator może czytać nadesłane zgłoszenia błędów.
